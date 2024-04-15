@@ -1,2 +1,8 @@
-# TaskMinder
-TaskMinder is a comprehensive application for productivity monitoring, featuring real-time clock-ins with late arrival alerts, detailed work hour tracking, active/inactive status indicators, discreet screenshot capturing, and seamless daily reporting for task accomplishments, automatically compiled and emailed to administrators.
+# React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
