@@ -1,18 +1,17 @@
 import './App.css'
-import Header from './components/Header'
-import Main from './components/Landing'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Landing from './components/Landing'
 import Dashboard from './components/Dashboard'
-import SideBar from './components/SideNavigation'
 
 function App() {
 
   return (
-    <>
-    {/* <Header/> */}
-    {/* <Main/> */}
-    <SideBar/>
-    <Dashboard/>
-    </>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Landing />}/>
+        <Route path='/dashboard/*' element={<Dashboard />}/>
+      </Routes>
+    </Router>
   )
 }
 

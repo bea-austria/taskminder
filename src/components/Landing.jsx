@@ -1,8 +1,10 @@
 import Login from './Login'
+import Header from './Header'
 
-
-function Main(){
+function Landing(){
     return(
+        <>
+        <Header/>
         <main className='flex p-12 gap-8 bg-indigo-500'>
             <div className='w-3/5'>
                 <h1 className='text-5xl mb-6 text-white'>Effortlessly manage your team</h1>
@@ -13,7 +15,8 @@ function Main(){
             </div>
             <Login/>
         </main>
+        </>
     )
 }
 
-export default Main;
+export default Landing;
