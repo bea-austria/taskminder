@@ -1,4 +1,7 @@
 import { useState } from "react";
+import React from 'react';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 function Login(){
     const[isRegistered, setIsRegistered] = useState('false');
@@ -11,6 +14,22 @@ function Login(){
       console.log('hello')
     }
 
+    const validationSchema = Yup.object().shape({
+      email: Yup.string().email('Invalid email').required('Required'),
+      password: Yup.string()
+        .min(8, 'Password must be at least 8 characters')
+        .required('Password is required'),
+    });
+
+    if (!isRegistered) {
+      validationSchema.fields.firstName = Yup.string()
+        .min(2, 'First name is too short!')
+        .max(50, 'First name is too Long!');
+      validationSchema.fields.lastName = Yup.string()
+        .min(2, 'Last name is too short!')
+        .max(50, 'Last name is too Long!');
+    }
+
     return(
         <div className="flex min-h-full flex-1 flex-col justify-center items-center pb-8 bg-white rounded-lg border-2">
         <div className="sm:w-full sm:max-w-sm">
@@ -20,90 +39,119 @@ function Login(){
         </div>
 
         <div className="mt-6 sm:w-full sm:max-w-sm">
-          <form className="space-y-6" method="POST">
-            {
-              !isRegistered && 
-              <>
+
+          <Formik
+            initialValues={{
+              firstName: '',
+              lastName: '',
+              email: '',
+              password: '',
+            }}
+            validationSchema={validationSchema}
+            onSubmit= {(values, { resetForm }) => {
+              console.log(values);
+              setTimeout(() => {
+                resetForm();
+              }, 1000);
+            }}
+          >
+            {({ errors, touched }) => (
+                <Form className="space-y-6">
+                {
+                  !isRegistered && 
+                  <>
+                    <div>
+                      <label htmlFor="text" className="block text-sm font-medium leading-6 text-gray-900">
+                        First Name
+                      </label>
+                      <div className="mt-2">
+                        <Field
+                          id="firstName"
+                          name="firstName"
+                          type="text"
+                          placeholder='Your first name'
+                          className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                        {errors.firstName && touched.firstName ? (
+                          <p className="text-red-500">{errors.firstName}</p>
+                          ) : null
+                        }
+                      </div>
+                    </div>
+  
+                    <div>
+                      <label htmlFor="text" className="block text-sm font-medium leading-6 text-gray-900">
+                        Last Name
+                      </label>
+                      <div className="mt-2">
+                        <Field
+                          id="lastName"
+                          name="lastName"
+                          type="text"
+                          placeholder='Your last name'
+                          className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                        {errors.lastName && touched.lastName ? (
+                          <p className="text-red-500">{errors.lastName}</p>
+                          ) : null
+                        }
+                      </div>
+                    </div>
+                  </>
+                }
+  
                 <div>
-                  <label htmlFor="text" className="block text-sm font-medium leading-6 text-gray-900">
-                    First Name
+                  <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                    Work email
                   </label>
                   <div className="mt-2">
-                    <input
-                      id="firstName"
-                      name="firstName"
-                      type="text"
-                      required
-                      placeholder='Your first name'
+                    <Field
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder='Your work email'
                       className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
+                    {errors.email && touched.email ? (
+                      <p className="text-red-500">{errors.email}</p>
+                      ) : null
+                    }
                   </div>
                 </div>
-
+  
                 <div>
-                  <label htmlFor="text" className="block text-sm font-medium leading-6 text-gray-900">
-                    Last Name
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                      Password
+                    </label>
+                  </div>
                   <div className="mt-2">
-                    <input
-                      id="lastName"
-                      name="lastName"
-                      type="text"
-                      required
-                      placeholder='Your last name'
-                      className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    <Field
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder='Your password'
+                      className="block w-full rounded-md p-1.5 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
+                    {errors.password && touched.password ? (
+                      <p className="text-red-500">{errors.password}</p>
+                      ) : null
+                    }
                   </div>
                 </div>
-              </>
-            }
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Work email
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  placeholder='Your work email'
-                  className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                  Password
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  placeholder='Your password'
-                  className="block w-full rounded-md p-1.5 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                {isRegistered ? "Log In" : "Create Your Account"}
-              </button>
-            </div>
-          </form>
-
+  
+                <div>
+                  <button
+                    type="submit"
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    {isRegistered ? "Log In" : "Create Your Account"}
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+      
           <p className="mt-5 text-left text-sm text-gray-500 pb-6 border-b-2">
             {isRegistered ? "Forgot Password?" : "Already Have an Account?"}
             <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" onClick={isRegistered ? handlePWReset : handleRegistration}>
