@@ -1,7 +1,7 @@
 import Login from './Login'
 import Header from './Header'
 
-function Landing(){
+function Landing({onLog, onRegister}){
     return(
         <>
         <Header/>
@@ -13,7 +13,7 @@ function Landing(){
                     Learn about TaskMinder
                 </button>
             </div>
-            <Login/>
+            <Login onLog={onLog} onRegister={onRegister}/>
         </main>
         </>
     )

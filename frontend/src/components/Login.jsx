@@ -3,8 +3,8 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
-function Login(){
-    const[isRegistered, setIsRegistered] = useState('false');
+function Login({onLog, onRegister}){
+    const[isRegistered, setIsRegistered] = useState(true);
 
     function handleRegistration(){
       setIsRegistered(!isRegistered);
@@ -14,40 +14,47 @@ function Login(){
       console.log('hello')
     }
 
+    //Submits user information based on intended action
     function handleSubmit(values){
       if(values.firstName){
-        console.log('register');
+        onRegister(values);
       }else{
-        console.log('log')
+        onLog(values);
       }
     }
 
-    const validationSchema = Yup.object().shape({
+    //Validation rules for login
+    let validationSchema = Yup.object().shape({
       email: Yup.string().email('Invalid email').required('Required'),
+      password: Yup.string()
+        .required('Password is required')
+    });
+
+    //Additional validation rules for registration
+    const registerValidationSchema = validationSchema.shape({
+      firstName: Yup.string()
+        .min(2, 'First name is too short!')
+        .max(50, 'First name is too long!')
+        .required('Please provide your first name'),
+      lastName: Yup.string()
+        .min(2, 'Last name is too short!')
+        .max(50, 'Last name is too long!')
+        .required('Please provide your last name'),
       password: Yup.string()
         .min(8, 'Password must be at least 8 characters')
         .required('Password is required')
-        .matches(/(?=.*[a-z])(?=.*[A-Z])\w+/, "Password ahould contain at least one uppercase and lowercase character")
+        .matches(/(?=.*[a-z])(?=.*[A-Z])\w+/, "Password should contain at least one uppercase and lowercase character")
         .matches(/\d/, "Password should contain at least one number")
         .matches(/[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, "Password should contain at least one special character"),
-    });
-
-    if (!isRegistered) {
-      validationSchema.fields.firstName = Yup.string()
-        .min(2, 'First name is too short!')
-        .max(50, 'First name is too Long!');
-      validationSchema.fields.lastName = Yup.string()
-        .min(2, 'Last name is too short!')
-        .max(50, 'Last name is too Long!');
-      validationSchema.fields.confirmPW = Yup.string()
-        .when("password", (password, field) => {
+      confirmPW: Yup.string()
+        .when("password", (password, schema) => {
           if (password) {
-            return field
-            .required("The passwords do not match")
-            .oneOf([Yup.ref("password")], "The passwords do not match");
+            return schema
+              .required("Password confirmation is required")
+              .oneOf([Yup.ref("password")], "Passwords do not match");
           }
-        });
-    }
+        }),
+    });
 
     return(
         <div className="flex min-h-full flex-1 flex-col justify-center items-center pb-8 bg-white rounded-lg border-2">
@@ -67,7 +74,7 @@ function Login(){
               password: '',
               confirmPW: '',
             }}
-            validationSchema={validationSchema}
+            validationSchema={isRegistered ? validationSchema : registerValidationSchema}
             onSubmit= {(values, { resetForm }) => {
               handleSubmit(values)
               setTimeout(() => {
@@ -163,16 +170,16 @@ function Login(){
                 {!isRegistered && 
                 <div>
                   <div className="flex items-center justify-between">
-                    <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                    <label htmlFor="confirmPW" className="block text-sm font-medium leading-6 text-gray-900">
                       Confirm Password
                     </label>
                   </div>
                   <div className="mt-2">
                     <Field
-                      id="password"
+                      id="confirmPW"
                       name="confirmPW"
                       type="password"
-                      placeholder='Your password'
+                      placeholder='Confirm your password'
                       className="block w-full rounded-md p-1.5 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                     {errors.confirmPW && touched.confirmPW ? (

@@ -8,21 +8,21 @@ import axios from 'axios';
 function App() {
   const [user, setUser] = useState([]);
 
-  const handleRegistration = async () => {
+  const handleRegistration = async (userInfo) => {
     try {
-      await axios.post('/api/addUser');
+      await axios.post('/api/addUser', userInfo);
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
-  const handleLogIn = async () => {
+  const handleLogIn = async (userInfo) => {
     try {
-      await axios.post('/api/logUser');
+      await axios.post('/api/logUser', userInfo);
     } catch (error) {
       console.error('Error:', error);
     }
-  }
+  };
 
   return (
     <Router>
