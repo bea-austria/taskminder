@@ -14,11 +14,22 @@ function Login(){
       console.log('hello')
     }
 
+    function handleSubmit(values){
+      if(values.firstName){
+        console.log('register');
+      }else{
+        console.log('log')
+      }
+    }
+
     const validationSchema = Yup.object().shape({
       email: Yup.string().email('Invalid email').required('Required'),
       password: Yup.string()
         .min(8, 'Password must be at least 8 characters')
-        .required('Password is required'),
+        .required('Password is required')
+        .matches(/(?=.*[a-z])(?=.*[A-Z])\w+/, "Password ahould contain at least one uppercase and lowercase character")
+        .matches(/\d/, "Password should contain at least one number")
+        .matches(/[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, "Password should contain at least one special character"),
     });
 
     if (!isRegistered) {
@@ -28,6 +39,14 @@ function Login(){
       validationSchema.fields.lastName = Yup.string()
         .min(2, 'Last name is too short!')
         .max(50, 'Last name is too Long!');
+      validationSchema.fields.confirmPW = Yup.string()
+        .when("password", (password, field) => {
+          if (password) {
+            return field
+            .required("The passwords do not match")
+            .oneOf([Yup.ref("password")], "The passwords do not match");
+          }
+        });
     }
 
     return(
@@ -46,10 +65,11 @@ function Login(){
               lastName: '',
               email: '',
               password: '',
+              confirmPW: '',
             }}
             validationSchema={validationSchema}
             onSubmit= {(values, { resetForm }) => {
-              console.log(values);
+              handleSubmit(values)
               setTimeout(() => {
                 resetForm();
               }, 1000);
@@ -139,6 +159,29 @@ function Login(){
                     }
                   </div>
                 </div>
+
+                {!isRegistered && 
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                      Confirm Password
+                    </label>
+                  </div>
+                  <div className="mt-2">
+                    <Field
+                      id="password"
+                      name="confirmPW"
+                      type="password"
+                      placeholder='Your password'
+                      className="block w-full rounded-md p-1.5 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                    {errors.confirmPW && touched.confirmPW ? (
+                      <p className="text-red-500">{errors.confirmPW}</p>
+                      ) : null
+                    }
+                  </div>
+                </div>
+                }
   
                 <div>
                   <button
