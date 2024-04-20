@@ -8,7 +8,12 @@ import UserContext from '../utils/userContext';
 
 function App() {
   const [user, setUser] = useState([]);
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
+  const[isRegistered, setIsRegistered] = useState(true);
+
+  function handleIsRegister(){
+    setIsRegistered(!isRegistered);
+  }
 
   const handleRegistration = async (userInfo) => {
     try {
@@ -30,11 +35,20 @@ function App() {
     }
   };
 
+  const contextValue = {
+    user,
+    handleLogIn,
+    handleRegistration,
+    message,
+    isRegistered,
+    handleIsRegister
+  };
+
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={contextValue}>
       <Router>
         <Routes>
-          <Route path='/' element={<Landing onLog={handleLogIn} onRegister={handleRegistration} message={message}/>}/>
+          <Route path='/' element={<Landing/>}/>
           <Route path='/dashboard/*' element={<Dashboard />}/>
         </Routes>
       </Router>

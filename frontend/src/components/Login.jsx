@@ -1,14 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import UserContext from "../../utils/userContext";
 
-function Login({onLog, onRegister}){
-    const[isRegistered, setIsRegistered] = useState(true);
-
-    function handleRegistration(){
-      setIsRegistered(!isRegistered);
-    }
+function Login(){
+    const {handleLogIn, handleRegistration, isRegistered, handleIsRegister} = useContext(UserContext);
 
     function handlePWReset(){
       console.log('hello')
@@ -17,9 +14,9 @@ function Login({onLog, onRegister}){
     //Submits user information based on intended action
     function handleSubmit(values){
       if(values.firstName){
-        onRegister(values);
+        handleRegistration(values);
       }else{
-        onLog(values);
+        handleLogIn(values);
       }
     }
 
@@ -75,11 +72,8 @@ function Login({onLog, onRegister}){
               confirmPW: '',
             }}
             validationSchema={isRegistered ? validationSchema : registerValidationSchema}
-            onSubmit= {(values, { resetForm }) => {
+            onSubmit= {(values) => {
               handleSubmit(values)
-              setTimeout(() => {
-                resetForm();
-              }, 1000);
             }}
           >
             {({ errors, touched }) => (
@@ -204,7 +198,7 @@ function Login({onLog, onRegister}){
       
           <p className="mt-5 text-left text-sm text-gray-500 pb-6 border-b-2">
             {isRegistered ? "Forgot Password?" : "Already Have an Account?"}
-            <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" onClick={isRegistered ? handlePWReset : handleRegistration}>
+            <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" onClick={isRegistered ? handlePWReset : handleIsRegister}>
               {isRegistered ? "Click here" : "Log in here"}
             </a>
           </p>
@@ -213,7 +207,7 @@ function Login({onLog, onRegister}){
             <p>
               New to TaskMinder?
             </p>
-            <button className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold py-2 px-4 rounded border border-gray-300" onClick={handleRegistration}>
+            <button className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold py-2 px-4 rounded border border-gray-300" onClick={handleIsRegister}>
               Get Started
             </button>
           </div>}
