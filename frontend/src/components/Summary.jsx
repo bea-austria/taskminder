@@ -1,14 +1,24 @@
 import Profile from '../assets/logo/bunny-icon.jpg'
 import Placeholder from '../assets/placeholder.jpg'
 import { dashOptions }  from "../const/navLinks.js"
+import UserContext from '../../utils/userContext.js'
+import { useContext } from 'react'
+
+function formatDate(date) {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
 
 function Summary(){
+    const {user} = useContext(UserContext);
+    const date = new Date();
+    
     return(
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
             <section className="flex justify-between mb-10">
                 <div>
                     <h1 className='text-3xl font-bold mb-2'>Dashboard</h1>
-                    <span className='text-lg'>Monday, April 15, 2024</span>
+                    <span className='text-lg'>{formatDate(date)}</span>
                 </div>
                 <ul className="flex gap-3">
                     {dashOptions.map((option, index)=>(
@@ -25,7 +35,7 @@ function Summary(){
                 <div className="flex items-center justify-center gap-3 rounded bg-gray-50 dark:bg-gray-800 py-6">
                     <img src={Profile} alt="Profile picture" className='rounded-full h-20 w-20'/>
                     <div>
-                        <h2 className='text-2xl'>Bea A. Caponga</h2>
+                        <h2 className='text-2xl'>{user.first_name.charAt(0).toUpperCase()+ user.first_name.slice(1) + ' ' + user.last_name.charAt(0).toUpperCase()+ user.last_name.slice(1)}</h2>
                         <p className='text-lg'>Job Position</p>
                     </div>
                 </div>

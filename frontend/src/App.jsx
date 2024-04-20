@@ -1,6 +1,6 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, useNavigate  } from 'react-router-dom';
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate  } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Landing from './components/Landing'
 import Dashboard from './components/Dashboard'
@@ -11,6 +11,22 @@ function App() {
   const [message, setMessage] = useState('');
   const [isLogged, setIsLogged] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    const checkLoggedIn = async() => {
+      try{
+        const response = await axios.get('/api/checkLoggedIn');
+        if(response.data.user){
+          setIsLogged(true);
+          setUser(response.data.user);
+        }else{
+          setIsLogged(false);
+        }
+      }catch(error){
+        setMessage(error.response.data.error);
+      }}
+    checkLoggedIn();
+  }, [])
 
   const handleRegistration = async (userInfo) => {
     try {
@@ -46,8 +62,15 @@ function App() {
   return (
     <UserContext.Provider value={contextValue}>
         <Routes>
-          <Route exact path='/' element={<Landing/>}/>
-          <Route path='/dashboard/*' element={isLogged ? <Dashboard /> : <Landing message={'Please log in to your account.'}/>}/>
+          <Route 
+            exact 
+            path='/' 
+            element={isLogged ? <Navigate to='/dashboard/' /> : <Landing/>}
+            />
+          <Route
+            path='/dashboard/*'
+            element={isLogged ? <Dashboard /> : <Navigate to='/' />}
+          />
         </Routes>
     </UserContext.Provider>
   )
