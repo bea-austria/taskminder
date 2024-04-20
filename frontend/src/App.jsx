@@ -1,6 +1,6 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate  } from 'react-router-dom';
+import { useState } from 'react';
 import axios from 'axios';
 import Landing from './components/Landing'
 import Dashboard from './components/Dashboard'
@@ -9,11 +9,8 @@ import UserContext from '../utils/userContext';
 function App() {
   const [user, setUser] = useState([]);
   const [message, setMessage] = useState('');
-  const[isRegistered, setIsRegistered] = useState(true);
-
-  function handleIsRegister(){
-    setIsRegistered(!isRegistered);
-  }
+  const [isLogged, setIsLogged] = useState(false);
+  const navigate = useNavigate();
 
   const handleRegistration = async (userInfo) => {
     try {
@@ -28,8 +25,12 @@ function App() {
     try {
       const response = await axios.post('/api/logUser', userInfo);
       setUser(response.data.user);
-      setMessage(response.data.message)
-      console.log(response)
+      setIsLogged(true);
+      setMessage(response.data.message);
+      setTimeout(()=> {
+        navigate('/dashboard/');
+      }, 2000);
+      
     } catch (error) {
       setMessage(error.response.data.error);
     }
@@ -39,19 +40,15 @@ function App() {
     user,
     handleLogIn,
     handleRegistration,
-    message,
-    isRegistered,
-    handleIsRegister
+    message
   };
 
   return (
     <UserContext.Provider value={contextValue}>
-      <Router>
         <Routes>
-          <Route path='/' element={<Landing/>}/>
-          <Route path='/dashboard/*' element={<Dashboard />}/>
+          <Route exact path='/' element={<Landing/>}/>
+          <Route path='/dashboard/*' element={isLogged ? <Dashboard /> : <Landing message={'Please log in to your account.'}/>}/>
         </Routes>
-      </Router>
     </UserContext.Provider>
   )
 }

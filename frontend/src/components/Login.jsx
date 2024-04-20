@@ -5,7 +5,12 @@ import * as Yup from 'yup';
 import UserContext from "../../utils/userContext";
 
 function Login(){
-    const {handleLogIn, handleRegistration, isRegistered, handleIsRegister} = useContext(UserContext);
+    const[isRegistered, setIsRegistered] = useState(true);
+    const {handleLogIn, handleRegistration} = useContext(UserContext);
+
+    function handleIsRegister(){
+      setIsRegistered(!isRegistered);
+    }
 
     function handlePWReset(){
       console.log('hello')
