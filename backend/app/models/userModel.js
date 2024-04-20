@@ -2,8 +2,17 @@ const db = require('../config/db.config');
 
 class UserModel{
 
-    static validate(input){
-
+    static async fetchUser(email){
+        return new Promise((resolve, reject)=>{
+            const query = 'SELECT * FROM users WHERE email = ?';
+            db.query(query, [email], (error, result)=>{
+                if(error){
+                    reject(error);
+                }else{
+                    resolve(result);
+                }
+            })
+        })
     }
 
     static async addUser(first_name, last_name, email, password){        

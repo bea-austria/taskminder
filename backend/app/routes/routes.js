@@ -17,12 +17,20 @@ router.post('/api/addUser',[
         }
 
         await controller.addUser(req, res);
-        res.sendStatus(200);
 });
 
-router.post('/api/logUser', async (req,res) => {
-    await controller.logUser(req, res);
-    res.sendStatus(200);
+router.post('/api/logUser',[
+    body('email').isEmail().normalizeEmail().trim(),
+    body('password').isLength({ min: 8 }).trim()
+    ]
+    ,async (req,res) => {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        await controller.logUser(req, res);
 });
 
 module.exports = router;
