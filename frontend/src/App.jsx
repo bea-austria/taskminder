@@ -1,9 +1,10 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Landing from './components/Landing'
-import Dashboard from './components/Dashboard'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Landing from './components/Landing'
+import Dashboard from './components/Dashboard'
+import UserContext from '../utils/userContext';
 
 function App() {
   const [user, setUser] = useState([]);
@@ -30,12 +31,14 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route path='/' element={<Landing onLog={handleLogIn} onRegister={handleRegistration}/>}/>
-        <Route path='/dashboard/*' element={<Dashboard />}/>
-      </Routes>
-    </Router>
+    <UserContext.Provider value={user}>
+      <Router>
+        <Routes>
+          <Route path='/' element={<Landing onLog={handleLogIn} onRegister={handleRegistration} message={message}/>}/>
+          <Route path='/dashboard/*' element={<Dashboard />}/>
+        </Routes>
+      </Router>
+    </UserContext.Provider>
   )
 }
 
