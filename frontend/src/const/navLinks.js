@@ -35,16 +35,16 @@ export const dashOptions = [
     {
         icon: "help",
         label: "Help",
-        path: "/help"
+        path: "/dashboard/help"
     },
     {
         icon: "settings",
         label: "Settings",
-        path: "/setting"
+        path: "/dashboard/setting"
     },
     {
         icon: "account_circle",
         label: "Profile",
-        path: "/profile"
+        path: "/dashboard/profile"
     }
 ];

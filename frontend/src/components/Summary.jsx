@@ -1,35 +1,16 @@
-import Profile from '../assets/logo/bunny-icon.jpg'
-import Placeholder from '../assets/placeholder.jpg'
-import { dashOptions }  from "../const/navLinks.js"
-import UserContext from '../../utils/userContext.js'
-import { useContext } from 'react'
+import Profile from '../assets/logo/bunny-icon.jpg';
+import Placeholder from '../assets/placeholder.jpg';
+import UserContext from '../../utils/userContext.js';
+import { useContext } from 'react';
+import PageHeader from './PageHeader.jsx';
 
-function formatDate(date) {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
-}
 
 function Summary(){
     const {user} = useContext(UserContext);
-    const date = new Date();
     
     return(
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-            <section className="flex justify-between mb-10">
-                <div>
-                    <h1 className='text-3xl font-bold mb-2'>Dashboard</h1>
-                    <span className='text-lg'>{formatDate(date)}</span>
-                </div>
-                <ul className="flex gap-3">
-                    {dashOptions.map((option, index)=>(
-                        <li key={index}>
-                            <span className="material-symbols-outlined text-2xl cursor-pointer">
-                                {option.icon}
-                            </span>
-                        </li>
-                    ))}
-                </ul>
-            </section>
+            <PageHeader h1={'Dashboard'}/>            
 
             <section className="grid grid-cols-3 gap-4 my-8">
                 <div className="flex items-center justify-center gap-3 rounded bg-gray-50 dark:bg-gray-800 py-6">
