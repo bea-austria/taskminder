@@ -7,20 +7,25 @@ import axios from 'axios';
 
 function App() {
   const [user, setUser] = useState([]);
+  const [message, setMessage] = useState('')
 
   const handleRegistration = async (userInfo) => {
     try {
-      await axios.post('/api/addUser', userInfo);
+      const response = await axios.post('/api/addUser', userInfo);
+      setMessage(response.data.message);
     } catch (error) {
-      console.error('Error:', error);
+      setMessage(error.response.data.error);
     }
   };
 
   const handleLogIn = async (userInfo) => {
     try {
-      await axios.post('/api/logUser', userInfo);
+      const response = await axios.post('/api/logUser', userInfo);
+      setUser(response.data.user);
+      setMessage(response.data.message)
+      console.log(response)
     } catch (error) {
-      console.error('Error:', error);
+      setMessage(error.response.data.error);
     }
   };
 
