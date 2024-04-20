@@ -1,9 +1,23 @@
-class userController{
+const bcrypt = require('bcryptjs');
+const model = require('../models/userModel');
+
+class UserController{
 
     static async addUser(req, res){
         try{
-            const user = {email: req.body.email, password: req.body.password}
-            console.log('im connected to addUser controller');
+            console.log('helo')
+            const first_name = req.body.firstName;
+            const last_name = req.body.lastName;
+            const email = req.body.email;
+            const password = req.body.password;
+            const pw_hashed = bcrypt.hashSync(password, 10)
+            
+            const status = await model.addUser(first_name, last_name, email, pw_hashed);
+
+            if(status){
+                console.log('successfully added');
+            }
+
         }catch(error){
             console.error('Error:', error);
         }
@@ -11,12 +25,12 @@ class userController{
 
     static async logUser(req, res){
         try{
-            const user = req.body;
-            console.log('im connected to logUser controller');
+            const email = req.body.email;
+            const password = req.body.password;
         }catch(error){
             console.error('Error:', error);
         }
     }
 }
 
-module.exports = userController;
+module.exports = UserController;
