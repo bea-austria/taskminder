@@ -53,6 +53,10 @@ class UserController{
             }
         }
     }
+
+    static async logOff(req, res){
+        req.session.destroy();
+    }
 }
 
 module.exports = UserController;

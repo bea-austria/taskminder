@@ -4,7 +4,6 @@ const router = express.Router();
 const controller = require('../controllers/userController');
 
 router.get('/api/checkLoggedIn', (req, res) => {
-    console.log('user session:', req.session.user)
     res.status(200).json({ user: req.session.user || null });
 });
 
@@ -37,5 +36,10 @@ router.post('/api/logUser',[
 
         await controller.logUser(req, res);
 });
+
+router.get('/api/logOff', async (req, res)=>{
+    await controller.logOff(req, res);
+    res.sendStatus(200);
+})
 
 module.exports = router;
