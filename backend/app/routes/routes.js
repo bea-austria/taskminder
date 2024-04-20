@@ -3,6 +3,11 @@ const { body, validationResult } = require("express-validator");
 const router = express.Router();
 const controller = require('../controllers/userController');
 
+router.get('/api/checkLoggedIn', (req, res) => {
+    console.log('user session:', req.session.user)
+    res.status(200).json({ user: req.session.user || null });
+});
+
 router.post('/api/addUser',[
     body('firstName').notEmpty().trim(),
     body('lastName').notEmpty().trim(),

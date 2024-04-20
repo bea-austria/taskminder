@@ -6,7 +6,6 @@ class UserController{
     static async isUserRegistered(email){
         try{
             const status = await model.fetchUser(email);
-            console.log(status)
             return status
         }catch(error){
             return false;
@@ -26,7 +25,11 @@ class UserController{
                 return res.status(400).json({error: 'Registration failed. Email is already registered.'})
             }
 
-            await model.addUser(first_name, last_name, email, pw_hashed);
+            const status = await model.addUser(first_name, last_name, email, pw_hashed);
+
+            if(status){
+                return res.status(200).json({message: 'User registered successfully.' })
+            }
 
         }catch(error){
             res.status(500).json({ error: error.message });
@@ -45,8 +48,8 @@ class UserController{
             if(!verified){
                 return res.status(400).json({error: 'Log in failed. Incorrect credentials.'})
             }else{
-                console.log(isRegistered[0]);
-                return res.status(200).json({ user: isRegistered[0], message: 'Log in successful' });
+                req.session.user = isRegistered[0];
+                return res.status(200).json({ user: isRegistered[0], message: 'Log in successful.' });
             }
         }
     }
