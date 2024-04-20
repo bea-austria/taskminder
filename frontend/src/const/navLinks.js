@@ -45,6 +45,6 @@ export const dashOptions = [
     {
         icon: "account_circle",
         label: "Profile",
-        path: "/dashboard/profile"
+        path: "#"
     }
 ];

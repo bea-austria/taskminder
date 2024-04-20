@@ -3,7 +3,6 @@ import SideBar from "./SideNavigation.jsx"
 import Timesheet from "./Timesheet.jsx"
 import {Routes, Route } from 'react-router-dom';
 import Settings from "./Settings.jsx";
-import Profile from "./Profile.jsx";
 import Help from "./Help.jsx";
 
 function Dashboard(){
@@ -17,7 +16,6 @@ function Dashboard(){
                     <Route exact path='/timesheets' element={<Timesheet />}/>
                     <Route exact path='/setting' element={<Settings />}/>
                     <Route exact path='/help' element={<Help />}/>
-                    <Route exact path='/profile' element={<Profile/>}/>
                 </Routes>
             </div>
         </main>

@@ -52,11 +52,22 @@ function App() {
     }
   };
 
+  const handleSignOut = async () =>{
+    try{
+      await axios.get('/api/logUser', userInfo);
+      setIsLogged(false);
+    }
+    catch(error){
+      console.error(error);
+    }
+  }
+
   const contextValue = {
     user,
     handleLogIn,
     handleRegistration,
-    message
+    message,
+    handleSignOut
   };
 
   return (
