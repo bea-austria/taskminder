@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate  } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate, useLocation  } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Landing from './components/Landing'
@@ -11,19 +11,22 @@ function App() {
   const [message, setMessage] = useState('');
   const [isLogged, setIsLogged] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation()
 
   useEffect(()=>{
     const checkLoggedIn = async() => {
       try{
         const response = await axios.get('/api/checkLoggedIn');
-        if(response.data.user){
+        if(response.data.user !== null){
           setIsLogged(true);
-          setUser(response.data.user);
+          setUser(response.data.user)
+          navigate(location.pathname)
+          console.log(response)
         }else{
           setIsLogged(false);
         }
       }catch(error){
-        setMessage(error.response.data.error);
+        console.error(error);
       }}
     checkLoggedIn();
   }, [])
@@ -54,8 +57,10 @@ function App() {
 
   const handleSignOut = async () =>{
     try{
-      await axios.get('/api/logUser', userInfo);
-      setIsLogged(false);
+      const response  = await axios.get('/api/logOff');
+      if (response){
+        setIsLogged(false);
+      }
     }
     catch(error){
       console.error(error);

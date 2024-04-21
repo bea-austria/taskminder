@@ -8,12 +8,18 @@ const PORT = process.env.PORT || 5000;
 app.use(session({
     secret: 'probability',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: false,
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24 * 3,
+        expires: 1000 * 60 * 60 * 24 * 3
+    },
 }));
 
 app.use(cors());
 app.use(express.json());
-app.use(router);
+app.use(router)
 
   
 app.listen(PORT, () => {
