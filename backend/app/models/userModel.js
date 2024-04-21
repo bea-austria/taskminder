@@ -27,6 +27,19 @@ class UserModel{
             })
         })
     }
+
+    static async addProject(name, target_hours, category, description){
+        return new Promise((resolve, reject)=>{
+            const query = 'INSERT INTO projects (name, target_hours, category, description, created_at, updated_at) VALUES(?,?,?,?, NOW(), NOW())';
+            db.query(query, [name, target_hours, category, description],(error, result)=>{
+                if(error){
+                    reject(error);
+                } else {
+                    resolve(true);
+                }
+            });
+        })
+    }
 };
 
 

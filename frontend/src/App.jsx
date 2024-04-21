@@ -10,6 +10,7 @@ function App() {
   const [user, setUser] = useState([]);
   const [message, setMessage] = useState('');
   const [isLogged, setIsLogged] = useState(false);
+  const [projects, setProjects] = ([]);
   const navigate = useNavigate();
   const location = useLocation()
 
@@ -66,8 +67,29 @@ function App() {
     }
   }
 
+  useEffect(()=>{
+    fetchProjects() 
+  }, []);
+
+  const fetchProjects = async() =>{
+    try{
+      const response = await axios.get('/api/getProjects')
+      if(response.data !==null){
+        setProjects(response.data);
+      }
+    }catch(error){
+      console.error(error);
+    }
+  }
+
   const handleNewProject = async (project) =>{
-    console.log(project);
+    try{
+      console.log(project)
+      await axios.post('/api/newProject', project);
+      fetchProjects()
+    }catch(error){
+      console.error(error);
+    }
   }
 
   const contextValue = {

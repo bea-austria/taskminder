@@ -16,7 +16,8 @@ function Projects(){
     let validationSchema = Yup.object().shape({
         name: Yup.string().required('Project name is required'),
         category: Yup.string().required('Please choose a category'),
-        description: Yup.string().required('Please provide a project description.'),
+        description: Yup.string().required('Please provide a project description.')
+        .min(10, 'Description is too short!'),
         target_hours: Yup.string()
         .matches(/^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, 'Invalid format.')
         .required('Required.'),
@@ -117,7 +118,7 @@ function Projects(){
                                 </div>
                                 <div className="col-span-2">
                                     <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Project Description</label>
-                                    <Field as="textarea" name='description' id="description" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write project description here" required/>                    
+                                    <Field as="textarea" minLength='10' maxLength='200' name='description' id="description" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write project description here" required/>                    
                                     {errors.description && touched.description ? (
                                     <p className="text-red-500">{errors.description}</p>
                                     ) : null
