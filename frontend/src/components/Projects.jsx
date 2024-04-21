@@ -1,11 +1,13 @@
 import PageHeader from "./PageHeader";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import UserContext from "../../utils/userContext";
 
 function Projects(){
     const [showToolTip, setShowToolTip] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const {handleNewProject} = useContext(UserContext);
 
     function handleModal(){
         setShowModal(!showModal);
@@ -75,7 +77,8 @@ function Projects(){
                         }}
                         validationSchema={validationSchema}
                         onSubmit= {(values) => {
-                        handleModal()
+                        handleModal();
+                        handleNewProject(values);
                         }}
                         >
                         {({ errors, touched }) => (

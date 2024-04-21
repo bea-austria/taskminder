@@ -21,7 +21,6 @@ function App() {
           setIsLogged(true);
           setUser(response.data.user)
           navigate(location.pathname)
-          console.log(response)
         }else{
           setIsLogged(false);
         }
@@ -67,12 +66,17 @@ function App() {
     }
   }
 
+  const handleNewProject = async (project) =>{
+    console.log(project);
+  }
+
   const contextValue = {
     user,
     handleLogIn,
     handleRegistration,
     message,
-    handleSignOut
+    handleSignOut,
+    handleNewProject
   };
 
   return (
