@@ -11,6 +11,7 @@ function formatDate(date) {
 function PageHeader({h1}){
     const[dropDown, setDropDown] = useState(false);
     const {handleSignOut} = useContext(UserContext);
+    const [showToolTip, setShowToolTip] = useState(false);
 
     function showDropDown(){
         setDropDown(!dropDown);
@@ -23,9 +24,22 @@ function PageHeader({h1}){
     const date = new Date();
     return(
         <section className="flex justify-between mb-10">
-            <div>
+            <div className={h1 == 'Projects' ? 'relative' : ''}>
                 <h1 className='text-4xl font-bold mb-2'>{h1}</h1>
                 <span className='text-lg'>{formatDate(date)}</span>
+                {h1 === 'Projects' && 
+                <a href="#" className="absolute -right-6 bottom-4" onMouseEnter={()=>setShowToolTip(true)} onMouseLeave={()=>setShowToolTip(false)}>
+                    <span class="material-symbols-outlined text-3xl text-blue-700 cursor-pointer hover:text-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    add_circle
+                    </span>
+                </a>
+                }
+                { h1 === 'Projects' && showToolTip &&
+                    <div className="absolute z-10 -right-0.5 bottom-1/3 bg-white border border-gray-200 rounded-lg shadow-sm p-2">
+                    <div className="text-gray-900 text-sm font-medium">Add Project</div>
+                    <div className="tooltip-arrow"></div>
+                    </div>
+                }
             </div>
             <ul className="flex gap-3">
                 {dashOptions.map((option, index)=>(

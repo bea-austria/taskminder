@@ -5,6 +5,7 @@ import {Routes, Route } from 'react-router-dom';
 import Settings from "./Settings.jsx";
 import Help from "./Help.jsx";
 import Teams from "./Teams.jsx";
+import Projects from "./Projects.jsx";
 
 function Dashboard(){
     return(
@@ -18,6 +19,7 @@ function Dashboard(){
                     <Route exact path='/setting' element={<Settings />}/>
                     <Route exact path='/help' element={<Help />}/>
                     <Route exact path='/teams' element={<Teams />}/>
+                    <Route exact path='/projects' element={<Projects />}/>
                 </Routes>
             </div>
         </main>
