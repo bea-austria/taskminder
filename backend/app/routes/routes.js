@@ -1,7 +1,8 @@
 const express = require('express');
 const { body, validationResult } = require("express-validator");
 const router = express.Router();
-const controller = require('../controllers/userController');
+const userController = require('../controllers/userController');
+const projectController = require('../controllers/projectController');
 
 router.get('/api/checkLoggedIn', (req, res) => {
     res.status(200).json({ user: req.session.user || null });
@@ -20,7 +21,7 @@ router.post('/api/addUser',[
             return res.status(400).json({ errors: errors.array() });
         }
 
-        await controller.addUser(req, res);
+        await userController.addUser(req, res);
 });
 
 router.post('/api/logUser',[
@@ -34,11 +35,11 @@ router.post('/api/logUser',[
             return res.status(400).json({ errors: errors.array() });
         }
 
-        await controller.logUser(req, res);
+        await userController.logUser(req, res);
 });
 
 router.get('/api/logOff', async (req, res)=>{
-    await controller.logOff(req, res);
+    await userController.logOff(req, res);
     res.sendStatus(200);
 });
 
@@ -55,14 +56,14 @@ router.post('/api/newProject',[
             return res.status(400).json({ errors: errors.array() });
         }
 
-        await controller.addProject(req, res);
+        await projectController.addProject(req, res);
         res.sendStatus(200);
     }
 );
 
 router.get('/api/getProjects', async (req, res)=> {
     try{
-        const projects = await controller.getProjects();
+        const projects = await projectController.getProjects();
         res.status(200).json({projects: projects})
     }catch(error){
         res.status(500);
@@ -71,7 +72,7 @@ router.get('/api/getProjects', async (req, res)=> {
 
 router.delete('/api/deleteProject/:id', async (req, res) =>{
     const index = parseInt(req.params.id);
-    await controller.deleteProject(index);
+    await projectController.deleteProject(index);
     res.sendStatus(200);
 });
 module.exports = router;
