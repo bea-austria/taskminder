@@ -5,13 +5,38 @@ import * as Yup from 'yup';
 import UserContext from "../../utils/userContext";
 
 function Projects(){
-    const [showToolTip, setShowToolTip] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const {handleNewProject} = useContext(UserContext);
-
+    const {handleNewProject, projects, handleDelete} = useContext(UserContext);
+    const [toolTips, settoolTips] = useState(Array(projects.length).fill(false));
+    const [showdeleteModal, setshowdeleteModal] = useState(false);
+    const [project, setProject] = useState({})
+ 
     function handleModal(){
         setShowModal(!showModal);
     };
+
+    function handleMouseEnter(index){
+        const currentToolTips = [...toolTips];
+        currentToolTips[index] = true;
+        settoolTips(currentToolTips);
+    };
+
+    function handleMouseLeave(index){
+        const currentToolTips = [...toolTips];
+        currentToolTips[index] = false;
+        settoolTips(currentToolTips);
+    };
+
+    function handleDeleteModal(index){
+        setProject(projects[index]);
+        setshowdeleteModal(true)
+    }
+
+    function handleDeleteProject(){
+        handleDelete(project.id);
+        setshowdeleteModal(false);
+    }
+
 
     let validationSchema = Yup.object().shape({
         name: Yup.string().required('Project name is required'),
@@ -26,20 +51,24 @@ function Projects(){
     return(
         <>
             <PageHeader h1={'Projects'} handleModal={handleModal}/>
-            <div className="grid grid-cols-3">
-                <div className="relative max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div className="grid grid-cols-3 gap-y-6">
+                {projects.map((project, index)=> (
+                    <div key={index} className="relative max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <span className="material-symbols-outlined absolute top-[5px] right-[15px] cursor-pointer text-2xl" onClick={()=> handleDeleteModal(index)}>
+                    remove
+                    </span>
                     <a href="#">
-                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Technical SEO Research</h5>
+                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{project.name}</h5>
                     </a>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{project.description}</p>
                     <div className="flex justify-between items-center">
-                        <p>Target hours: 3:00:00</p>
-                        <a href="#" className="inline-flex items-center px-4 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onMouseEnter={()=>setShowToolTip(true)} onMouseLeave={()=>setShowToolTip(false)}>
+                        <p>Target hours: {project.target_hours}</p>
+                        <a href="#" className="inline-flex items-center px-4 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onMouseEnter={()=>handleMouseEnter(index)} onMouseLeave={()=>handleMouseLeave(index)}>
                             <span className="rtl:rotate-180 flex justify-center items-center w-5 h-5 material-symbols-outlined text-4xl" aria-hidden="true">
                             play_arrow
                             </span>
                         </a>
-                        { showToolTip &&
+                        { toolTips[index] &&
                         <div className="absolute z-10 -right-0.5 bottom-1/3 bg-white border border-gray-200 rounded-lg shadow-sm p-2">
                         <div className="text-gray-900 text-sm font-medium">Start Tracker</div>
                         <div className="tooltip-arrow"></div>
@@ -47,6 +76,7 @@ function Projects(){
                         }
                     </div>
                 </div>
+                ))}
             </div>
 
             {showModal && (
@@ -77,9 +107,12 @@ function Projects(){
                         description: ''
                         }}
                         validationSchema={validationSchema}
-                        onSubmit= {(values) => {
+                        onSubmit= {(values, {resetForm}) => {
                         handleModal();
                         handleNewProject(values);
+                        setTimeout(()=>{
+                            resetForm()
+                        }, 1000)
                         }}
                         >
                         {({ errors, touched }) => (
@@ -136,6 +169,33 @@ function Projects(){
                     </div>
                 </div>
             </div> 
+
+            {showdeleteModal && (
+                <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50 z-50" onClick={()=>setshowdeleteModal(false)}></div>
+            )}
+
+                <div id="popup-modal" tabIndex="-1" className={`${showdeleteModal ? '' : 'hidden'} overflow-y-auto overflow-x-hidden flex fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full`}>
+                    <div className="relative p-4 w-full max-w-md max-h-full">
+                        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <button type="button" className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
+                                <span className="material-symbols-outlined absolute text-2xl" onClick={()=> setshowdeleteModal(false)}>
+                                close
+                                </span>
+                                <span className="sr-only">Close modal</span>
+                            </button>
+                            <div className="p-4 md:p-5 text-center">
+                                <span className="material-symbols-outlined mx-auto mb-4 text-gray-400 text-4xl dark:text-gray-200">
+                                warning
+                                </span>
+                                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete {project.name}?</h3>
+                                <button data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center" onClick={handleDeleteProject}>
+                                    Yes, I'm sure
+                                </button>
+                                <button data-modal-hide="popup-modal" type="button" className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" onClick={()=> setshowdeleteModal(false)}>No, cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </>
     )
 }

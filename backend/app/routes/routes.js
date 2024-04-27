@@ -40,7 +40,7 @@ router.post('/api/logUser',[
 router.get('/api/logOff', async (req, res)=>{
     await controller.logOff(req, res);
     res.sendStatus(200);
-})
+});
 
 router.post('/api/newProject',[
     body('name').notEmpty().trim(),
@@ -56,11 +56,22 @@ router.post('/api/newProject',[
         }
 
         await controller.addProject(req, res);
+        res.sendStatus(200);
     }
-)
+);
 
-router.get('/api/getProjects', (req, res)=> {
-    console.log('hello')
-})
+router.get('/api/getProjects', async (req, res)=> {
+    try{
+        const projects = await controller.getProjects();
+        res.status(200).json({projects: projects})
+    }catch(error){
+        res.status(500);
+    }
+});
 
+router.delete('/api/deleteProject/:id', async (req, res) =>{
+    const index = parseInt(req.params.id);
+    await controller.deleteProject(index);
+    res.sendStatus(200);
+});
 module.exports = router;

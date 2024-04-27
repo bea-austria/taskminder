@@ -63,6 +63,23 @@ class UserController{
         await model.addProject(name, target_hours, category, description);
     }
 
+    static async getProjects(req, res){
+        try{
+            const response = await model.getProjects()
+            return response;
+        }catch(error){
+            res.status(500);
+        }
+    }
+
+    static async deleteProject(index){
+        try{
+            await model.deleteProject(index);
+        }catch(error){
+            res.status(500);
+        }
+    }
+
     static async logOff(req, res){
         req.session.destroy();
     }

@@ -10,7 +10,7 @@ function App() {
   const [user, setUser] = useState([]);
   const [message, setMessage] = useState('');
   const [isLogged, setIsLogged] = useState(false);
-  const [projects, setProjects] = ([]);
+  const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
   const location = useLocation()
 
@@ -75,7 +75,7 @@ function App() {
     try{
       const response = await axios.get('/api/getProjects')
       if(response.data !==null){
-        setProjects(response.data);
+        setProjects(response.data.projects);
       }
     }catch(error){
       console.error(error);
@@ -84,11 +84,19 @@ function App() {
 
   const handleNewProject = async (project) =>{
     try{
-      console.log(project)
       await axios.post('/api/newProject', project);
       fetchProjects()
     }catch(error){
       console.error(error);
+    }
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`/api/deleteProject/${id}`);
+      fetchProjects(); 
+    } catch (error) {
+      console.error('Error:', error);
     }
   }
 
@@ -98,7 +106,9 @@ function App() {
     handleRegistration,
     message,
     handleSignOut,
-    handleNewProject
+    handleNewProject,
+    projects,
+    handleDelete
   };
 
   return (

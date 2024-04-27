@@ -40,6 +40,32 @@ class UserModel{
             });
         })
     }
+
+    static async getProjects(){
+        return new Promise((resolve, reject)=>{
+            const query = 'SELECT * FROM projects';
+            db.query(query, (error, result)=>{
+                if(error){
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
+        })
+    }
+
+    static async deleteProject(index){
+        return new Promise((resolve, reject) => {
+            const query = 'DELETE FROM projects WHERE id = ?';
+            db.query(query, [index], (error, result)=>{
+                if(error){
+                    reject(error);
+                }else{
+                    resolve(true);
+                }
+            })
+        })
+    }
 };
 
 
