@@ -26,6 +26,20 @@ class projectModel {
             });
         })
     }
+    
+    static async editProject(name, target_hours, category, description, index){
+        console.log('hello')
+        return new Promise((resolve, reject)=> {
+            const query = 'UPDATE projects SET name=?, target_hours=?, category=?, description=?, updated_at=NOW() WHERE id =?';
+            db.query(query, [name, target_hours, category, description, index],(error, result)=>{
+                if(error){
+                    reject(error);
+                } else {
+                    resolve(true);
+                }
+            });
+        })
+    }
 
     static async deleteProject(index){
         return new Promise((resolve, reject) => {

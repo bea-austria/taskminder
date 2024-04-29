@@ -8,7 +8,8 @@ import UserContext from '../utils/userContext';
 
 function App() {
   const [user, setUser] = useState([]);
-  const [message, setMessage] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const [isLogged, setIsLogged] = useState(false);
   const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
@@ -34,9 +35,9 @@ function App() {
   const handleRegistration = async (userInfo) => {
     try {
       const response = await axios.post('/api/addUser', userInfo);
-      setMessage(response.data.message);
+      setSuccessMsg(response.data.message);
     } catch (error) {
-      setMessage(error.response.data.error);
+      setErrorMsg(error.response.data.error);
     }
   };
 
@@ -44,14 +45,13 @@ function App() {
     try {
       const response = await axios.post('/api/logUser', userInfo);
       setUser(response.data.user);
-      setIsLogged(true);
-      setMessage(response.data.message);
+      setSuccessMsg(response.data.message);
       setTimeout(()=> {
-        navigate('/dashboard/');
+        setIsLogged(true);
       }, 2000);
       
     } catch (error) {
-      setMessage(error.response.data.error);
+      setErrorMsg(error.response.data.error);
     }
   };
 
@@ -86,16 +86,26 @@ function App() {
     try{
       await axios.post('/api/newProject', project);
       fetchProjects()
+      setSuccessMsg('Project successfully added')
     }catch(error){
-      console.error(error);
+      setErrorMsg(error.response.data.error);
     }
   }
 
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/api/deleteProject/${id}`);
-      fetchProjects(); 
-    } catch (error) {
+      fetchProjects();
+    }catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  const handleEdit = async(project) => {
+    try{
+      await axios.post(`/api/editProject`, project);
+      fetchProjects();
+    }catch (error) {
       console.error('Error:', error);
     }
   }
@@ -104,11 +114,15 @@ function App() {
     user,
     handleLogIn,
     handleRegistration,
-    message,
+    errorMsg,
+    successMsg,
+    setSuccessMsg,
+    setErrorMsg,
     handleSignOut,
     handleNewProject,
     projects,
-    handleDelete
+    handleDelete,
+    handleEdit
   };
 
   return (

@@ -28,14 +28,14 @@ function PageHeader({h1, handleModal}){
                 <h1 className='text-4xl font-bold mb-2'>{h1}</h1>
                 <span className='text-lg'>{formatDate(date)}</span>
                 {h1 === 'Projects' && 
-                <a href="#" className="absolute -right-6 bottom-4" onMouseEnter={()=>setShowToolTip(true)} onMouseLeave={()=>setShowToolTip(false)} onClick={handleModal}>
-                    <span className="material-symbols-outlined text-3xl text-blue-700 cursor-pointer hover:text-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <a href="#" className="absolute right-[5px] top-[8px]" onMouseEnter={()=>setShowToolTip(true)} onMouseLeave={()=>setShowToolTip(false)} onClick={handleModal}>
+                    <span className="material-symbols-outlined text-3xl text-blue-700 cursor-pointer hover:text-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     add_circle
                     </span>
                 </a>
                 }
                 { h1 === 'Projects' && showToolTip &&
-                    <div className="absolute z-10 -right-0.5 bottom-1/3 bg-white border border-gray-200 rounded-lg shadow-sm p-2">
+                    <div className="absolute z-10 -right-[45px] -top-[20px] bg-white border border-gray-200 rounded-lg shadow-sm p-2">
                     <div className="text-gray-900 text-sm font-medium">Add Project</div>
                     <div className="tooltip-arrow"></div>
                     </div>

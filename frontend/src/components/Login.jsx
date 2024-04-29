@@ -9,10 +9,12 @@ function Login(){
     const[isRegistered, setIsRegistered] = useState(true);
     const {handleLogIn, handleRegistration} = useContext(UserContext);
 
+    //Handles registration of new user
     function handleIsRegister(){
       setIsRegistered(!isRegistered);
     }
 
+    //Handles password reset
     function handlePWReset(){
       console.log('hello')
     }
@@ -68,7 +70,6 @@ function Login(){
         </div>
 
         <div className="mt-6 sm:w-full sm:max-w-sm">
-
           <Formik
             initialValues={{
               firstName: '',

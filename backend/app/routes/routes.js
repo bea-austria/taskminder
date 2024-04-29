@@ -50,14 +50,36 @@ router.post('/api/newProject',[
     body('description').isLength({ min: 10}).trim()
     ]
     ,async (req,res) => {
-
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        await projectController.addProject(req, res);
-        res.sendStatus(200);
+        try{
+            await projectController.addProject(req, res);
+        }catch(error){
+            return res.json({ error: error.message });
+        }
+    }
+);
+
+router.post('/api/editProject', [
+    body('name').notEmpty().trim(),
+    body('category').notEmpty().trim(),
+    body('target_hours').notEmpty().trim(),
+    body('description').isLength({ min: 10}).trim()
+    ]
+    ,async (req,res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        try{
+            await projectController.editProject(req, res)
+        }catch(error){
+            return res.json({ error: error.message });
+        }
     }
 );
 
@@ -72,7 +94,6 @@ router.get('/api/getProjects', async (req, res)=> {
 
 router.delete('/api/deleteProject/:id', async (req, res) =>{
     const index = parseInt(req.params.id);
-    await projectController.deleteProject(index);
-    res.sendStatus(200);
+    await projectController.deleteProject(req, res, index);
 });
 module.exports = router;
