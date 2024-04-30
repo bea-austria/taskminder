@@ -2,7 +2,7 @@ const model = require('../models/projectModel');
 class projectController {
     static async addProject(req, res){
         const name = req.body.name;
-        const target_hours = req.body.target_hours;
+        const limit_hours = req.body.limit_hours;
         const category = req.body.category;
         const description = req.body.description;
         const projects = await model.getProjects();
@@ -11,7 +11,7 @@ class projectController {
         if(duplicate){
             throw new Error('Duplicate project name');
         }else{
-            await model.addProject(name, target_hours, category, description);
+            await model.addProject(name, limit_hours, category, description);
             return res.sendStatus(200);
         }
     }
@@ -36,7 +36,7 @@ class projectController {
 
     static async editProject(req, res){
         const name = req.body.name;
-        const target_hours = req.body.target_hours;
+        const limit_hours = req.body.limit_hours;
         const category = req.body.category;
         const description = req.body.description;
         const index = req.body.id;
@@ -46,7 +46,7 @@ class projectController {
         if(duplicate){
             throw new Error('Duplicate project name');
         }else{
-            await model.editProject(name, target_hours, category, description, index);
+            await model.editProject(name, limit_hours, category, description, index);
             return res.sendStatus(200);
         }
     }

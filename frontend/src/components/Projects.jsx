@@ -48,7 +48,6 @@ function Projects(){
     //Allows user to edit project information
     function handleEditProject(project){
         setProject(project);
-        console.log(project)
         setFormPurpose('edit');
         setShowModal(true);
     }
@@ -61,9 +60,8 @@ function Projects(){
         category: Yup.string().required('Please choose a category'),
         description: Yup.string().required('Please provide a project description.')
         .min(10, 'Description is too short!'),
-        target_hours: Yup.string()
-        .matches(/^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, 'Invalid format.')
-        .required('Required.'),
+        limit_hours: Yup.string()
+        .max(8, 'Max limit_hours is 8 hours'),
       });
 
     return(
@@ -102,7 +100,7 @@ function Projects(){
                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{project.name}</h5>
                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{project.description}</p>
                     <div className="flex justify-between items-center">
-                        <p>Target hours: {project.target_hours}</p>
+                        <p>Worked hours:</p>
                         <a href="#" className="inline-flex items-center px-4 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onMouseEnter={()=>handleMouseEnter(index)} onMouseLeave={()=>handleMouseLeave(index)}>
                             <span className="rtl:rotate-180 flex justify-center items-center w-5 h-5 material-symbols-outlined text-4xl" aria-hidden="true">
                             play_arrow
@@ -143,7 +141,7 @@ function Projects(){
                         enableReinitialize={true}
                         initialValues={{
                         name: project.name || '',
-                        target_hours: project.target_hours || '',
+                        limit_hours: project.limit_hours || 0,
                         category: project.category || '',
                         description: project.description || ''
                         }}
@@ -174,14 +172,7 @@ function Projects(){
                                     ) : null
                                     }
                                 </div>
-                                <div className="col-span-2 sm:col-span-1">
-                                    <label htmlFor="target_hours" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Target Hours</label>
-                                    <Field type="text" name="target_hours" id="target_hours" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="HH:MM:SS" required/>
-                                    {errors.target_hours && touched.target_hours ? (
-                                    <p className="text-red-500">{errors.target_hours}</p>
-                                    ) : null
-                                    }
-                                </div>
+                            
                                 <div className="col-span-2 sm:col-span-1">
                                     <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
                                     <Field as="select" name='category' id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
@@ -197,6 +188,16 @@ function Projects(){
                                     ) : null
                                     }
                                 </div>
+
+                                <div className="col-span-2 sm:col-span-1">
+                                    <label htmlFor="limit_hours" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">limit_hours (optional)</label>
+                                    <Field type="number" min='0' name="limit_hours" id="limit_hours" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder='0'/>
+                                    {errors.limit_hours && touched.limit_hours ? (
+                                    <p className="text-red-500">{errors.limit_hours}</p>
+                                    ) : null
+                                    }
+                                </div>
+
                                 <div className="col-span-2">
                                     <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Project Description</label>
                                     <Field as="textarea" minLength='10' maxLength='200' name='description' id="description" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write project description here" required/>                    
@@ -206,9 +207,11 @@ function Projects(){
                                     }
                                 </div>
                             </div>
+
                             <button type="submit" className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 {formPurpose === 'edit'? 'Edit': 'Add'}
                             </button>
+
                         </Form>)}
                         </Formik>
                     </div>
