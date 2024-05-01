@@ -6,10 +6,11 @@ import UserContext from "../../utils/userContext";
 
 function Projects(){
     const [showModal, setShowModal] = useState(false);
-    const {handleNewProject, handleEdit, projects, handleDelete, errorMsg, successMsg, setSuccessMsg, setErrorMsg} = useContext(UserContext);
+    const {handleNewProject, handleEdit, projects, handleDelete, errorMsg, successMsg, setSuccessMsg, setErrorMsg, startTracker, pauseTracker, timer} = useContext(UserContext);
     const [toolTips, settoolTips] = useState(Array(projects.length).fill(false));
     const [showdeleteModal, setshowdeleteModal] = useState(false);
     const [formPurpose, setFormPurpose] = useState('add');
+    const [trackerBtn, setTrackerBtn] = useState('start');
     const [project, setProject] = useState({})
  
     //Handles appearance and dissappearance of modal
@@ -50,6 +51,17 @@ function Projects(){
         setProject(project);
         setFormPurpose('edit');
         setShowModal(true);
+    }
+
+    function handleTracking(e, project){
+        e.stopPropagation();
+        if(trackerBtn == 'start'){
+            startTracker(project);
+            setTrackerBtn('pause')
+        }else{
+            pauseTracker();
+            setTrackerBtn('start');
+        }
     }
 
     setTimeout(() => setErrorMsg(''), 3000)
@@ -100,10 +112,10 @@ function Projects(){
                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{project.name}</h5>
                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{project.description}</p>
                     <div className="flex justify-between items-center">
-                        <p>Worked hours:</p>
-                        <a href="#" className="inline-flex items-center px-4 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onMouseEnter={()=>handleMouseEnter(index)} onMouseLeave={()=>handleMouseLeave(index)}>
+                        <p>Worked hours: {timer ? `${timer.hours}: ${timer.minutes}: ${timer.seconds}` : '00:00:00'}</p>
+                        <a href="#" className="inline-flex items-center px-4 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onMouseEnter={()=>handleMouseEnter(index)} onMouseLeave={()=>handleMouseLeave(index)} onClick={(e) => {handleTracking(e, project)}}>
                             <span className="rtl:rotate-180 flex justify-center items-center w-5 h-5 material-symbols-outlined text-4xl" aria-hidden="true">
-                            play_arrow
+                            {trackerBtn === 'start' ? 'play_arrow' : 'pause'}
                             </span>
                         </a>
                         { toolTips[index] &&

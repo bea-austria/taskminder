@@ -50,7 +50,7 @@ router.post('/api/newProject',[
     body('description').isLength({ min: 10}).trim()
     ]
     ,async (req,res) => {
-        console.log(req.body)
+
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -67,7 +67,7 @@ router.post('/api/newProject',[
 router.post('/api/editProject', [
     body('name').notEmpty().trim(),
     body('category').notEmpty().trim(),
-    body('limit_hours').optional().isInt({ min: 1, max: 8 }),
+    body('limit_hours').optional().isInt({ min: 0, max: 8 }),
     body('description').isLength({ min: 10}).trim()
     ]
     ,async (req,res) => {

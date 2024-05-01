@@ -50,6 +50,14 @@ class projectController {
             return res.sendStatus(200);
         }
     }
+
+    static async getHours(project){
+        try{
+            return await model.getHours(project.id);
+        }catch(error){
+            console.error('Unable to retrieved tracked hours for this project.');
+        }
+    }
     
 }
 

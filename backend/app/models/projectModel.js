@@ -12,7 +12,7 @@ class projectModel {
                 }
             });
         })
-    }
+    };
 
     static async getProjects(){
         return new Promise((resolve, reject)=>{
@@ -25,7 +25,7 @@ class projectModel {
                 }
             });
         })
-    }
+    };
     
     static async editProject(name, limit_hours, category, description, index){
         return new Promise((resolve, reject)=> {
@@ -38,7 +38,7 @@ class projectModel {
                 }
             });
         })
-    }
+    };
 
     static async deleteProject(index){
         return new Promise((resolve, reject) => {
@@ -51,7 +51,20 @@ class projectModel {
                 }
             })
         })
-    }
+    };
+
+    static async getHours(id){
+        return new Promise((resolve, reject)=>{
+            const query = 'SELECT worked_hours FROM projects WHERE id = ?';
+            db.query(query, [id], (error, result)=>{
+                if(error){
+                    reject(error);
+                }else{
+                    resolve(result);
+                }
+            });
+        });
+    };
 }
 
 module.exports = projectModel;

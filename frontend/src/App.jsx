@@ -1,10 +1,13 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate, useLocation  } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 import axios from 'axios';
 import Landing from './components/Landing'
 import Dashboard from './components/Dashboard'
 import UserContext from '../utils/userContext';
+
+const socket = io.connect('http://localhost:5000');
 
 function App() {
   const [user, setUser] = useState([]);
@@ -12,6 +15,7 @@ function App() {
   const [errorMsg, setErrorMsg] = useState('');
   const [isLogged, setIsLogged] = useState(false);
   const [projects, setProjects] = useState([]);
+  const [timer, setTimer] = useState(null);
   const navigate = useNavigate();
   const location = useLocation()
 
@@ -101,6 +105,17 @@ function App() {
     }
   }
 
+  const startTracker = (project) => {
+    socket.emit('start', project);
+    socket.on('timer', (data) => {
+      setTimer(data);
+    });
+  }
+
+  const pauseTracker = () => {
+    socket.emit('pause');
+  }
+
   const handleEdit = async(project) => {
     try{
       await axios.post(`/api/editProject`, project);
@@ -122,7 +137,10 @@ function App() {
     handleNewProject,
     projects,
     handleDelete,
-    handleEdit
+    handleEdit,
+    startTracker,
+    pauseTracker,
+    timer
   };
 
   return (
