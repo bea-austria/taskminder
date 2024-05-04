@@ -6,7 +6,19 @@ import UserContext from "../../utils/userContext";
 
 function Projects(){
     const [showModal, setShowModal] = useState(false);
-    const {handleNewProject, handleEdit, projects, handleDelete, errorMsg, successMsg, setSuccessMsg, setErrorMsg, startTracker, pauseTracker, timer} = useContext(UserContext);
+    const {
+        user,
+        handleNewProject, 
+        handleEdit, 
+        projects, 
+        handleDelete, 
+        errorMsg, 
+        successMsg, 
+        setSuccessMsg, 
+        setErrorMsg, 
+        startTracker, 
+        pauseTracker, 
+        timer} = useContext(UserContext);
     const [toolTips, settoolTips] = useState(Array(projects.length).fill(false));
     const [showdeleteModal, setshowdeleteModal] = useState(false);
     const [formPurpose, setFormPurpose] = useState('add');
@@ -64,6 +76,7 @@ function Projects(){
         }
     }
 
+    //removes error or success alert after 3 seconds
     setTimeout(() => setErrorMsg(''), 3000)
     setTimeout(() => setSuccessMsg(''), 3000)
 
@@ -162,6 +175,7 @@ function Projects(){
 
                         onSubmit= {(values, {resetForm}) => {
                         values.id = project.id;
+                        values.user_id = user.id
                         handleModal();
                         if(formPurpose == 'edit'){
                             handleEdit(values)

@@ -1,10 +1,10 @@
 const db = require('../config/db.config');
 
 class projectModel {
-    static async addProject(name, limit_hours, category, description){
+    static async addProject(user_id, name, limit_hours, category, description){
         return new Promise((resolve, reject)=>{
-            const query = 'INSERT INTO projects (name, limit_hours, category, description, created_at, updated_at) VALUES(?,?,?,?, NOW(), NOW())';
-            db.query(query, [name, limit_hours, category, description],(error, result)=>{
+            const query = 'INSERT INTO projects (user_id, name, limit_hours, category, description, created_at, updated_at) VALUES(?,?,?,?,?, NOW(), NOW())';
+            db.query(query, [user_id, name, limit_hours, category, description],(error, result)=>{
                 if(error){
                     reject(error);
                 } else {
@@ -14,13 +14,14 @@ class projectModel {
         })
     };
 
-    static async getProjects(){
+    static async getProjects(index){
         return new Promise((resolve, reject)=>{
-            const query = 'SELECT * FROM projects';
-            db.query(query, (error, result)=>{
+            console.log(index)
+            const query = 'SELECT * FROM projects WHERE user_id = ?';
+            db.query(query, [index], (error, result)=>{
                 if(error){
                     reject(error);
-                } else {
+                }else{
                     resolve(result);
                 }
             });

@@ -84,12 +84,13 @@ router.post('/api/editProject', [
     }
 );
 
-router.get('/api/getProjects', async (req, res)=> {
+router.get('/api/getProjects/:id', async (req, res)=> {
     try{
-        const projects = await projectController.getProjects();
-        res.status(200).json({projects: projects})
+        const index = parseInt(req.params.id);
+        const projects = await projectController.getProjects(req, res, index);
+        return res.status(200).json({projects: projects})
     }catch(error){
-        res.status(500);
+        res.status(400).json({ error: error.message });
     }
 });
 

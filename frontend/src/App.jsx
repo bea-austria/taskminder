@@ -19,6 +19,7 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation()
 
+  //Checks if the user is logged in when page reloads
   useEffect(()=>{
     const checkLoggedIn = async() => {
       try{
@@ -36,6 +37,7 @@ function App() {
     checkLoggedIn();
   }, [])
 
+  //Adds user to the database
   const handleRegistration = async (userInfo) => {
     try {
       const response = await axios.post('/api/addUser', userInfo);
@@ -45,6 +47,7 @@ function App() {
     }
   };
 
+  //Fetches user information on log in
   const handleLogIn = async (userInfo) => {
     try {
       const response = await axios.post('/api/logUser', userInfo);
@@ -59,6 +62,7 @@ function App() {
     }
   };
 
+  //Requests to destroy user session on sign out
   const handleSignOut = async () =>{
     try{
       const response  = await axios.get('/api/logOff');
@@ -69,33 +73,45 @@ function App() {
     catch(error){
       console.error(error);
     }
-  }
+  };
 
+  //Fetches saved projects when page reloads
   useEffect(()=>{
-    fetchProjects() 
-  }, []);
+    if(isLogged) fetchProjects() 
+  }, [isLogged]);
 
+  //Fetches saved projects
   const fetchProjects = async() =>{
     try{
-      const response = await axios.get('/api/getProjects')
-      if(response.data !==null){
-        setProjects(response.data.projects);
+        const response = await axios.get(`/api/getProjects/${user.id}`)
+        if(response.data !==null){
+          setProjects(response.data.projects);
       }
     }catch(error){
-      console.error(error);
+      if(error.response.data.error){
+        setErrorMsg(error.response.data.error);
+      }else{
+        setErrorMsg('An error occurred while processing your request.');
+      }
     }
-  }
+  };
 
+  //Passes new project information to the backend
   const handleNewProject = async (project) =>{
     try{
       await axios.post('/api/newProject', project);
-      fetchProjects()
-      setSuccessMsg('Project successfully added')
+      fetchProjects();
+      setSuccessMsg('Project successfully added');
     }catch(error){
-      setErrorMsg(error.response.data.error);
+      if(error.response.data.error){
+        setErrorMsg(error.response.data.error);
+      }else{
+        setErrorMsg('An error occurred while processing your request.');
+      }
     }
   }
 
+  //Passes project to be deleted to the backend
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/api/deleteProject/${id}`);
@@ -116,12 +132,16 @@ function App() {
     socket.emit('pause');
   }
 
-  const handleEdit = async(project) => {
+  const handleEdit = async(project, user) => {
     try{
       await axios.post(`/api/editProject`, project);
       fetchProjects();
     }catch (error) {
-      console.error('Error:', error);
+      if(error.response.data.error){
+        setErrorMsg(error.response.data.error);
+      }else{
+        setErrorMsg('An error occurred while processing your request.');
+      }
     }
   }
 

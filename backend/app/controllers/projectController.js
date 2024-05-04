@@ -2,26 +2,28 @@ const model = require('../models/projectModel');
 class projectController {
     static async addProject(req, res){
         const name = req.body.name;
+        const user_id = req.body.user_id;
         const limit_hours = req.body.limit_hours;
         const category = req.body.category;
         const description = req.body.description;
         const projects = await model.getProjects();
         
-        const duplicate = projects.find((project)=> project.name === name)
+        const duplicate = projects.find((project)=> project.name === name && project.user_id == user_id)
         if(duplicate){
-            throw new Error('Duplicate project name');
+            return res.status(400).json({ error: "Duplicate project found" });
         }else{
-            await model.addProject(name, limit_hours, category, description);
+            await model.addProject(user_id, name, limit_hours, category, description);
             return res.sendStatus(200);
         }
     }
 
-    static async getProjects(req, res){
+    static async getProjects(req, res, index){
         try{
-            const response = await model.getProjects()
+            console.log(index);
+            const response = await model.getProjects(index);
             return response;
         }catch(error){
-            res.status(500);
+            throw new Error("Unable to load projects.")
         }
     }
 
@@ -44,7 +46,7 @@ class projectController {
 
         const duplicate = projects.find((project)=> project.name === name && project.id !== index);
         if(duplicate){
-            throw new Error('Duplicate project name');
+            return res.status(400).json({ error: "Duplicate project found" });
         }else{
             await model.editProject(name, limit_hours, category, description, index);
             return res.sendStatus(200);
