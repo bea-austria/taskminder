@@ -6,22 +6,20 @@ class projectController {
         const limit_hours = req.body.limit_hours;
         const category = req.body.category;
         const description = req.body.description;
-        const projects = await model.getProjects();
+        const projects = await model.getProjects(user_id);
         
         const duplicate = projects.find((project)=> project.name === name && project.user_id == user_id)
         if(duplicate){
             return res.status(400).json({ error: "Duplicate project found" });
         }else{
             await model.addProject(user_id, name, limit_hours, category, description);
-            return res.sendStatus(200);
+            res.sendStatus(200);
         }
     }
 
     static async getProjects(req, res, index){
         try{
-            console.log(index);
-            const response = await model.getProjects(index);
-            return response;
+            return await model.getProjects(index);
         }catch(error){
             throw new Error("Unable to load projects.")
         }
@@ -42,25 +40,33 @@ class projectController {
         const category = req.body.category;
         const description = req.body.description;
         const index = req.body.id;
-        const projects = await model.getProjects();
+        const user_id = req.body.user_id;
+        const projects = await model.getProjects(user_id);
 
         const duplicate = projects.find((project)=> project.name === name && project.id !== index);
         if(duplicate){
             return res.status(400).json({ error: "Duplicate project found" });
         }else{
             await model.editProject(name, limit_hours, category, description, index);
-            return res.sendStatus(200);
+            res.sendStatus(200);
         }
     }
 
-    static async getHours(project){
+    static async getHours(project_id, user_id){
         try{
-            return await model.getHours(project.id);
+            return await model.getHours(project_id, user_id);
         }catch(error){
-            console.error('Unable to retrieved tracked hours for this project.');
+            console.error('Unable to retrieve tracked hours for this project.');
         }
     }
     
+    static async saveHours(timer, project_id, user_id){
+        try{
+            return await model.saveHours(timer, project_id, user_id);
+        }catch(error){
+            console.error('Unable to save tracked hours for this project.');
+        }
+    }
 }
 
 module.exports = projectController;

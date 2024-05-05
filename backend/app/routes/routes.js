@@ -59,7 +59,7 @@ router.post('/api/newProject',[
         try{
             await projectController.addProject(req, res);
         }catch(error){
-            return res.json({ error: error.message });
+            res.json({ error: error.message });
         }
     }
 );
@@ -79,7 +79,7 @@ router.post('/api/editProject', [
         try{
             await projectController.editProject(req, res)
         }catch(error){
-            return res.json({ error: error.message });
+            res.json({ error: error.message });
         }
     }
 );
@@ -88,7 +88,7 @@ router.get('/api/getProjects/:id', async (req, res)=> {
     try{
         const index = parseInt(req.params.id);
         const projects = await projectController.getProjects(req, res, index);
-        return res.status(200).json({projects: projects})
+        res.status(200).json({projects: projects})
     }catch(error){
         res.status(400).json({ error: error.message });
     }

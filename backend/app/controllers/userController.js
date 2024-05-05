@@ -54,6 +54,22 @@ class UserController{
         }
     }
 
+    static async getHours(id){
+        try{
+            return await model.getHours(id);
+        }catch(error){
+            console.error('Unable to retrieve tracked hours for this user.');
+        }
+    }
+
+    static async saveHours(timer, id){
+        try{
+            return await model.saveHours(timer, id);
+        }catch(error){
+            console.error('Unable to save tracked hours for this user.');
+        }
+    }
+
     static async logOff(req, res){
         req.session.destroy();
     }

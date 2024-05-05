@@ -117,19 +117,20 @@ function App() {
       await axios.delete(`/api/deleteProject/${id}`);
       fetchProjects();
     }catch (error) {
-      console.error('Error:', error);
+      setErrorMsg('An error occurred while processing your request.');
     }
   }
 
   const startTracker = (project) => {
-    socket.emit('start', project);
-    socket.on('timer', (data) => {
+    socket.emit('start', {project, user});
+    socket.on('userTimer', (data) => {
       setTimer(data);
     });
   }
 
   const pauseTracker = () => {
     socket.emit('pause');
+    fetchProjects();
   }
 
   const handleEdit = async(project, user) => {

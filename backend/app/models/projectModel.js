@@ -16,7 +16,6 @@ class projectModel {
 
     static async getProjects(index){
         return new Promise((resolve, reject)=>{
-            console.log(index)
             const query = 'SELECT * FROM projects WHERE user_id = ?';
             db.query(query, [index], (error, result)=>{
                 if(error){
@@ -54,10 +53,10 @@ class projectModel {
         })
     };
 
-    static async getHours(id){
+    static async getHours(id, user_id){
         return new Promise((resolve, reject)=>{
-            const query = 'SELECT worked_hours FROM projects WHERE id = ?';
-            db.query(query, [id], (error, result)=>{
+            const query = 'SELECT worked_hours FROM projects WHERE id = ? && user_id = ?';
+            db.query(query, [id, user_id], (error, result)=>{
                 if(error){
                     reject(error);
                 }else{
@@ -66,6 +65,19 @@ class projectModel {
             });
         });
     };
+
+    static async saveHours(timer, project_id, user_id){
+        return new Promise((resolve, reject)=>{
+            const query = 'UPDATE projects SET worked_hours = ? WHERE id= ? && user_id = ?';
+            db.query(query, [timer, project_id, user_id], (error, result)=>{
+                if(error){
+                    reject(error);
+                }else{
+                    resolve(true);
+                }
+            })
+        })
+    }
 }
 
 module.exports = projectModel;
