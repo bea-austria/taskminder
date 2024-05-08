@@ -28,7 +28,7 @@ class UserController{
             const status = await model.addUser(first_name, last_name, email, pw_hashed);
 
             if(status){
-                return res.status(200).json({message: 'User registered successfully.' })
+                res.status(200).json({message: 'User registered successfully.' })
             }
 
         }catch(error){
@@ -51,22 +51,6 @@ class UserController{
                 req.session.user = isRegistered[0];
                 return res.status(200).json({ user: isRegistered[0], message: 'Log in successful.' });
             }
-        }
-    }
-
-    static async getHours(id){
-        try{
-            return await model.getHours(id);
-        }catch(error){
-            console.error('Unable to retrieve tracked hours for this user.');
-        }
-    }
-
-    static async saveHours(timer, id){
-        try{
-            return await model.saveHours(timer, id);
-        }catch(error){
-            console.error('Unable to save tracked hours for this user.');
         }
     }
 

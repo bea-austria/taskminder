@@ -28,7 +28,7 @@ function PageHeader({h1, handleModal}){
                 <h1 className='text-4xl font-bold mb-2'>{h1}</h1>
                 <span className='text-lg'>{formatDate(date)}</span>
                 {h1 === 'Projects' && 
-                <a href="#" className="absolute right-[5px] top-[8px]" onMouseEnter={()=>setShowToolTip(true)} onMouseLeave={()=>setShowToolTip(false)} onClick={handleModal}>
+                <a href="#" className="absolute right-[2px] top-[8px]" onMouseEnter={()=>setShowToolTip(true)} onMouseLeave={()=>setShowToolTip(false)} onClick={handleModal}>
                     <span className="material-symbols-outlined text-3xl text-blue-700 cursor-pointer hover:text-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     add_circle
                     </span>

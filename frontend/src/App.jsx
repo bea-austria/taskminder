@@ -16,8 +16,11 @@ function App() {
   const [isLogged, setIsLogged] = useState(false);
   const [projects, setProjects] = useState([]);
   const [timer, setTimer] = useState(null);
+  const [dailyHours, setDailyHours] = useState('');
+  const [weeklyHours, setWeeklyHours] = useState('');
+  const [trackerBtns, setTrackerBtns] = useState([]);
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
 
   //Checks if the user is logged in when page reloads
   useEffect(()=>{
@@ -95,6 +98,11 @@ function App() {
       }
     }
   };
+  
+  useEffect(() => {
+    // Initialize trackerBtns after projects have been fetched
+    setTrackerBtns(Array(projects.length).fill('start'));
+  }, [projects]);
 
   //Passes new project information to the backend
   const handleNewProject = async (project) =>{
@@ -121,16 +129,25 @@ function App() {
     }
   }
 
-  const startTracker = (project) => {
+  const startTracker = (project, index) => {
+    const currentTracker = [...trackerBtns];
+    currentTracker[index] = 'pause';
+    setTrackerBtns(currentTracker);
+
     socket.emit('start', {project, user});
     socket.on('userTimer', (data) => {
       setTimer(data);
     });
   }
 
-  const pauseTracker = () => {
+  const pauseTracker = (index) => {
+    const currentTracker = [...trackerBtns];
+    currentTracker[index] = 'start';
+    setTrackerBtns(currentTracker);
+
     socket.emit('pause');
     fetchProjects();
+    getWeeklyHours();
   }
 
   const handleEdit = async(project, user) => {
@@ -143,6 +160,31 @@ function App() {
       }else{
         setErrorMsg('An error occurred while processing your request.');
       }
+    }
+  }
+
+  useEffect(()=>{
+    if(user.id){
+      getDailyHours();
+      getWeeklyHours();
+    }
+  }, [user]);
+
+  const getDailyHours = async() => {
+    try{
+      const response = await axios.get(`/api/getDailyHours/${user.id}`);
+      setDailyHours(response.data[0].worked_hours);
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  const getWeeklyHours = async() => {
+    try{
+      const response = await axios.get(`/api/getWeeklyHours/${user.id}`);
+      setWeeklyHours(response.data[0].worked_hours);
+    }catch(error){
+      console.log(error);
     }
   }
 
@@ -161,7 +203,10 @@ function App() {
     handleEdit,
     startTracker,
     pauseTracker,
-    timer
+    trackerBtns,
+    timer,
+    dailyHours,
+    weeklyHours
   };
 
   return (

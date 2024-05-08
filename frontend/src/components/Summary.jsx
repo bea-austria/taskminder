@@ -6,7 +6,7 @@ import PageHeader from './PageHeader.jsx';
 
 
 function Summary(){
-    const {user} = useContext(UserContext);
+    const {user, timer, weeklyHours} = useContext(UserContext);
     
     return(
         <>
@@ -25,18 +25,9 @@ function Summary(){
                         <span className="material-symbols-outlined text-2xl">
                         schedule
                         </span>
-                        <h3 className='text-xl'>Total hours worked:</h3>
+                        <h3 className='text-xl'>Hours worked this week:</h3>
                     </div>
-                    <div className='flex gap-5'>
-                        <div>
-                            <p className='text-bs'>Today</p>
-                            <p className='text-3xl'>06:30:05</p>
-                        </div>
-                        <div>
-                            <p className='text-bs'>This Week</p>
-                            <p className='text-3xl'>36:15:59</p>
-                        </div>
-                    </div>
+                    <p className='text-3xl'>{weeklyHours ? weeklyHours : '00:00:00'}</p>             
                 </div>
                 <div className="flex flex-col items-center justify-center rounded bg-gray-50 dark:bg-gray-800 py-6">
                     <div className='flex'>

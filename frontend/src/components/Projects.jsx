@@ -18,11 +18,12 @@ function Projects(){
         setErrorMsg, 
         startTracker, 
         pauseTracker, 
-        timer} = useContext(UserContext);
+        trackerBtns,
+        timer,
+        dailyHours} = useContext(UserContext);
     const [toolTips, settoolTips] = useState(Array(projects.length).fill(false));
     const [showdeleteModal, setshowdeleteModal] = useState(false);
     const [formPurpose, setFormPurpose] = useState('add');
-    const [trackerBtn, setTrackerBtn] = useState('start');
     const [project, setProject] = useState({})
  
     //Handles appearance and dissappearance of modal
@@ -65,20 +66,19 @@ function Projects(){
         setShowModal(true);
     }
 
-    function handleTracking(e, project){
+    //Starts or pause tracker for a specific project
+    function handleTracking(e, project, index){
         e.stopPropagation();
-        if(trackerBtn == 'start'){
-            startTracker(project);
-            setTrackerBtn('pause')
+        if(trackerBtns[index] === 'start'){
+            startTracker(project, index);
         }else{
-            pauseTracker();
-            setTrackerBtn('start');
+            pauseTracker(index);
         }
     }
 
     //removes error or success alert after 3 seconds
-    setTimeout(() => setErrorMsg(''), 3000)
-    setTimeout(() => setSuccessMsg(''), 3000)
+    setTimeout(() => setErrorMsg(''), 4000)
+    setTimeout(() => setSuccessMsg(''), 4000)
 
     let validationSchema = Yup.object().shape({
         name: Yup.string().required('Project name is required'),
@@ -116,7 +116,15 @@ function Projects(){
               </div>
             )}
 
-            <p>{timer ? `${timer.hours}: ${timer.minutes}: ${timer.seconds}` : '00:00:00'}</p>
+            <div id="toast-success" className="flex items-center w-fit p-4 mb-4 text-gray-900 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+                <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-green-100 rounded-lg dark:bg-blue-800 dark:text-green-200">
+                    <span className="material-symbols-outlined">
+                    timer
+                    </span>
+                    <span className="sr-only">Timer icon</span>
+                </div>
+                <p className="ms-3 text-2xl font-normal">{timer ? `${timer.hours}:${timer.minutes}:${timer.seconds}` : dailyHours}</p>
+            </div>
 
             <div className="grid grid-cols-3 gap-y-6">
                 {projects.map((project, index)=> (
@@ -128,9 +136,9 @@ function Projects(){
                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{project.description}</p>
                     <div className="flex justify-between items-center">
                         <p>Worked hours: {project.worked_hours ? project.worked_hours : '00:00:00'}</p>
-                        <a href="#" className="inline-flex items-center px-4 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onMouseEnter={()=>handleMouseEnter(index)} onMouseLeave={()=>handleMouseLeave(index)} onClick={(e) => {handleTracking(e, project)}}>
+                        <a href="#" className="inline-flex items-center px-4 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onMouseEnter={()=>handleMouseEnter(index)} onMouseLeave={()=>handleMouseLeave(index)} onClick={(e) => {handleTracking(e, project, index)}}>
                             <span className="rtl:rotate-180 flex justify-center items-center w-5 h-5 material-symbols-outlined text-4xl" aria-hidden="true">
-                            {trackerBtn === 'start' ? 'play_arrow' : 'pause'}
+                            {trackerBtns[index] === 'start' ? 'play_arrow' : 'pause'}
                             </span>
                         </a>
                         { toolTips[index] &&

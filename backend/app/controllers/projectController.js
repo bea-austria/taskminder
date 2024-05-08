@@ -67,6 +67,22 @@ class projectController {
             console.error('Unable to save tracked hours for this project.');
         }
     }
+
+    static async getDailyHours(user_id){
+        try{
+            return await model.getDailyHours(user_id)
+        }catch(error){
+            console.error('Unable to retrieve total tracked hours for this user.')
+        }
+    }
+
+    static async getWeeklyHours(user_id){
+        try{
+            return await model.getWeeklyHours(user_id)
+        }catch(error){
+            console.error('Unable to retrieve weekly tracked hours for this user.')
+        }
+    }
 }
 
 module.exports = projectController;

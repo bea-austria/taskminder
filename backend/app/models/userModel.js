@@ -27,32 +27,6 @@ class UserModel{
             });
         });
     };
-
-    static async getHours(id){
-        return new Promise((resolve, reject)=>{
-            const query = 'SELECT worked_hours FROM users WHERE id = ?';
-            db.query(query, [id], (error, result)=>{
-                if(error){
-                    reject(error);
-                }else{
-                    resolve(result);
-                }
-            });
-        });
-    };
-
-    static async saveHours(timer, id){
-        return new Promise((resolve, reject)=>{
-            const query = 'UPDATE users SET worked_hours = ? WHERE id = ?';
-            db.query(query, [timer, id], (error, result)=>{
-                if(error){
-                    reject(error);
-                }else{
-                    resolve(true);
-                }
-            });
-        });
-    };
 };
 
 

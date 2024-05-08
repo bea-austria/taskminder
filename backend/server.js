@@ -8,7 +8,7 @@ const http = require('http');
 const getHours = require('./app/utils/getHours');
 const format = require('./app/utils/timeFormat');
 const saveHours = require('./app/utils/saveHours');
-
+const incrementHours = require('./app/utils/incrementHours');
 
 const { Server } = require("socket.io");
 const server = http.createServer(app);
@@ -47,42 +47,19 @@ io.on('connection', (socket)=>{
         projectTimer = await getHours(project_id, user_id);
 
         interval = setInterval(() => {
-            projectTimer.seconds++;
-            userTimer.seconds++;
-
-            if (projectTimer.seconds === 60) {
-              projectTimer.seconds = 0;
-              projectTimer.minutes++;
-              if (projectTimer.minutes === 60) {
-                projectTimer.minutes = 0;
-                projectTimer.hours++;
-              }
-            }
-
-            if (userTimer.seconds === 60) {
-                userTimer.seconds = 0;
-                userTimer.minutes++;
-                if (userTimer.minutes === 60) {
-                    userTimer.minutes = 0;
-                    userTimer.hours++;
-                }
-            }
-            
+            projectTimer = incrementHours(projectTimer);
+            userTimer = incrementHours(userTimer);
             formatteduserTimer = format(userTimer);
             socket.emit('userTimer', formatteduserTimer);       
-          }, 1000);
+        }, 1000);
     });
 
     socket.on('pause', () => {
         const formattedprojectTimer = format(projectTimer);
 
         saveHours(formattedprojectTimer, project_id, user_id);
-        saveHours(formatteduserTimer,null, user_id);
-
         clearInterval(interval);
     });
-
-    
 })
 
 server.listen(PORT, () => {

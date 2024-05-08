@@ -1,16 +1,12 @@
-const projectController = require('../controllers/projectController')
-const userController = require('../controllers/userController');
+const controller = require('../controllers/projectController')
 
 const getHours = async (project_id, user_id) => {
     let response;
-    let type;
 
     if(project_id){
-        response = await projectController.getHours(project_id, user_id);
-        type = 'project'
+        response = await controller.getHours(project_id, user_id);
     }else{
-        response = await userController.getHours(user_id);
-        type = 'user'
+        response = await controller.getDailyHours(user_id);
     }
 
     const timeString = response[0].worked_hours;
