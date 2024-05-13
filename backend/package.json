@@ -17,6 +17,7 @@
     "express-session": "^1.18.0",
     "express-validator": "^7.0.1",
     "mysql": "^2.18.1",
+    "node-cron": "^3.0.3",
     "socket.io": "^4.7.5"
   }
 }

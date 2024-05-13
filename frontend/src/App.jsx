@@ -88,7 +88,7 @@ function App() {
     try{
         const response = await axios.get(`/api/getProjects/${user.id}`)
         if(response.data !==null){
-          setProjects(response.data.projects);
+          setProjects(response.data);
       }
     }catch(error){
       if(error.response.data.error){

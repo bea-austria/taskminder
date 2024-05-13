@@ -185,7 +185,7 @@ function Projects(){
 
                         onSubmit= {(values, {resetForm}) => {
                         values.id = project.id;
-                        values.user_id = user.id
+                        values.user_id = user.id;
                         handleModal();
                         if(formPurpose == 'edit'){
                             handleEdit(values)

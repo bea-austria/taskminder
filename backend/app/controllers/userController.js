@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 const model = require('../models/userModel');
+const check = require("express-validator");
+const { validationResult } = check;
 
 class UserController{
 
@@ -21,8 +23,13 @@ class UserController{
             const pw_hashed = bcrypt.hashSync(password, 10)
             const isRegistered = await this.isUserRegistered(email)
 
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.send(errors.array());
+            }
+
             if(isRegistered.length > 0){
-                return res.status(400).json({error: 'Registration failed. Email is already registered.'})
+                return res.json({error: 'Registration failed. Email is already registered.'})
             }
 
             const status = await model.addUser(first_name, last_name, email, pw_hashed);
@@ -32,30 +39,40 @@ class UserController{
             }
 
         }catch(error){
-            res.status(500).json({ error: error.message });
+            res.json({ error: "User registration failed. Try again later." });
         }
     }
 
     static async logUser(req, res){
-        const email = req.body.email;
-        const password = req.body.password;
-        const isRegistered = await UserController.isUserRegistered(email);
-        
-        if(isRegistered.length === 0){
-            return res.status(400).json({error: 'Log in failed. User not found.'})
-        }else{
+        try{
+            const email = req.body.email;
+            const password = req.body.password;
+            const isRegistered = await UserController.isUserRegistered(email);
             const verified = bcrypt.compareSync(password, isRegistered[0].password);
-            if(!verified){
-                return res.status(400).json({error: 'Log in failed. Incorrect credentials.'})
-            }else{
-                req.session.user = isRegistered[0];
-                return res.status(200).json({ user: isRegistered[0], message: 'Log in successful.' });
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                return res.json({ errors: errors.array() });
             }
+            
+            if(isRegistered.length === 0){
+                return res.json({error: 'Log in failed. User not found.'})
+            }
+
+            if(!verified){
+                return res.json({error: 'Log in failed. Incorrect credentials.'})
+            }
+
+            req.session.user = isRegistered[0];
+            res.status(200).json({ user: isRegistered[0], message: 'Log in successful.' });  
+        }catch(error){
+            res.json({ error: "User log in failed. Try again later." });
         }
     }
 
     static async logOff(req, res){
         req.session.destroy();
+        res.sendStatus(200);
     }
 }
 
