@@ -29,7 +29,7 @@ class UserController{
             }
 
             if(isRegistered.length > 0){
-                return res.json({error: 'Registration failed. Email is already registered.'})
+                return res.status(400).json({error: 'Registration failed. Email is already registered.'})
             }
 
             const status = await model.addUser(first_name, last_name, email, pw_hashed);
@@ -48,25 +48,25 @@ class UserController{
             const email = req.body.email;
             const password = req.body.password;
             const isRegistered = await UserController.isUserRegistered(email);
-            const verified = bcrypt.compareSync(password, isRegistered[0].password);
             const errors = validationResult(req);
-
+    
             if (!errors.isEmpty()) {
-                return res.json({ errors: errors.array() });
+                return res.status(400).json({ errors: errors.array() });
             }
             
             if(isRegistered.length === 0){
-                return res.json({error: 'Log in failed. User not found.'})
+                return res.status(400).json({error: 'Log in failed. User not found.'})
             }
-
+            
+            const verified = bcrypt.compareSync(password, isRegistered[0].password);
             if(!verified){
-                return res.json({error: 'Log in failed. Incorrect credentials.'})
+                return res.status(400).json({error: 'Log in failed. Incorrect credentials.'})
             }
-
+    
             req.session.user = isRegistered[0];
-            res.status(200).json({ user: isRegistered[0], message: 'Log in successful.' });  
+            return res.status(200).json({ user: isRegistered[0], message: 'Log in successful.' }); 
         }catch(error){
-            res.json({ error: "User log in failed. Try again later." });
+            return res.json({ error: "User log in failed. Try again later." });
         }
     }
 

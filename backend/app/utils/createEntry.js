@@ -2,10 +2,12 @@ const cron = require('node-cron');
 const controller = require('../controllers/productivityController');
 const projectController = require('../controllers/projectController');
 
-async function createEntry(){
+const createEntry = async() => {
     try {
         const projects = await projectController.getAllProjects();
+        console.log(projects)
         for (const project of projects) {
+            console.log(project.id)
             await controller.addEntry(project.id);
         }
     } catch (error) {
@@ -13,4 +15,4 @@ async function createEntry(){
     }
 };
 
-cron.schedule('0 0 * * *', createEntry);
+cron.schedule('0 11 * * *', createEntry);

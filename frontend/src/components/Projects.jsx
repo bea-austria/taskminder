@@ -19,8 +19,7 @@ function Projects(){
         startTracker, 
         pauseTracker, 
         trackerBtns,
-        timer,
-        dailyHours} = useContext(UserContext);
+        timer} = useContext(UserContext);
     const [toolTips, settoolTips] = useState(Array(projects.length).fill(false));
     const [showdeleteModal, setshowdeleteModal] = useState(false);
     const [formPurpose, setFormPurpose] = useState('add');
@@ -71,6 +70,7 @@ function Projects(){
         e.stopPropagation();
         if(trackerBtns[index] === 'start'){
             startTracker(project, index);
+            // setProject(project)
         }else{
             pauseTracker(index);
         }
@@ -123,7 +123,7 @@ function Projects(){
                     </span>
                     <span className="sr-only">Timer icon</span>
                 </div>
-                <p className="ms-3 text-2xl font-normal">{timer ? `${timer.hours}:${timer.minutes}:${timer.seconds}` : dailyHours}</p>
+                <p className="ms-3 text-2xl font-normal">{timer ? `${timer.hours}:${timer.minutes}:${timer.seconds}` : project.worked_hours}</p>
             </div>
 
             <div className="grid grid-cols-3 gap-y-6">

@@ -1,15 +1,13 @@
-const controller = require('../controllers/projectController')
+const controller = require('../controllers/productivityController')
 
-const getHours = async (project_id, user_id) => {
-    let response;
+const getHours = async (project_id) => {
+    const response = await controller.getDailyHours(project_id);
+    let timeString;
 
-    if(project_id){
-        response = await controller.getHours(project_id, user_id);
-    }else{
-        response = await controller.getDailyHours(user_id);
+    if(response.length >0 ){
+        timeString = response[0].worked_hours;
     }
-
-    const timeString = response[0].worked_hours;
+    
     let timeArr = []
 
     if(timeString){

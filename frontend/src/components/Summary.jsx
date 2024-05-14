@@ -6,7 +6,7 @@ import PageHeader from './PageHeader.jsx';
 
 
 function Summary(){
-    const {user, timer, weeklyHours} = useContext(UserContext);
+    const {user, weeklyHours, projects} = useContext(UserContext);
     
     return(
         <>
@@ -58,39 +58,19 @@ function Summary(){
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                {projects.map((project, index)=>(
+                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={index}>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        SEO Research
+                                        {project.name}
                                     </th>
                                     <td className="px-6 py-4 flex justify-start gap-5 items-center">
-                                        16:25:09
+                                        {project.worked_hours ? project.worked_hours : '00:00:00'}
                                         <div className="w-2/5 bg-gray-200 rounded-full dark:bg-gray-700">
                                             <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: '45%' }}> 45%</div>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Coding
-                                    </th>
-                                    <td className="px-6 py-4 flex justify-start gap-5 items-center">
-                                        23:23:01
-                                        <div className="w-2/5 bg-gray-200 rounded-full dark:bg-gray-700">
-                                            <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: '45%' }}> 45%</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr className="bg-white dark:bg-gray-800">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Product Design
-                                    </th>
-                                    <td className="px-6 py-4 flex justify-start gap-5 items-center">
-                                        03:25:09
-                                        <div className="w-2/5 bg-gray-200 rounded-full dark:bg-gray-700">
-                                            <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: '45%' }}> 45%</div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>

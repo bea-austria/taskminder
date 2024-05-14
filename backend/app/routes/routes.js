@@ -6,7 +6,7 @@ const projectController = require('../controllers/projectController');
 const productivityController = require('../controllers/productivityController');
 
 router.get('/api/checkLoggedIn', (req, res) => {
-    res.status(200).json({ user: req.session.user || null });
+    res.json({ user: req.session.user || null });
 });
 
 router.post('/api/addUser',[
@@ -48,32 +48,17 @@ router.post('/api/editProject', [
 
 router.get('/api/getProjects/:id', async (req, res)=> {
     const index = parseInt(req.params.id);
-    projectController.getUserProjects(req, res, index);
+    await projectController.getUserProjects(req, res, index);
 });
 
 router.delete('/api/deleteProject/:id', async (req, res) =>{
     const index = parseInt(req.params.id);
-    projectController.deleteProject(req, res, index);
+    await projectController.deleteProject(req, res, index);
 });
 
-// router.get('/api/getDailyHours/:id', async(req, res)=> {
-//     try{
-//         const id = parseInt(req.params.id);
-//         const response = await projectController.getDailyHours(id);
-//         res.status(200).json(response)
-//     }catch(error){
-//         res.status(400).json({ error: error.message });
-//     }
-// });
-
-// router.get('/api/getWeeklyHours/:id', async(req, res)=> {
-//     try{
-//         const id = parseInt(req.params.id);
-//         const response = await projectController.getWeeklyHours(id);
-//         res.status(200).json(response)
-//     }catch(error){
-//         res.status(400).json({ error: error.message });
-//     }
-// });
+router.get('/api/getWeeklyHours/:id', async(req, res)=> {
+    const id = parseInt(req.params.id);
+    await productivityController.getWeeklyHours(req, res, id);
+});
 
 module.exports = router;

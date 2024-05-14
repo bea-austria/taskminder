@@ -20,7 +20,13 @@ class projectModel {
             let values = [];
             
             if(index){
-                query = 'SELECT * FROM projects WHERE user_id = ?';
+                query = 
+                `SELECT projects.id, projects.user_id, name, category, description, worked_hours
+                FROM projects
+                INNER JOIN productivity
+                ON productivity.project_id = taskminder.projects.id
+                WHERE DATE(productivity.created_at) = CURDATE()
+                AND projects.user_id = ?;`;
                 values.push(index);
             }else{
                 query = 'SELECT * FROM projects'

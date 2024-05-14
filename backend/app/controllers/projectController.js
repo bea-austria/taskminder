@@ -19,17 +19,18 @@ class projectController {
         }
         
         if(duplicate){
-            return res.json({ error: "Duplicate project found" });
+            return res.status(400).json({ error: "Duplicate project found" });
         }
 
         const project_id = await model.addProject(user_id, name, limit_hours, category, description);
         await productivityController.addEntry(req, res, project_id);
+        res.sendStatus(200);
     }
 
     static async getUserProjects(req, res, index){
         try{
             const projects = await model.getProjects(index);
-            res.status(200).json(projects)
+            res.status(200).json(projects);
         }catch(error){
             res.json({ error: "Unable to retrieve projects at the moment." });
         }

@@ -1,46 +1,38 @@
 const model = require('../models/productivityModel');
 class productivityController {
 
-    static async addEntry(req, res, project_id){
+    static async addEntry(project_id){
         try{
             await model.addEntry(project_id);
-            res.sendStatus(200);
         }catch(error){
-            // throw new Error('Unable to add daily entry for this project');
+            console.error(error, 'Unable to add daily entry to this project')
         }
     }
 
-    static async getHours(project_id, user_id){
+    static async getDailyHours(project_id){
         try{
-            return await model.getHours(project_id);
+            return await model.getDailyHours(project_id);
         }catch(error){
-            throw new Error('Unable to retrieve tracked hours for this project.');
+            console.error(error, 'Unable to retrieve tracked hours for this project.')
         }
     }
     
-    // static async saveHours(timer, project_id, user_id){
-    //     try{
-    //         return await model.saveHours(timer, project_id, user_id);
-    //     }catch(error){
-    //         throw new Error('Unable to save tracked hours for this project.');
-    //     }
-    // }
+    static async saveHours(timer, project_id){
+        try{
+            await model.saveHours(timer, project_id);
+        }catch(error){
+            console.error(error,'Unable to save tracked hours for this project.');
+        }
+    }
 
-    // static async getDailyHours(user_id){
-    //     try{
-    //         return await model.getDailyHours(user_id)
-    //     }catch(error){
-    //         throw new Error('Unable to retrieve total tracked hours for this user.')
-    //     }
-    // }
-
-    // static async getWeeklyHours(user_id){
-    //     try{
-    //         return await model.getWeeklyHours(user_id)
-    //     }catch(error){
-    //         throw new Error('Unable to retrieve weekly tracked hours for this user.')
-    //     }
-    // }
+    static async getWeeklyHours(req, res, user_id){
+        try{
+            const response = await model.getWeeklyHours(user_id);
+            res.json(response[0]);
+        }catch(error){
+            console.error(error,'Unable to retrieve weekly tracked hours for this user.')
+        }
+    }
 }
 
 module.exports = productivityController;

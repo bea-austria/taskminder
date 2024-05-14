@@ -16,7 +16,6 @@ function App() {
   const [isLogged, setIsLogged] = useState(false);
   const [projects, setProjects] = useState([]);
   const [timer, setTimer] = useState(null);
-  const [dailyHours, setDailyHours] = useState('');
   const [weeklyHours, setWeeklyHours] = useState('');
   const [trackerBtns, setTrackerBtns] = useState([]);
   const navigate = useNavigate();
@@ -165,26 +164,16 @@ function App() {
 
   useEffect(()=>{
     if(user.id){
-      getDailyHours();
       getWeeklyHours();
     }
   }, [user]);
 
-  const getDailyHours = async() => {
-    try{
-      const response = await axios.get(`/api/getDailyHours/${user.id}`);
-      setDailyHours(response.data[0].worked_hours);
-    }catch(error){
-      console.log(error);
-    }
-  }
-
   const getWeeklyHours = async() => {
     try{
       const response = await axios.get(`/api/getWeeklyHours/${user.id}`);
-      setWeeklyHours(response.data[0].worked_hours);
+      setWeeklyHours(response.data.worked_hours);
     }catch(error){
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -205,7 +194,6 @@ function App() {
     pauseTracker,
     trackerBtns,
     timer,
-    dailyHours,
     weeklyHours
   };
 

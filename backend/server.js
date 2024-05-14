@@ -33,31 +33,26 @@ app.use(express.json());
 app.use(router)
 
 io.on('connection', (socket)=>{
-    let userTimer;
     let projectTimer;
     let interval;
     let project_id;
     let user_id;
-    let formatteduserTimer;
+    let formattedprojectTimer;
 
     socket.on('start', async (data)=>{
         user_id = data.user.id;
         project_id = data.project.id;
-        userTimer = await getHours(null, user_id);
-        projectTimer = await getHours(project_id, user_id);
+        projectTimer = await getHours(project_id);
 
         interval = setInterval(() => {
             projectTimer = incrementHours(projectTimer);
-            userTimer = incrementHours(userTimer);
-            formatteduserTimer = format(userTimer);
-            socket.emit('userTimer', formatteduserTimer);       
+            formattedprojectTimer = format(projectTimer);
+            socket.emit('userTimer', formattedprojectTimer);       
         }, 1000);
     });
 
     socket.on('pause', () => {
-        const formattedprojectTimer = format(projectTimer);
-
-        saveHours(formattedprojectTimer, project_id, user_id);
+        saveHours(formattedprojectTimer, project_id);
         clearInterval(interval);
     });
 })
