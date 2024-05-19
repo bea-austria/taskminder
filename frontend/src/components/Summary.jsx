@@ -3,11 +3,12 @@ import Placeholder from '../assets/placeholder.jpg';
 import UserContext from '../../utils/userContext.js';
 import { useContext } from 'react';
 import PageHeader from './PageHeader.jsx';
+// import ActivityLevels from './Productivity.jsx';
 
 
 function Summary(){
     const {user, weeklyHours, projects} = useContext(UserContext);
-    
+
     return(
         <>
             <PageHeader h1={'Dashboard'}/>            
@@ -29,15 +30,7 @@ function Summary(){
                     </div>
                     <p className='text-3xl'>{weeklyHours ? weeklyHours : '00:00:00'}</p>             
                 </div>
-                <div className="flex flex-col items-center justify-center rounded bg-gray-50 dark:bg-gray-800 py-6">
-                    <div className='flex'>
-                        <span className="material-symbols-outlined text-2xl">
-                        trackpad_input
-                        </span>
-                        <h3 className='text-xl'>Activity level:</h3>
-                    </div>
-                    <p className='text-3xl'>78%</p>
-                </div>
+                {/* <ActivityLevels/> */}
             </section>
             
             <section className="grid grid-cols-3 gap-4 my-8">

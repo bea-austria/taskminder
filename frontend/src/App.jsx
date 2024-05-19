@@ -6,6 +6,7 @@ import axios from 'axios';
 import Landing from './components/Landing'
 import Dashboard from './components/Dashboard'
 import UserContext from '../utils/userContext';
+import activityCalculator from '../utils/getActivity';
 
 const socket = io.connect('http://localhost:5000');
 
@@ -18,8 +19,10 @@ function App() {
   const [timer, setTimer] = useState(null);
   const [weeklyHours, setWeeklyHours] = useState('');
   const [trackerBtns, setTrackerBtns] = useState([]);
+  const [activityLevel, setActivityLevel] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
+  const calculator = activityCalculator();
 
   //Checks if the user is logged in when page reloads
   useEffect(()=>{
@@ -55,6 +58,7 @@ function App() {
       const response = await axios.post('/api/logUser', userInfo);
       setUser(response.data.user);
       setSuccessMsg(response.data.message);
+      activityCalculator();
       setTimeout(()=> {
         setIsLogged(true);
       }, 2000);
@@ -67,10 +71,9 @@ function App() {
   //Requests to destroy user session on sign out
   const handleSignOut = async () =>{
     try{
-      const response  = await axios.get('/api/logOff');
-      if (response){
-        setIsLogged(false);
-      }
+      await axios.get('/api/logOff');
+      setIsLogged(false);
+      calculator.stopTimer()
     }
     catch(error){
       console.error(error);
@@ -177,6 +180,25 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    const timer = setInterval(()=>{
+      const activity = calculator.getActivity();
+      saveActivityLevel(activity);
+    }, 5 * 60 * 1000);
+
+    return (()=>{
+      clearInterval(timer);
+    })
+  }, []);
+
+  const saveActivityLevel = async(activity) => {
+    try{
+      console.log(activity)
+    }catch(error){
+
+    }
+  }
+
   const contextValue = {
     user,
     handleLogIn,
@@ -194,7 +216,9 @@ function App() {
     pauseTracker,
     trackerBtns,
     timer,
-    weeklyHours
+    weeklyHours,
+    activityLevel, 
+    saveActivityLevel
   };
 
   return (
