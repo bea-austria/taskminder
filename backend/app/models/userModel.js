@@ -27,6 +27,19 @@ class UserModel{
             });
         });
     };
+
+    static async getUsers(){
+        return new Promise((resolve, reject)=>{
+            const query = 'SELECT * FROM users';
+            db.query(query, (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
 };
 
 

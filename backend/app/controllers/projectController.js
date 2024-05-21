@@ -23,7 +23,7 @@ class projectController {
         }
 
         const project_id = await model.addProject(user_id, name, limit_hours, category, description);
-        await productivityController.addEntry(req, res, project_id);
+        await productivityController.addEntry(project_id);
         res.sendStatus(200);
     }
 
@@ -38,7 +38,7 @@ class projectController {
 
     static async getAllProjects(){
         try{
-            return await model.getProjects(null);
+            return await model.getProjects();
         }catch(error){
             throw error;
         }

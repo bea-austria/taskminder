@@ -30,7 +30,7 @@ class productivityModel {
 
     static async saveHours(timer, project_id){
         return new Promise((resolve, reject)=>{
-            const query = 'UPDATE productivity SET worked_hours = ?, updated_at = NOW() WHERE project_id= ?';
+            const query = 'UPDATE productivity SET worked_hours = ?, updated_at = NOW() WHERE project_id= ? AND DATE(created_at) = CURDATE()';
             db.query(query, [timer, project_id], (error, result)=>{
                 if(error){
                     reject(error);

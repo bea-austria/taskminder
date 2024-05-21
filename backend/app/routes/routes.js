@@ -4,6 +4,7 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const projectController = require('../controllers/projectController');
 const productivityController = require('../controllers/productivityController');
+const activityController = require('../controllers/activityController');
 
 router.get('/api/checkLoggedIn', (req, res) => {
     res.json({ user: req.session.user || null });
@@ -55,6 +56,13 @@ router.delete('/api/deleteProject/:id', async (req, res) =>{
     const index = parseInt(req.params.id);
     await projectController.deleteProject(req, res, index);
 });
+
+router.get('/api/getActivity/:id', async(req, res)=>{
+    const index = parseInt(req.params.id);
+    activityController.getDailyActivity(req, res, index);
+});
+
+router.post('/api/setActivity', activityController.saveActivity);
 
 router.get('/api/getWeeklyHours/:id', async(req, res)=> {
     const id = parseInt(req.params.id);

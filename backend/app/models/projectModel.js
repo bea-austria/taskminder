@@ -17,7 +17,6 @@ class projectModel {
     static async getProjects(index){
         return new Promise((resolve, reject)=>{
             let query;
-            let values = [];
             
             if(index){
                 query = 
@@ -27,12 +26,11 @@ class projectModel {
                 ON productivity.project_id = taskminder.projects.id
                 WHERE DATE(productivity.created_at) = CURDATE()
                 AND projects.user_id = ?;`;
-                values.push(index);
             }else{
                 query = 'SELECT * FROM projects'
             }
             
-            db.query(query, values, (error, result)=>{
+            db.query(query, [index], (error, result)=>{
                 if(error){
                     reject(error);
                 }else{

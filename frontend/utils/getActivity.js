@@ -1,6 +1,6 @@
-const activityCalculator = () =>{
+const activityCalculator = (activityLevel) =>{
     let isActive = false;
-    let activeSeconds = 0;
+    let activeSeconds = (activityLevel / 100 ) * 300;
     let inactiveSeconds = 0;
     let inactivityTimer;
 
@@ -26,16 +26,9 @@ const activityCalculator = () =>{
         }
     }, 1000);
 
-    const getActivity = () => {
-        const totalSeconds = activeSeconds + inactiveSeconds;
-        if (totalSeconds === 0) {
-            return 0; // Return 0 if there's no activity yet
-        }
-        return Math.round((activeSeconds / totalSeconds) * 100);
-    };
-
     return {
-        getActivity: getActivity,
+        // getActivity: () => Math.round((activeSeconds / (activeSeconds + inactiveSeconds)) * 100),
+        getActivity: () => Math.round((activeSeconds /  (activeSeconds + inactiveSeconds)) * 100),
         stopTimer: () => clearInterval(timer)
     };
 }

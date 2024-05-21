@@ -9,6 +9,9 @@ const getHours = require('./app/utils/getHours');
 const format = require('./app/utils/timeFormat');
 const saveHours = require('./app/utils/saveHours');
 const incrementHours = require('./app/utils/incrementHours');
+const cron = require('node-cron');
+const createProductivityEntry = require('./app/utils/createProductivityEntry');
+const createActivityEntry = require('./app/utils/createActivityEntry');
 
 const { Server } = require("socket.io");
 const server = http.createServer(app);
@@ -30,7 +33,7 @@ app.use(session({
 
 app.use(cors());
 app.use(express.json());
-app.use(router)
+app.use(router);
 
 io.on('connection', (socket)=>{
     let projectTimer;
@@ -55,7 +58,13 @@ io.on('connection', (socket)=>{
         saveHours(formattedprojectTimer, project_id);
         clearInterval(interval);
     });
-})
+});
+
+cron.schedule('0 0 * * *', () => {
+    createProductivityEntry();
+    createActivityEntry();
+});
+
 
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`); 

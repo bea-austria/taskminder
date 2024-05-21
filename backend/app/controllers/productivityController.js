@@ -5,7 +5,7 @@ class productivityController {
         try{
             await model.addEntry(project_id);
         }catch(error){
-            console.error(error, 'Unable to add daily entry to this project')
+            console.error(error, 'Unable to add daily entry to this project');
         }
     }
 

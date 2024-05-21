@@ -20,9 +20,9 @@ function App() {
   const [weeklyHours, setWeeklyHours] = useState('');
   const [trackerBtns, setTrackerBtns] = useState([]);
   const [activityLevel, setActivityLevel] = useState(0);
+  const [calculator, setCalculator] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const calculator = activityCalculator();
 
   //Checks if the user is logged in when page reloads
   useEffect(()=>{
@@ -58,7 +58,6 @@ function App() {
       const response = await axios.post('/api/logUser', userInfo);
       setUser(response.data.user);
       setSuccessMsg(response.data.message);
-      activityCalculator();
       setTimeout(()=> {
         setIsLogged(true);
       }, 2000);
@@ -70,10 +69,9 @@ function App() {
 
   //Requests to destroy user session on sign out
   const handleSignOut = async () =>{
-    try{
+    try{     
       await axios.get('/api/logOff');
       setIsLogged(false);
-      calculator.stopTimer()
     }
     catch(error){
       console.error(error);
@@ -88,9 +86,9 @@ function App() {
   //Fetches saved projects
   const fetchProjects = async() =>{
     try{
-        const response = await axios.get(`/api/getProjects/${user.id}`)
-        if(response.data !==null){
-          setProjects(response.data);
+      const response = await axios.get(`/api/getProjects/${user.id}`)
+      if(response.data !==null){
+        setProjects(response.data);
       }
     }catch(error){
       if(error.response.data.error){
@@ -135,6 +133,7 @@ function App() {
     const currentTracker = [...trackerBtns];
     currentTracker[index] = 'pause';
     setTrackerBtns(currentTracker);
+    getActivity();
 
     socket.emit('start', {project, user});
     socket.on('userTimer', (data) => {
@@ -150,7 +149,11 @@ function App() {
     socket.emit('pause');
     fetchProjects();
     getWeeklyHours();
-  }
+
+    calculator.stopTimer();
+    setCalculator(null);
+    }
+  
 
   const handleEdit = async(project, user) => {
     try{
@@ -180,22 +183,40 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    const timer = setInterval(()=>{
-      const activity = calculator.getActivity();
-      saveActivityLevel(activity);
-    }, 5 * 60 * 1000);
+  const getActivity = async() =>{
+    try{
+      const response = await axios.get(`/api/getActivity/${user.id}`);
+      setActivityLevel(response.data.activity);
+      const newCalculator = activityCalculator(activityLevel);
+      setCalculator(newCalculator)
+    }catch(error){
+      console.error(error);
+    }
+  }
 
-    return (()=>{
-      clearInterval(timer);
-    })
-  }, []);
+  useEffect(()=>{
+    let activity;
+    let timer;
+    if(calculator){
+      timer = setInterval(()=>{
+        activity = calculator.getActivity();
+        setActivityLevel(activity)
+        saveActivityLevel(activity);
+      }, 1000)
+    }
+
+    return (() => clearInterval(timer))
+  }, [calculator]);
 
   const saveActivityLevel = async(activity) => {
     try{
-      console.log(activity)
+      const data = {
+        id: user.id,
+        activity: activity
+      };
+      await axios.post('/api/setActivity', data);
     }catch(error){
-
+      console.error(error);
     }
   }
 
@@ -218,7 +239,6 @@ function App() {
     timer,
     weeklyHours,
     activityLevel, 
-    saveActivityLevel
   };
 
   return (

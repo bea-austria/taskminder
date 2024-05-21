@@ -70,6 +70,14 @@ class UserController{
         }
     }
 
+    static async getUsers(){
+        try{
+            return await model.getUsers()
+        }catch(error){
+            console.error('Unable to fetch user information');
+        }
+    }
+
     static async logOff(req, res){
         req.session.destroy();
         res.sendStatus(200);
