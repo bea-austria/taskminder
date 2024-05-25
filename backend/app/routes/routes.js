@@ -69,4 +69,9 @@ router.get('/api/getWeeklyHours/:id', async(req, res)=> {
     await productivityController.getWeeklyHours(req, res, id);
 });
 
+router.get('/api/getWeeklyData/:id', async(req, res)=> {
+    const id = parseInt(req.params.id);
+    await productivityController.getWeeklyHours(req, res, id);
+});
+
 module.exports = router;

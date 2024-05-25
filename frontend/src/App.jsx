@@ -24,6 +24,12 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  //Fetches data summary for the chart
+  useEffect(()=>{
+    const response = axios.get(`/api/getWeeklyData/${user.id}`);
+    console.log(response);
+  }, [isLogged])
+
   //Checks if the user is logged in when page reloads
   useEffect(()=>{
     const checkLoggedIn = async() => {
@@ -129,6 +135,7 @@ function App() {
     }
   }
 
+  //Allows user to start tracking time and activity level
   const startTracker = (project, index) => {
     const currentTracker = [...trackerBtns];
     currentTracker[index] = 'pause';
@@ -141,6 +148,7 @@ function App() {
     });
   }
 
+  //Saves tracked time and activity level
   const pauseTracker = (index) => {
     const currentTracker = [...trackerBtns];
     currentTracker[index] = 'start';
@@ -151,10 +159,11 @@ function App() {
     getWeeklyHours();
 
     calculator.stopTimer();
+    saveActivityLevel(activityLevel);
     setCalculator(null);
     }
   
-
+  //Allows user to edit a project
   const handleEdit = async(project, user) => {
     try{
       await axios.post(`/api/editProject`, project);
@@ -168,12 +177,14 @@ function App() {
     }
   }
 
+  //Automatically updates weekly hours
   useEffect(()=>{
     if(user.id){
       getWeeklyHours();
     }
   }, [user]);
 
+  //Retrieves weekly hours from the database
   const getWeeklyHours = async() => {
     try{
       const response = await axios.get(`/api/getWeeklyHours/${user.id}`);
@@ -183,31 +194,34 @@ function App() {
     }
   }
 
+  //Retrieves activity level from the database
   const getActivity = async() =>{
     try{
       const response = await axios.get(`/api/getActivity/${user.id}`);
       setActivityLevel(response.data.activity);
       const newCalculator = activityCalculator(activityLevel);
-      setCalculator(newCalculator)
+      setCalculator(newCalculator);
     }catch(error){
       console.error(error);
     }
   }
 
+  //Automatically updates activity level shown on user's feed
   useEffect(()=>{
     let activity;
     let timer;
+
     if(calculator){
       timer = setInterval(()=>{
         activity = calculator.getActivity();
         setActivityLevel(activity)
-        saveActivityLevel(activity);
-      }, 1000)
+      }, 300000)
     }
 
     return (() => clearInterval(timer))
   }, [calculator]);
 
+  //Saves activity level in the database
   const saveActivityLevel = async(activity) => {
     try{
       const data = {
@@ -220,6 +234,7 @@ function App() {
     }
   }
 
+  //Context values to be consumed by other components
   const contextValue = {
     user,
     handleLogIn,

@@ -3,7 +3,8 @@ import Placeholder from '../assets/placeholder.jpg';
 import UserContext from '../../utils/userContext.js';
 import { useContext } from 'react';
 import PageHeader from './PageHeader.jsx';
-// import ActivityLevels from './Productivity.jsx';
+import ApexCharts from 'react-apexcharts';
+import options from '../../utils/chartData';
 
 
 function Summary(){
@@ -79,11 +80,13 @@ function Summary(){
                     <h2 className="text-2xl mb-4">
                     Productivity:
                     </h2>
-                    <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                    <p className="text-2xl text-gray-400 dark:text-gray-500">
-                        Insert chart here
-                    </p>
-                </div>
+                    <ApexCharts 
+                        className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800"
+                        options={options} 
+                        series={options.series} 
+                        type="bar" 
+                        height={250} 
+                    />
                 </div>
             
             </section>
