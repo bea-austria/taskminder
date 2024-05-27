@@ -47,31 +47,31 @@ router.post('/api/editProject', [
     projectController.editProject
 );
 
-router.get('/api/getProjects/:id', async (req, res)=> {
+router.get('/api/getProjects/:id', (req, res)=> {
     const index = parseInt(req.params.id);
-    await projectController.getUserProjects(req, res, index);
+    projectController.getUserProjects(req, res, index);
 });
 
-router.delete('/api/deleteProject/:id', async (req, res) =>{
+router.delete('/api/deleteProject/:id', (req, res) =>{
     const index = parseInt(req.params.id);
-    await projectController.deleteProject(req, res, index);
+    projectController.deleteProject(req, res, index);
 });
 
-router.get('/api/getActivity/:id', async(req, res)=>{
+router.get('/api/getActivity/:id', (req, res)=>{
     const index = parseInt(req.params.id);
     activityController.getDailyActivity(req, res, index);
 });
 
 router.post('/api/setActivity', activityController.saveActivity);
 
-router.get('/api/getWeeklyHours/:id', async(req, res)=> {
+router.get('/api/getWeeklyHours/:id', (req, res)=> {
     const id = parseInt(req.params.id);
-    await productivityController.getWeeklyHours(req, res, id);
+    productivityController.getWeeklyHours(req, res, id);
 });
 
 router.get('/api/getWeeklyData/:id', async(req, res)=> {
     const id = parseInt(req.params.id);
-    await productivityController.getWeeklyHours(req, res, id);
+    await productivityController.getWeeklyData(req, res, id);
 });
 
 module.exports = router;

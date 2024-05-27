@@ -21,14 +21,9 @@ function App() {
   const [trackerBtns, setTrackerBtns] = useState([]);
   const [activityLevel, setActivityLevel] = useState(0);
   const [calculator, setCalculator] = useState(null);
+  const [weeklyData, setWeeklyData] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-
-  //Fetches data summary for the chart
-  useEffect(()=>{
-    const response = axios.get(`/api/getWeeklyData/${user.id}`);
-    console.log(response);
-  }, [isLogged])
 
   //Checks if the user is logged in when page reloads
   useEffect(()=>{
@@ -177,12 +172,22 @@ function App() {
     }
   }
 
-  //Automatically updates weekly hours
+  //Automatically updates weekly hours and fetches data summary for the chart
   useEffect(()=>{
     if(user.id){
+      getWeeklyData();
       getWeeklyHours();
     }
-  }, [user]);
+  }, [isLogged])
+
+  const getWeeklyData = async() => {
+    try{
+      const response = await axios.get(`/api/getWeeklyData/${user.id}`);
+      setWeeklyData(response.data);
+    }catch(error){
+      console.error(error);
+    }
+  }
 
   //Retrieves weekly hours from the database
   const getWeeklyHours = async() => {
@@ -206,7 +211,7 @@ function App() {
     }
   }
 
-  //Automatically updates activity level shown on user's feed
+  //Automatically updates activity level shown on user's feed every 5 minutes
   useEffect(()=>{
     let activity;
     let timer;
@@ -254,6 +259,7 @@ function App() {
     timer,
     weeklyHours,
     activityLevel, 
+    weeklyData
   };
 
   return (

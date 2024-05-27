@@ -5,26 +5,26 @@ const options = {
         name: "Hours",
         color: "#1A56DB",
         data: [
-          { x: "Mon", y: 231 },
-          { x: "Tue", y: 122 },
-          { x: "Wed", y: 63 },
-          { x: "Thu", y: 421 },
-          { x: "Fri", y: 122 },
-          { x: "Sat", y: 323 },
-          { x: "Sun", y: 111 },
+          { x: "Mon", y: 0 },
+          { x: "Tue", y: 0 },
+          { x: "Wed", y: 0 },
+          { x: "Thu", y: 0 },
+          { x: "Fri", y: 0 },
+          { x: "Sat", y: 0 },
+          { x: "Sun", y: 0 },
         ],
       },
       {
         name: "Activity",
         color: "#FDBA8C",
         data: [
-          { x: "Mon", y: 232 },
-          { x: "Tue", y: 113 },
-          { x: "Wed", y: 341 },
-          { x: "Thu", y: 224 },
-          { x: "Fri", y: 522 },
-          { x: "Sat", y: 411 },
-          { x: "Sun", y: 243 },
+          { x: "Mon", y: 0 },
+          { x: "Tue", y: 0 },
+          { x: "Wed", y: 0 },
+          { x: "Thu", y: 0 },
+          { x: "Fri", y: 0 },
+          { x: "Sat", y: 0 },
+          { x: "Sun", y: 0 },
         ],
       },
     ],
@@ -95,9 +95,19 @@ const options = {
         show: false,
       },
     },
-    yaxis: {
-      show: false,
-    },
+    yaxis: [
+      {
+        show: false,
+      },
+      {
+        labels: {
+          formatter: function (value) {
+            return value + '%'; // Add '%' sign to y-axis labels
+          }
+        },
+        show: false,
+      },
+    ],
     fill: {
       opacity: 1,
     },

@@ -1,14 +1,53 @@
 import Profile from '../assets/logo/bunny-icon.jpg';
 import Placeholder from '../assets/placeholder.jpg';
 import UserContext from '../../utils/userContext.js';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PageHeader from './PageHeader.jsx';
 import ApexCharts from 'react-apexcharts';
 import options from '../../utils/chartData';
 
-
 function Summary(){
-    const {user, weeklyHours, projects, activityLevel} = useContext(UserContext);
+    const {user, weeklyHours, projects, activityLevel, weeklyData} = useContext(UserContext);
+    const [chartOptions, setChartOptions] = useState(options);
+    
+    useEffect(()=> {
+        if(weeklyData){
+            // Process fetched data
+            const hoursData = chartOptions.series[0].data.map(dayData => {
+                const matchingDailyData = weeklyData.find(dailyData => dailyData.day === dayData.x);
+                if (matchingDailyData) {
+                    const [hours, minutes, seconds] = matchingDailyData.total_hours.split(':');
+                    const totalHours = parseInt(hours) + parseInt(minutes) / 60 + parseInt(seconds) / 3600;
+                    return { x: dayData.x, y: totalHours.toFixed(2) };
+                } else {
+                    return { x: dayData.x, y: dayData.y }; // Keep the original value
+                }
+            });
+
+            const activityData = chartOptions.series[1].data.map(dayData => {
+                const matchingDailyData = weeklyData.find(dailyData => dailyData.day === dayData.x);
+                return matchingDailyData ? { x: dayData.x, y: matchingDailyData.activity } : { x: dayData.x, y: dayData.y };
+            });
+
+            // Update the chart options and data
+            const updatedOptions = {
+                ...options,
+                series: [
+                    {
+                        name: 'Hours',
+                        data: hoursData
+                    },
+                    {
+                        name: 'Activity',
+                        data: activityData
+                    }
+                ]
+            };
+
+            setChartOptions(updatedOptions);
+        };
+    }, [weeklyData]);
+
     return(
         <>
             <PageHeader h1={'Dashboard'}/>            
@@ -82,8 +121,8 @@ function Summary(){
                     </h2>
                     <ApexCharts 
                         className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800"
-                        options={options} 
-                        series={options.series} 
+                        options={chartOptions} 
+                        series={chartOptions.series} 
                         type="bar" 
                         height={250} 
                     />

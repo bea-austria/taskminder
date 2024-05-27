@@ -36,9 +36,9 @@ class productivityModel {
                     reject(error);
                 }else{
                     resolve(true);
-                }
-            })
-        })
+                };
+            });
+        });
     };
 
     static async getWeeklyHours(id){
@@ -55,10 +55,35 @@ class productivityModel {
                     reject(error);
                 }else{
                     resolve(result);
-                }
-            })
+                };
+            });
+        });
+    };
+
+    static async getWeeklyData(id){
+        return new Promise((resolve, reject) =>{
+            const query = `
+            SELECT 
+                DATE_FORMAT(p.created_at, '%a') AS day,
+                a.activity,
+                SEC_TO_TIME(SUM(TIME_TO_SEC(p.worked_hours))) AS total_hours
+            FROM productivity p
+            INNER JOIN projects pr ON p.project_id = pr.id
+            INNER JOIN activity_levels a ON pr.user_id = a.user_id
+            WHERE pr.user_id = 4 
+            AND WEEK(a.created_at, 1) = WEEK(CURDATE(), 1) 
+            AND WEEK(p.created_at, 1) = WEEK(CURDATE(), 1)
+            GROUP BY DATE_FORMAT(p.created_at, '%a'), a.activity
+            ORDER BY DATE_FORMAT(p.created_at, '%a');`
+            db.query(query, [id], (error, result)=>{
+                if(error){
+                    reject(error);
+                }else{
+                    resolve(result);
+                };
+            });
         })
-    }
+    };
 };
 
 module.exports = productivityModel;

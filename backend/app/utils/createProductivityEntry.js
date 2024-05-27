@@ -5,7 +5,6 @@ const createProductivityEntry = async() => {
     try {
         const projects = await projectController.getAllProjects();
         for (const project of projects) {
-            console.log(project.id)
             await controller.addEntry(project.id);
         }
     } catch (error) {

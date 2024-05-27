@@ -33,6 +33,15 @@ class productivityController {
             console.error(error,'Unable to retrieve weekly tracked hours for this user.')
         }
     }
+
+    static async getWeeklyData(req, res, user_id){
+        try{
+            const response = await model.getWeeklyData(user_id);
+            res.json(response);
+        }catch(error){
+            console.error(error,'Unable to retrieve weekly data for this user.')
+        }
+    }
 }
 
 module.exports = productivityController;

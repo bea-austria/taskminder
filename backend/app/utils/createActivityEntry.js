@@ -5,7 +5,6 @@ const createActivityEntry = async() => {
     try {
         const users = await userController.getUsers();
         for (const user of users) {
-            console.log(user.id)
             await controller.addEntry(user.id);
         }
     } catch (error) {

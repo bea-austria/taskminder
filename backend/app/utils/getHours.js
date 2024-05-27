@@ -1,4 +1,4 @@
-const controller = require('../controllers/productivityController')
+const controller = require('../controllers/productivityController');
 
 const getHours = async (project_id) => {
     const response = await controller.getDailyHours(project_id);
@@ -8,7 +8,7 @@ const getHours = async (project_id) => {
         timeString = response[0].worked_hours;
     }
     
-    let timeArr = []
+    let timeArr = [];
 
     if(timeString){
         timeArr = timeString.split(':');
