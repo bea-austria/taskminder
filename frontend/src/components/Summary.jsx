@@ -26,7 +26,7 @@ function Summary(){
 
             const activityData = chartOptions.series[1].data.map(dayData => {
                 const matchingDailyData = weeklyData.find(dailyData => dailyData.day === dayData.x);
-                return matchingDailyData ? { x: dayData.x, y: matchingDailyData.activity } : { x: dayData.x, y: dayData.y };
+                return matchingDailyData ? { x: dayData.x, y: matchingDailyData.activity} : { x: dayData.x, y: dayData.y };
             });
 
             // Update the chart options and data
@@ -45,7 +45,7 @@ function Summary(){
             };
 
             setChartOptions(updatedOptions);
-        };
+        }
     }, [weeklyData]);
 
     return(
@@ -105,9 +105,6 @@ function Summary(){
                                     </th>
                                     <td className="px-6 py-4 flex justify-start gap-5 items-center">
                                         {project.worked_hours ? project.worked_hours : '00:00:00'}
-                                        <div className="w-2/5 bg-gray-200 rounded-full dark:bg-gray-700">
-                                            <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: '45%' }}> 45%</div>
-                                        </div>
                                     </td>
                                 </tr>
                                 ))}

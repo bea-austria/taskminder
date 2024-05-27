@@ -4,22 +4,22 @@ import logo from "../assets/logo/taskminderlogo.svg"
 function Header(){
     return (
 
-    <header className="flex justify-between px-6 py-5 lg:px-8">
-        <div>
+    <header className="flex flex-col xsm:flex xsm:justify-between xsm:flex-row xsm:px-6 sm:py-4 lg:px-8">
+        <div className="pt-3 xsm:py-3 sm:py-0">
           <a href="#" className="-m-1.5 p-1.5 flex justify-center gap-3">
             <span className="sr-only">TaskMinder</span>
             <img className="h-10 w-auto" src={logo} alt="TaskMinder logo" />
             <span className="text-2xl">TaskMinder</span>
           </a>
         </div>
-        <nav className="flex max-w-3xl items-center justify-between gap-10" aria-label="Global">
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+        <nav className="flex justify-center gap-8 py-2 text-lg xsm:py-0 sm:max-w-3xl items-center sm:justify-between sm:gap-10 " aria-label="Global">
+          <a href="#" className="text-sm font-semibold leading-6 text-gray-900 sm:text-base">
             About
           </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+          <a href="#" className="text-sm font-semibold leading-6 text-gray-900 sm:text-base">
             Features
           </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+          <a href="#" className="text-sm font-semibold leading-6 text-gray-900 sm:text-base">
             Company
           </a>
       </nav>
