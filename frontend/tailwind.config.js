@@ -11,7 +11,7 @@ export default {
         ...screens,
       },
       backgroundImage: {
-        'custom-image': "url('./public/taskminder-landing-bg.jpg')",
+        'custom-image': "url('/taskminder-landing-bg.jpg')",
       },
       colors: {
         customLightBlue: '#d3e6f5',

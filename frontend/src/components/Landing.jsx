@@ -4,19 +4,21 @@ import UserContext from '../../utils/userContext';
 import { useContext } from 'react';
 import Footer from './Footer';
 import Blog from './Blog';
+import Contact from './Contact';
+import proofs from '../const/socialProof'
 
 function Landing(){
     const {successMsg, errorMsg, setSuccessMsg, setErrorMsg} = useContext(UserContext);
 
-    setTimeout(() => setErrorMsg(''), 2000)
-    setTimeout(() => setSuccessMsg(''), 2000)
+    setTimeout(() => setErrorMsg(''), 1800)
+    setTimeout(() => setSuccessMsg(''), 1800)
     return(
         <div className='min-h-screen flex flex-col'>
         <Header/>
-        <main className="flex-grow md:grid md:grid-cols-2 bg-blue-900">
+        <main className="flex-grow md:grid md:grid-cols-2 bg-blue-900 bg-custom-image">
             <div className="p-6 pb-0 xsm:p-8 xsm:pb-0 sm:p-12 sm:pb-0 md:p-10 lg:p-12 ">
-                <h1 className='text-3xl mb-3 text-white sm:text-4xl lg:text-5xl'>Effortlessly manage your team</h1>
-                <p className='text-base text-white sm:text-lg lg:text-xl lg:my-6'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt similique ducimus labore repellendus eum. Dignissimos harum corrupti nam veritatis numquam, fugiat maxime expedita quo voluptatem placeat repudiandae quam saepe assumenda.</p>
+                <h1 className='text-3xl mb-3 text-white sm:text-4xl lg:text-5xl' style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 1)' }}>Effortlessly manage your team</h1>
+                <p className='text-base text-white sm:text-lg md:text-lg lg:text-xl lg:my-6' style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 1.5)' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt similique ducimus labore repellendus eum. Dignissimos harum corrupti nam veritatis numquam, fugiat maxime expedita quo voluptatem placeat repudiandae quam saepe assumenda.</p>
                 <button className="bg-indigo-50 text-base hover:bg-indigo-100 text-blue-900 font-bold mt-4 py-2 px-3 lg:text-xl lg:py-4 lg:px-6 rounded border border-gray-300 sm:text-lg">
                     Learn about TaskMinder
                 </button>
@@ -50,7 +52,20 @@ function Landing(){
                 <Login/>
             </div>
         </main>
+
         <Blog/>
+
+        <section className="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
+            <dl className="grid max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-3 dark:text-white">
+                {proofs.map((proof, index)=>(
+                <div className="flex flex-col items-center justify-center" key={index}>
+                    <dt className="mb-2 text-3xl md:text-4xl font-bold">{proof.figure}</dt>
+                    <dd className="font-semibold md:text-lg text-gray-500 dark:text-gray-400">{proof.text}</dd>
+                </div>
+                ))};
+            </dl>
+        </section>
+
         <section className="bg-blue-900 dark:bg-gray-900">
             <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
                 <div className="mx-auto max-w-screen-sm text-center">
@@ -60,7 +75,11 @@ function Landing(){
                 </div>
             </div>
         </section>
+
+        <Contact/>
+
         <Footer/>
+
         </div>
     )
 }
