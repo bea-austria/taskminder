@@ -1,10 +1,10 @@
 import logo from "../assets/logo/taskminderlogo.svg"
-
+import { Link } from "react-router-dom";
 
 function Header(){
     return (
 
-    <header className="flex flex-col xsm:flex xsm:justify-between xsm:flex-row xsm:px-6 sm:py-4 lg:px-8">
+    <header className="flex flex-col xsm:flex xsm:justify-between xsm:flex-row xsm:px-6 sm:py-4 lg:px-8 flex-shrink-0">
         <div className="pt-3 xsm:py-3 sm:py-0">
           <a href="#" className="-m-1.5 p-1.5 flex justify-center gap-3">
             <span className="sr-only">TaskMinder</span>
@@ -16,11 +16,11 @@ function Header(){
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 sm:text-base">
             About
           </a>
+          <Link to="#blog" className="text-sm font-semibold leading-6 text-gray-900 sm:text-base">
+            Blog
+          </Link>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 sm:text-base">
-            Features
-          </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900 sm:text-base">
-            Company
+            Contact
           </a>
       </nav>
     </header>

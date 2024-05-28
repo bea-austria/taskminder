@@ -4,7 +4,7 @@ import UserContext from '../../utils/userContext.js';
 import { useContext, useEffect, useState } from 'react';
 import PageHeader from './PageHeader.jsx';
 import ApexCharts from 'react-apexcharts';
-import options from '../../utils/chartData';
+import options from '../const/chartData.js';
 
 function Summary(){
     const {user, weeklyHours, projects, activityLevel, weeklyData} = useContext(UserContext);
