@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate, useLocat
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
-import Landing from './components/Landing'
+import Landing from './components/landing/Landing';
 import Dashboard from './components/Dashboard'
 import UserContext from '../utils/userContext';
 import activityCalculator from '../utils/getActivity';
@@ -203,8 +203,9 @@ function App() {
   const getActivity = async() =>{
     try{
       const response = await axios.get(`/api/getActivity/${user.id}`);
-      setActivityLevel(response.data.activity);
-      const newCalculator = activityCalculator(activityLevel);
+      const activity = response.data.activity;
+      setActivityLevel(activity);
+      const newCalculator = activityCalculator(activity);
       setCalculator(newCalculator);
     }catch(error){
       console.error(error);

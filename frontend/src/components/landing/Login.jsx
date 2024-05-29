@@ -1,10 +1,10 @@
 import { useState, useContext } from "react";
 import React from 'react';
-import { Formik, Form, useFormikContext} from 'formik';
+import { Formik, Form} from 'formik';
 import FormFields from "./FormFields";
-import { registrationfields, logInFields } from "../const/formFields";
+import { registrationfields, logInFields } from "../../const/formFields";
 import * as Yup from 'yup';
-import UserContext from "../../utils/userContext";
+import UserContext from "../../../utils/userContext";
 
 
 function Login(){

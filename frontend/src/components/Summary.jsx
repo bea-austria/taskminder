@@ -15,7 +15,7 @@ function Summary(){
             // Process fetched data
             const hoursData = chartOptions.series[0].data.map(dayData => {
                 const matchingDailyData = weeklyData.find(dailyData => dailyData.day === dayData.x);
-                if (matchingDailyData) {
+                if (matchingDailyData && matchingDailyData.total_hours) {
                     const [hours, minutes, seconds] = matchingDailyData.total_hours.split(':');
                     const totalHours = parseInt(hours) + parseInt(minutes) / 60 + parseInt(seconds) / 3600;
                     return { x: dayData.x, y: totalHours.toFixed(2) };
