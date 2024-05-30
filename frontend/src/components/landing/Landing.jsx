@@ -11,8 +11,8 @@ import About from '../About';
 function Landing(){
     const {successMsg, errorMsg, setSuccessMsg, setErrorMsg} = useContext(UserContext);
 
-    setTimeout(() => setErrorMsg(''), 1800)
-    setTimeout(() => setSuccessMsg(''), 1800)
+    setTimeout(() => setErrorMsg(''), 2000)
+    setTimeout(() => setSuccessMsg(''), 2000)
     return(
         <div className='min-h-screen flex flex-col'>
             <Header/>
@@ -32,7 +32,7 @@ function Landing(){
 
                     <div className='relative p-6 xsm:p-12 sm:w-4/5 md:w-full md:p-10 sm:mx-auto lg:p-12 xl:w-4/5'>
                     {errorMsg && (
-                        <div className="animate-bounce absolute top-0 left-0 right-0 mx-auto flex items-center p-4 mb-4 text-sm w-fit text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                        <div className="animate-slow-bounce absolute z-50 top-0 left-0 right-0 mx-auto flex items-center p-4 mb-4 text-sm w-fit text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
                         <span className="material-symbols-outlined flex-shrink-0 inline me-3">
                         info
                         </span>
@@ -44,7 +44,7 @@ function Landing(){
                     )}
 
                     {successMsg && (
-                        <div className="animate-bounce absolute top-0 left-0 right-0 mx-auto flex items-center p-4 mb-4 text-sm w-fit text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
+                        <div className="animate-slow-bounce absolute z-50 top-0 left-0 right-0 mx-auto flex items-center p-4 mb-4 text-sm w-fit text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
                         <span className="material-symbols-outlined flex-shrink-0 inline me-3">
                         info
                         </span>

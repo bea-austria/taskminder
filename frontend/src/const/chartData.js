@@ -3,7 +3,7 @@ const options = {
     series: [
       {
         name: "Hours",
-        color: "#1A56DB",
+        color: "#0D47A1",
         data: [
           { x: "Mon", y: 0 },
           { x: "Tue", y: 0 },

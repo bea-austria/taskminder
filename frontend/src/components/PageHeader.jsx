@@ -9,26 +9,18 @@ function formatDate(date) {
 }
 
 function PageHeader({h1, handleModal}){
-    const[dropDown, setDropDown] = useState(false);
-    const {handleSignOut} = useContext(UserContext);
+    const {dropDown, showDropDown, handleSignOut} = useContext(UserContext);
     const [showToolTip, setShowToolTip] = useState(false);
 
-    function showDropDown(){
-        setDropDown(!dropDown);
-    }
-
-    function handleLogOff(){
-        handleSignOut();
-    }
 
     const date = new Date();
     return(
         <section className="flex justify-between mb-10">
             <div className={h1 == 'Projects' ? 'relative' : ''}>
-                <h1 className='text-4xl font-bold mb-2'>{h1}</h1>
-                <span className='text-lg'>{formatDate(date)}</span>
+                <h1 className='text-3xl md:text-4xl font-bold mb-2'>{h1}</h1>
+                <span className='text-base md:text-lg'>{formatDate(date)}</span>
                 {h1 === 'Projects' && 
-                <a href="#" className="absolute right-[2px] top-[8px]" onMouseEnter={()=>setShowToolTip(true)} onMouseLeave={()=>setShowToolTip(false)} onClick={handleModal}>
+                <a href="#" className="absolute left-[120px] top-[4px] md:left-[140px] md:top-[7px]" onMouseEnter={()=>setShowToolTip(true)} onMouseLeave={()=>setShowToolTip(false)} onClick={handleModal}>
                     <span className="material-symbols-outlined text-3xl text-blue-700 cursor-pointer hover:text-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     add_circle
                     </span>
@@ -41,7 +33,7 @@ function PageHeader({h1, handleModal}){
                     </div>
                 }
             </div>
-            <ul className="flex gap-3">
+            <ul className="hidden sm:flex xsm:gap-3">
                 {dashOptions.map((option, index)=>(
                     <li key={index} className={option.icon === 'account_circle' ? 'relative' : ''}> 
                         <Link to={option.path} onClick={option.icon === 'account_circle' ? showDropDown : undefined}>
@@ -57,16 +49,16 @@ function PageHeader({h1, handleModal}){
                     >
                         <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                             <li>
-                                <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                <Link to='/dashboard' className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                 Dashboard
-                                </a>
+                                </Link>
                             </li>
                             <li>
                                 <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                 Settings
                                 </a>
                             </li>
-                            <li onClick={handleLogOff}>
+                            <li onClick={handleSignOut}>
                                 <Link to="/" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                 Sign out
                                 </Link>

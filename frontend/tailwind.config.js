@@ -16,6 +16,9 @@ export default {
       colors: {
         customLightBlue: '#d3e6f5',
       },
+      animation: {
+        'slow-bounce': 'bounce 2s infinite', 
+      },
     },
   },
   plugins: [],

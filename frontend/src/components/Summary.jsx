@@ -52,7 +52,7 @@ function Summary(){
         <>
             <PageHeader h1={'Dashboard'}/>            
 
-            <section className="grid grid-cols-3 gap-4 my-8">
+            <section className="lg:grid lg:grid-cols-3 lg:gap-4 my-8">
                 <div className="flex items-center justify-center gap-3 rounded bg-gray-50 dark:bg-gray-800 py-6">
                     <img src={Profile} alt="Profile picture" className='rounded-full h-20 w-20'/>
                     <div>
@@ -65,23 +65,23 @@ function Summary(){
                         <span className="material-symbols-outlined text-2xl">
                         schedule
                         </span>
-                        <h3 className='text-xl'>Hours worked this week:</h3>
+                        <h3 className='text-lg lg:text-xl'>Hours worked this week:</h3>
                     </div>
-                    <p className='text-3xl'>{weeklyHours ? weeklyHours : '00:00:00'}</p>             
+                    <p className='text-xl lg:text-3xl'>{weeklyHours ? weeklyHours : '00:00:00'}</p>             
                 </div>
                 <div className="flex flex-col items-center justify-center rounded bg-gray-50 dark:bg-gray-800 py-6">
                 <div className='flex'>
                     <span className="material-symbols-outlined text-2xl">
                     trackpad_input
                     </span>
-                    <h3 className='text-xl'>Activity level:</h3>
+                    <h3 className='text-lg lg:text-xl'>Activity level:</h3>
                 </div>
-                <p className='text-3xl'>{activityLevel}%</p>
+                <p className='text-xl lg:text-3xl'>{activityLevel}%</p>
                 </div>
             </section>
             
-            <section className="grid grid-cols-3 gap-4 my-8">
-                <div className="flex flex-col justify-start col-span-2">
+            <section className="lg:grid lg:grid-cols-3 lg:gap-4 my-8">
+                <div className="mb-4 lg:mb-0 flex flex-col justify-start col-span-2">
                     <h2 className="text-2xl mb-4">
                     Projects:
                     </h2>
@@ -131,7 +131,7 @@ function Summary(){
                 <h2 className="text-2xl mb-4">
                     Recent Activities:
                 </h2>
-                <div className="grid grid-cols-6 h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800 gap-4">
+                <div className="h-full grid grid-cols-2 xsm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mb-4 rounded bg-gray-50 dark:bg-gray-800 gap-4">
                     <div className='flex flex-col justify-start items-center col-span-1'>
                         <img className="h-full w-full rounded-lg shadow-xl dark:shadow-gray-800 object-cover" src={Placeholder} alt="image description"/>
                         <span>05:06 pm</span>

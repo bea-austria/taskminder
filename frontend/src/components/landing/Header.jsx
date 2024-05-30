@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Header(){
     return (
 
-    <header className="flex flex-col xsm:flex xsm:justify-between xsm:flex-row xsm:px-6 sm:py-4 lg:px-8 flex-shrink-0 sticky top-0 z-50 bg-white shadow-md">
+    <header className="flex flex-col xsm:flex xsm:justify-between xsm:flex-row xsm:px-6 sm:py-4 lg:px-8 flex-shrink-0 sticky top-0 z-40 bg-white shadow-md">
         <div className="pt-3 xsm:py-3 sm:py-0">
           <a href="#" className="-m-1.5 p-1.5 flex justify-center gap-3">
             <span className="sr-only">TaskMinder</span>

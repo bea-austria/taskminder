@@ -2,7 +2,7 @@ import image from '../assets/landing/taskminder-landing-about.jpg'
 function About(){
     return(
         <section className="container px-6 py-10 mx-auto p-6 xsm:p-8 sm:p-12 md:p-10 lg:p-12" id='about'>
-            <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white">About TaskMinder</h1>
+            <h2 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white">About TaskMinder</h2>
 
             <div className="mt-2">
                 <span className="inline-block w-40 h-1 bg-blue-900 rounded-full"></span>

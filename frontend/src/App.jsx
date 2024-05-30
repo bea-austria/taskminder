@@ -22,8 +22,14 @@ function App() {
   const [activityLevel, setActivityLevel] = useState(0);
   const [calculator, setCalculator] = useState(null);
   const [weeklyData, setWeeklyData] = useState([]);
+  const[dropDown, setDropDown] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+
+  function showDropDown(){
+    setDropDown(!dropDown);
+  }
 
   //Checks if the user is logged in when page reloads
   useEffect(()=>{
@@ -72,6 +78,7 @@ function App() {
   const handleSignOut = async () =>{
     try{     
       await axios.get('/api/logOff');
+      setDropDown(false);
       setIsLogged(false);
     }
     catch(error){
@@ -260,7 +267,11 @@ function App() {
     timer,
     weeklyHours,
     activityLevel, 
-    weeklyData
+    weeklyData,
+    dropDown,
+    setDropDown,
+    showDropDown,
+    handleSignOut
   };
 
   return (
