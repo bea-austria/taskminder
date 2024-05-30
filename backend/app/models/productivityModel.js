@@ -68,9 +68,8 @@ class productivityModel {
                 a.activity,
                 SEC_TO_TIME(SUM(TIME_TO_SEC(p.worked_hours))) AS total_hours
             FROM productivity p
-            INNER JOIN projects pr ON p.project_id = pr.id
-            INNER JOIN activity_levels a ON pr.user_id = a.user_id
-            WHERE pr.user_id = 4 
+            INNER JOIN activity_levels a ON p.user_id = a.user_id
+            WHERE p.user_id = 4 
             AND WEEK(a.created_at, 1) = WEEK(CURDATE(), 1) 
             AND WEEK(p.created_at, 1) = WEEK(CURDATE(), 1)
             GROUP BY DATE_FORMAT(p.created_at, '%a'), a.activity

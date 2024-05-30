@@ -55,18 +55,18 @@ class UserController{
             }
             
             if(isRegistered.length === 0){
-                return res.status(400).json({error: 'Log in failed. User not found.'})
+                return res.status(400).json({error: 'Log in failed. User not found'})
             }
             
             const verified = bcrypt.compareSync(password, isRegistered[0].password);
             if(!verified){
-                return res.status(400).json({error: 'Log in failed. Incorrect credentials.'})
+                return res.status(400).json({error: 'Log in failed. Incorrect credentials'})
             }
     
             req.session.user = isRegistered[0];
-            return res.status(200).json({ user: isRegistered[0], message: 'Log in successful.' }); 
+            return res.status(200).json({ user: isRegistered[0], message: 'Log in successful' }); 
         }catch(error){
-            return res.json({ error: "User log in failed. Try again later." });
+            return res.json({ error: "User log in failed. Try again later" });
         }
     }
 
