@@ -143,7 +143,7 @@ function Projects(){
                         </a>
                         { toolTips[index] &&
                         <div className="absolute z-10 -right-0.5 bottom-1/3 bg-white border border-gray-200 rounded-lg shadow-sm p-2">
-                        <div className="text-gray-900 text-sm font-medium">Start Tracker</div>
+                        <div className="text-gray-900 text-sm font-medium">{trackerBtns[index] === 'start' ? 'Start Tracker' : 'Pause Tracker'}</div>
                         <div className="tooltip-arrow"></div>
                         </div>
                         }

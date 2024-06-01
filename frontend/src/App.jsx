@@ -47,7 +47,7 @@ function App() {
         console.error(error);
       }}
     checkLoggedIn();
-  }, [])
+  }, [location.pathname])
 
   //Adds user to the database
   const handleRegistration = async (userInfo) => {
@@ -160,8 +160,11 @@ function App() {
     fetchProjects();
     getWeeklyHours();
 
+    
+    const actLevelOnPause = calculator.getActivity()
+    setActivityLevel(actLevelOnPause);
+    saveActivityLevel(actLevelOnPause);
     calculator.stopTimer();
-    saveActivityLevel(activityLevel);
     setCalculator(null);
     }
   
@@ -181,11 +184,12 @@ function App() {
 
   //Automatically updates weekly hours and fetches data summary for the chart
   useEffect(()=>{
-    if(user.id){
+    if(isLogged && user.id){
       getWeeklyData();
       getWeeklyHours();
+      getActivity();
     }
-  }, [isLogged])
+  }, [isLogged, user])
 
   const getWeeklyData = async() => {
     try{
@@ -217,7 +221,7 @@ function App() {
     }catch(error){
       console.error(error);
     }
-  }
+  };
 
   //Automatically updates activity level shown on user's feed every 5 minutes
   useEffect(()=>{
@@ -227,9 +231,10 @@ function App() {
     if(calculator){
       timer = setInterval(()=>{
         activity = calculator.getActivity();
-        setActivityLevel(activity)
+        setActivityLevel(activity);
+        saveActivityLevel(activity);
       }, 300000)
-    }
+    };
 
     return (() => clearInterval(timer))
   }, [calculator]);
@@ -270,8 +275,7 @@ function App() {
     weeklyData,
     dropDown,
     setDropDown,
-    showDropDown,
-    handleSignOut
+    showDropDown
   };
 
   return (
