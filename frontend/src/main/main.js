@@ -4,7 +4,11 @@ import * as path from 'path';
 let mainWindow;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({});
+  mainWindow = new BrowserWindow({
+    width: 640,
+    height: 700,
+    resizable: false,
+  });
 
   // Vite dev server URL
   mainWindow.loadURL('http://localhost:5173');

@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate, useLocat
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
-import Landing from './components/landing/Landing';
+import Landing from './components/landing/Web-landing';
+import DesktopLanding from './components/landing/Desktop-landing';
 import Dashboard from './components/Dashboard'
 import UserContext from '../../../utils/userContext';
 import activityCalculator from '../../../utils/getActivity';
+import isElectron from 'is-electron';
 
 const socket = io.connect('http://localhost:5000');
 
@@ -279,21 +281,39 @@ function App() {
     showDropDown
   };
 
-  return (
-    <UserContext.Provider value={contextValue}>
-        <Routes>
-          <Route 
-            exact 
-            path='/' 
-            element={isLogged ? <Navigate to='/dashboard/' /> : <Landing/>}
+  if(isElectron()){
+    return (
+      <UserContext.Provider value={contextValue}>
+          <Routes>
+            <Route 
+              exact 
+              path='/' 
+              element={isLogged ? <Navigate to='/dashboard/' /> : <DesktopLanding/>}
+              />
+            <Route
+              path='/dashboard/*'
+              element={isLogged ? <Dashboard /> : <Navigate to='/' />}
             />
-          <Route
-            path='/dashboard/*'
-            element={isLogged ? <Dashboard /> : <Navigate to='/' />}
-          />
-        </Routes>
-    </UserContext.Provider>
-  )
+          </Routes>
+      </UserContext.Provider>
+    )
+  }else{
+    return (
+      <UserContext.Provider value={contextValue}>
+          <Routes>
+            <Route 
+              exact 
+              path='/' 
+              element={isLogged ? <Navigate to='/dashboard/' /> : <Landing/>}
+              />
+            <Route
+              path='/dashboard/*'
+              element={isLogged ? <Dashboard /> : <Navigate to='/' />}
+            />
+          </Routes>
+      </UserContext.Provider>
+    )
+  }
 }
 
 export default App

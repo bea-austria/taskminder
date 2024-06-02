@@ -1,6 +1,7 @@
 import Login from './Login';
 import Header from './Header';
 import UserContext from '../../../../../utils/userContext';
+import backgroundImg from '../../assets/landing/taskminder-landing-bg.jpg/'
 import { useContext } from 'react';
 import Footer from '../Footer'
 import Blog from './Blog';
@@ -18,7 +19,7 @@ function Landing(){
             <Header/>
             <main>
                 <section className="relative flex-grow md:grid md:grid-cols-2 bg-blue-900">
-                    <div className="absolute inset-0 bg-cover bg-center bg-custom-image opacity-35"></div>
+                    <div className="absolute inset-0 bg-cover bg-center opacity-35" style={{backgroundImage: `url(${backgroundImg})` }}></div>
 
                     <div className="relative p-6 pb-0 xsm:p-8 xsm:pb-0 sm:p-12 sm:pb-0 md:p-10 lg:p-12 ">
                         <h1 className='text-3xl mb-3 text-white sm:text-4xl lg:text-5xl' style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 1)' }}>Effortlessly manage your team</h1>
