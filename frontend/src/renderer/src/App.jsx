@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate, useLocat
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
-import Landing from './components/landing/Web-landing';
-import DesktopLanding from './components/landing/Desktop-landing';
+import Landing from './components/website-landing/Web-landing';
+import DesktopLanding from './components/desktop/Desktop-landing';
+import DesktopDashboard from './components/desktop/Desktop-dashboard';
 import Dashboard from './components/Dashboard'
 import UserContext from '../../../utils/userContext';
 import activityCalculator from '../../../utils/getActivity';
@@ -254,7 +255,7 @@ function App() {
       console.error(error);
     }
   }
-
+  
   //Context values to be consumed by other components
   const contextValue = {
     user,
@@ -292,7 +293,7 @@ function App() {
               />
             <Route
               path='/dashboard/*'
-              element={isLogged ? <Dashboard /> : <Navigate to='/' />}
+              element={isLogged ? <DesktopDashboard /> : <Navigate to='/' />}
             />
           </Routes>
       </UserContext.Provider>

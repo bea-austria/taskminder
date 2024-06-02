@@ -20,7 +20,7 @@ function Projects(){
         pauseTracker, 
         trackerBtns,
         timer} = useContext(UserContext);
-    const [toolTips, settoolTips] = useState(Array(projects.length).fill(false));
+    const [toolTips, setToolTips] = useState(Array(projects.length).fill(false));
     const [showdeleteModal, setshowdeleteModal] = useState(false);
     const [formPurpose, setFormPurpose] = useState('add');
     const [project, setProject] = useState({})
@@ -34,14 +34,14 @@ function Projects(){
     function handleMouseEnter(index){
         const currentToolTips = [...toolTips];
         currentToolTips[index] = true;
-        settoolTips(currentToolTips);
+        setToolTips(currentToolTips);
     };
 
     //Handles disappearance of tooltip
     function handleMouseLeave(index){
         const currentToolTips = [...toolTips];
         currentToolTips[index] = false;
-        settoolTips(currentToolTips);
+        setToolTips(currentToolTips);
     };
 
     //Handles appearance of alert for deleting a project

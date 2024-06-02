@@ -1,11 +1,14 @@
-import Login from './Login';
+import Login from '../website-landing/Login';
 import backgroundImg from '../../assets/landing/taskminder-landing-bg.jpg/'
 import { useContext } from 'react';
 import UserContext from '../../../../../utils/userContext';
 import Footer from '../Footer'
 
 function DesktopLanding(){
-    const {successMsg, errorMsg} = useContext(UserContext);
+    const {successMsg, errorMsg, setErrorMsg, setSuccessMsg} = useContext(UserContext);
+
+    setTimeout(() => setErrorMsg(''), 2000)
+    setTimeout(() => setSuccessMsg(''), 2000)
     return(
         <div className="relative min-h-screen bg-blue-900 flex justify-center items-center">
             <div className="absolute inset-0 bg-cover bg-center opacity-35" style={{backgroundImage: `url(${backgroundImg})` }}></div>

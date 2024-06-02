@@ -2,10 +2,10 @@ const db = require('../config/db.config');
 
 class productivityModel {
 
-    static async addEntry(project_id){
+    static async addEntry(project_id, user_id){
         return new Promise((resolve, reject)=>{
-            const query = 'INSERT INTO productivity (project_id, created_at, updated_at) VALUES(?, NOW(), NOW())';
-            db.query(query, [project_id],(error, result)=>{
+            const query = 'INSERT INTO productivity (user_id, project_id, created_at, updated_at) VALUES(?,?, NOW(), NOW())';
+            db.query(query, [user_id, project_id],(error, result)=>{
                 if(error){
                     reject(error);
                 } else {

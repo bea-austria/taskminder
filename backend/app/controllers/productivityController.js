@@ -1,9 +1,9 @@
 const model = require('../models/productivityModel');
 class productivityController {
 
-    static async addEntry(project_id){
+    static async addEntry(project_id, user_id){
         try{
-            await model.addEntry(project_id);
+            await model.addEntry(project_id, user_id);
         }catch(error){
             console.error(error, 'Unable to add daily entry to this project');
         }
