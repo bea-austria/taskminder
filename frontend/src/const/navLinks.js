@@ -10,19 +10,14 @@ export const sideBarOptions = [
         path: "/dashboard/projects"
     },
     {
-        icon: "task",
-        label: "Timesheets",
-        path: "/dashboard/timesheets"
-    },
-    {
         icon: "chart_data",
         label: "Activity",
         path: "/dashboard/activity"
     },
     {
-        icon: "monetization_on",
-        label: "Finances",
-        path: "/dashboard/finances"
+        icon: "task",
+        label: "Reports",
+        path: "/dashboard/timesheets"
     },
     {
         icon: "groups",

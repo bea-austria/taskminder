@@ -187,7 +187,6 @@ function App() {
     if(isLogged && user.id){
       getWeeklyData();
       getWeeklyHours();
-      getActivity();
     }
   }, [isLogged, user])
 

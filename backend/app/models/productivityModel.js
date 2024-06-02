@@ -46,10 +46,8 @@ class productivityModel {
             const query = `
                 SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(productivity.worked_hours))) as worked_hours 
                 FROM productivity 
-                INNER JOIN projects
-                ON productivity.project_id = projects.id 
                 WHERE week(productivity.created_at, 1) = week(now(), 1)
-                AND projects.user_id = ?`;
+                AND productivity.user_id = ?`;
             db.query(query, [id], (error, result)=>{
                 if(error){
                     reject(error);
