@@ -5,8 +5,8 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import Landing from './components/landing/Landing';
 import Dashboard from './components/Dashboard'
-import UserContext from '../utils/userContext';
-import activityCalculator from '../utils/getActivity';
+import UserContext from '../../../utils/userContext';
+import activityCalculator from '../../../utils/getActivity';
 
 const socket = io.connect('http://localhost:5000');
 
@@ -25,17 +25,18 @@ function App() {
   const[dropDown, setDropDown] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const PORT = 'http://localhost:5000'
 
 
   function showDropDown(){
     setDropDown(!dropDown);
   }
 
-  //Checks if the user is logged in when page reloads
+  // Checks if the user is logged in when page reloads
   useEffect(()=>{
     const checkLoggedIn = async() => {
       try{
-        const response = await axios.get('/api/checkLoggedIn');
+        const response = await axios.get(`${PORT}/api/checkLoggedIn`);
         if(response.data.user !== null){
           setIsLogged(true);
           setUser(response.data.user)
@@ -47,12 +48,12 @@ function App() {
         console.error(error);
       }}
     checkLoggedIn();
-  }, [location.pathname])
+  }, [])
 
   //Adds user to the database
   const handleRegistration = async (userInfo) => {
     try {
-      const response = await axios.post('/api/addUser', userInfo);
+      const response = await axios.post(`${PORT}/api/addUser`, userInfo);
       setSuccessMsg(response.data.message);
     } catch (error) {
       setErrorMsg(error.response.data.error);
@@ -62,7 +63,8 @@ function App() {
   //Fetches user information on log in
   const handleLogIn = async (userInfo) => {
     try {
-      const response = await axios.post('/api/logUser', userInfo);
+      const response = await axios.post(`${PORT}/api/logUser`, userInfo);
+      console.log(response)
       setUser(response.data.user);
       setSuccessMsg(response.data.message);
       setTimeout(()=> {
@@ -77,7 +79,7 @@ function App() {
   //Requests to destroy user session on sign out
   const handleSignOut = async () =>{
     try{     
-      await axios.get('/api/logOff');
+      await axios.get(`${PORT}/api/logOff`);
       setDropDown(false);
       setIsLogged(false);
     }
@@ -94,7 +96,7 @@ function App() {
   //Fetches saved projects
   const fetchProjects = async() =>{
     try{
-      const response = await axios.get(`/api/getProjects/${user.id}`)
+      const response = await axios.get(`${PORT}/api/getProjects/${user.id}`)
       if(response.data !==null){
         setProjects(response.data);
       }
@@ -115,7 +117,7 @@ function App() {
   //Passes new project information to the backend
   const handleNewProject = async (project) =>{
     try{
-      await axios.post('/api/newProject', project);
+      await axios.post(`${PORT}/api/newProject`, project);
       fetchProjects();
       setSuccessMsg('Project successfully added');
     }catch(error){
@@ -130,7 +132,7 @@ function App() {
   //Passes project to be deleted to the backend
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/deleteProject/${id}`);
+      await axios.delete(`${PORT}/api/deleteProject/${id}`);
       fetchProjects();
     }catch (error) {
       setErrorMsg('An error occurred while processing your request.');
@@ -171,7 +173,7 @@ function App() {
   //Allows user to edit a project
   const handleEdit = async(project, user) => {
     try{
-      await axios.post(`/api/editProject`, project);
+      await axios.post(`${PORT}/api/editProject`, project);
       fetchProjects();
     }catch (error) {
       if(error.response.data.error){
@@ -192,7 +194,7 @@ function App() {
 
   const getWeeklyData = async() => {
     try{
-      const response = await axios.get(`/api/getWeeklyData/${user.id}`);
+      const response = await axios.get(`${PORT}/api/getWeeklyData/${user.id}`);
       setWeeklyData(response.data);
     }catch(error){
       console.error(error);
@@ -202,7 +204,7 @@ function App() {
   //Retrieves weekly hours from the database
   const getWeeklyHours = async() => {
     try{
-      const response = await axios.get(`/api/getWeeklyHours/${user.id}`);
+      const response = await axios.get(`${PORT}/api/getWeeklyHours/${user.id}`);
       setWeeklyHours(response.data.worked_hours);
     }catch(error){
       console.error(error);
@@ -212,7 +214,7 @@ function App() {
   //Retrieves activity level from the database
   const getActivity = async() =>{
     try{
-      const response = await axios.get(`/api/getActivity/${user.id}`);
+      const response = await axios.get(`${PORT}/api/getActivity/${user.id}`);
       const activity = response.data.activity;
       setActivityLevel(activity);
       const newCalculator = activityCalculator(activity);
@@ -245,7 +247,7 @@ function App() {
         id: user.id,
         activity: activity
       };
-      await axios.post('/api/setActivity', data);
+      await axios.post(`${PORT}/api/setActivity`, data);
     }catch(error){
       console.error(error);
     }

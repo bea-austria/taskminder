@@ -1,5 +1,5 @@
 import logo from "../assets/logo/taskminderlogo.svg";
-import { sideBarOptions } from "../const/navLinks.js";
+import { sideBarOptions } from "../../src/const/navLinks";
 import { Link } from "react-router-dom";
 
 function SideBar(){

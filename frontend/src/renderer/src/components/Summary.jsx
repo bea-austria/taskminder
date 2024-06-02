@@ -1,10 +1,10 @@
 import Profile from '../assets/logo/bunny-icon.jpg';
 import Placeholder from '../assets/placeholder.jpg';
-import UserContext from '../../utils/userContext.js';
+import UserContext from '../../../../utils/userContext.js';
 import { useContext, useEffect, useState } from 'react';
 import PageHeader from './PageHeader.jsx';
 import ApexCharts from 'react-apexcharts';
-import options from '../const/chartData.js';
+import options from '../../src/const/chartData.js';
 
 function Summary(){
     const {user, weeklyHours, projects, activityLevel, weeklyData} = useContext(UserContext);

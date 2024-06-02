@@ -1,5 +1,4 @@
 import { useState, useContext } from "react";
-import { dashOptions }  from "../const/navLinks.js";
 import { Link } from "react-router-dom";
 import DashOptions from "./DashboardLinks.jsx";
 

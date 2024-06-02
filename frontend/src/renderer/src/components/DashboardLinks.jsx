@@ -1,7 +1,7 @@
 
 import { useContext } from "react";
-import { dashOptions } from "../const/navLinks.js";
-import UserContext from "../../utils/userContext.js";
+import { dashOptions } from "../../src/const/navLinks.js";
+import UserContext from "../../../../utils/userContext.js";
 import {Link } from 'react-router-dom';
 
 function DashOptions(){

@@ -3,11 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "./out/main/main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "dev": "electron-vite dev -w",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "apexcharts": "^3.49.1",
@@ -26,6 +27,8 @@
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
+    "electron": "^30.0.9",
+    "electron-vite": "^2.2.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",

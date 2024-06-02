@@ -1,5 +1,5 @@
 import PageHeader from './PageHeader.jsx';
-import faqs from '../const/faqs.js';
+import faqs from '../../src/const/faqs.js';
 
 function Help(){
     return(

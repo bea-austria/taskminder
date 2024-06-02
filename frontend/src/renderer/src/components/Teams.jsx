@@ -1,5 +1,4 @@
-import teamMembers from "../const/teams";
-import teammembers from "../const/teams";
+import teamMembers from "../../src/const/teams";
 
 function Teams(){
     return(
