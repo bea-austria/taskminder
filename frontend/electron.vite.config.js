@@ -8,9 +8,4 @@ export default defineConfig({
     renderer: {
         plugins: [react()]
     },
-    server: {
-        proxy: {
-            '/api': 'http://localhost:5000'
-        }
-    }
 });

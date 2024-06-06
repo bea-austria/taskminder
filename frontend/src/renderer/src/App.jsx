@@ -30,7 +30,6 @@ function App() {
   const location = useLocation();
   const PORT = 'http://localhost:5000'
 
-
   function showDropDown(){
     setDropDown(!dropDown);
   }

@@ -12,11 +12,13 @@ const activityCalculator = (activityLevel) =>{
         }, 1000);
     };
 
-    // Add event listeners for detecting user activity
-    document.addEventListener('keydown', handleMovement);
-    document.addEventListener('click', handleMovement);
-    document.addEventListener('mousemove', handleMovement);
-    document.addEventListener('scroll', handleMovement);
+    window.electron.userActivity(()=>{
+        handleMovement();
+    })
+
+    window.electron.userIdle(()=>{
+        isActive = false;
+    })
 
     const timer = setInterval(()=>{
         if(isActive){
