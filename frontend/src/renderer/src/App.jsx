@@ -1,17 +1,20 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate, useLocation  } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import Landing from './components/website-landing/Web-landing';
 import DesktopLanding from './components/desktop/Desktop-landing';
 import DesktopDashboard from './components/desktop/Desktop-dashboard';
-import Dashboard from './components/Dashboard'
+import Dashboard from './components/Dashboard';
+import ResetPassword from './components/resetPassword';
+import NotFound from './components/404';
 import UserContext from '../../../utils/userContext';
 import activityCalculator from '../../../utils/getActivity';
 import isElectron from 'is-electron';
 
-const socket = io.connect('http://localhost:5000');
+const URL = 'http://localhost:5000'
+const socket = io.connect(URL);
 
 function App() {
   const [user, setUser] = useState([]);
@@ -25,23 +28,54 @@ function App() {
   const [activityLevel, setActivityLevel] = useState(0);
   const [calculator, setCalculator] = useState(null);
   const [weeklyData, setWeeklyData] = useState([]);
-  const[dropDown, setDropDown] = useState(false);
+  const [dropDown, setDropDown] = useState(false);
+  const [screenShots, setScreenShots] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [isTokenValid, setIsTokenValid] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const location = useLocation();
-  const PORT = 'http://localhost:5000'
+  axios.defaults.withCredentials = true;
+  axios.defaults.baseURL = 'http://localhost:5000';
 
+  //Shows and hide profile dropdown
   function showDropDown(){
     setDropDown(!dropDown);
   }
 
-  // Checks if the user is logged in when page reloads
+  //Verifies token for password reset page
   useEffect(()=>{
+    const verify = async() => {
+      const token = searchParams.get('token');
+      if(token){
+        const response = await verifyToken(token);
+        setIsTokenValid(response);
+      }else{
+        setIsTokenValid(false);
+      }
+    };
+    verify();
+  }, [searchParams]);
+
+  //Communicates with the backend to verify token validity
+  const verifyToken = async(token) => {
+    try{
+      const response = await axios.post(`api/verifyToken`, {token: token})
+      if(response.status == 200) return true
+    }catch(error){
+      setErrorMsg(error.response.data)
+      return false;
+    }
+  };
+
+  //Handles user authentication upon page refresh
+  useEffect(() => {
     const checkLoggedIn = async() => {
       try{
-        const response = await axios.get(`${PORT}/api/checkLoggedIn`);
+        const response = await axios.get(`/api/isAuthenticated`);
         if(response.data.user !== null){
-          setIsLogged(true);
           setUser(response.data.user)
+          setIsLogged(true);
           navigate(location.pathname)
         }else{
           setIsLogged(false);
@@ -55,7 +89,7 @@ function App() {
   //Adds user to the database
   const handleRegistration = async (userInfo) => {
     try {
-      const response = await axios.post(`${PORT}/api/addUser`, userInfo);
+      const response = await axios.post(`/api/addUser`, userInfo);
       setSuccessMsg(response.data.message);
     } catch (error) {
       setErrorMsg(error.response.data.error);
@@ -65,8 +99,7 @@ function App() {
   //Fetches user information on log in
   const handleLogIn = async (userInfo) => {
     try {
-      const response = await axios.post(`${PORT}/api/logUser`, userInfo);
-      console.log(response)
+      const response = await axios.post(`/api/logUser`, userInfo);
       setUser(response.data.user);
       setSuccessMsg(response.data.message);
       setTimeout(()=> {
@@ -81,7 +114,8 @@ function App() {
   //Requests to destroy user session on sign out
   const handleSignOut = async () =>{
     try{     
-      await axios.get(`${PORT}/api/logOff`);
+      await axios.get(`/api/logOff`);
+      socket.emit('pause');
       setDropDown(false);
       setIsLogged(false);
     }
@@ -89,6 +123,34 @@ function App() {
       console.error(error);
     }
   };
+
+  //Request backend to send email for password reset
+  const handleEmailVerification = async(email) =>{
+    try{
+      const response = await axios.post(`api/forgotPassword`, email);
+      setSuccessMsg(response.data.message);
+    }catch(error){
+      if(error && error.response.data.error){
+        setErrorMsg(error.response.data.error);
+      }else{
+        setErrorMsg('An error occurred while processing your request.');
+      }
+    }
+  }
+
+  //Sets new password for a user
+  const handlePWReset = async(data) => {
+    try{
+      const response = await axios.post('/api/resetPassword/', data);
+      setSuccessMsg(response.data.message);
+    }catch(error){
+      if(error && error.response.data.error){
+        setErrorMsg(error.response.data.error);
+      }else{
+        setErrorMsg('An error occurred while processing your request.');
+      }
+    }
+  }
 
   //Fetches saved projects when page reloads
   useEffect(()=>{
@@ -98,12 +160,12 @@ function App() {
   //Fetches saved projects
   const fetchProjects = async() =>{
     try{
-      const response = await axios.get(`${PORT}/api/getProjects/${user.id}`)
+      const response = await axios.get(`/api/getProjects/${user.id}`)
       if(response.data !==null){
         setProjects(response.data);
       }
     }catch(error){
-      if(error.response.data.error){
+      if(error && error.response.data.error){
         setErrorMsg(error.response.data.error);
       }else{
         setErrorMsg('An error occurred while processing your request.');
@@ -119,7 +181,7 @@ function App() {
   //Passes new project information to the backend
   const handleNewProject = async (project) =>{
     try{
-      await axios.post(`${PORT}/api/newProject`, project);
+      await axios.post(`/api/newProject`, project);
       fetchProjects();
       setSuccessMsg('Project successfully added');
     }catch(error){
@@ -134,7 +196,7 @@ function App() {
   //Passes project to be deleted to the backend
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${PORT}/api/deleteProject/${id}`);
+      await axios.delete(`/api/deleteProject/${id}`);
       fetchProjects();
     }catch (error) {
       setErrorMsg('An error occurred while processing your request.');
@@ -142,40 +204,53 @@ function App() {
   }
 
   //Allows user to start tracking time and activity level
-  const startTracker = (project, index) => {
-    const currentTracker = [...trackerBtns];
-    currentTracker[index] = 'pause';
-    setTrackerBtns(currentTracker);
+  const startTracker = (project) => {
     getActivity();
+    const newCalculator = activityCalculator(activityLevel);
+    setCalculator(newCalculator);
 
     socket.emit('start', {project, user});
     socket.on('userTimer', (data) => {
       setTimer(data);
     });
+
+    window.electron.screenshotMsg(()=>{
+      getScreenShots();
+    });
+    window.electron.startCapture(project.name);
+    window.electron.uploadScreenShot((data)=>{
+      uploadScreenShot(project, data)
+    })
   }
 
   //Saves tracked time and activity level
-  const pauseTracker = (index) => {
-    const currentTracker = [...trackerBtns];
-    currentTracker[index] = 'start';
-    setTrackerBtns(currentTracker);
-
+  const pauseTracker = (project) => {
+    window.electron.stopCapture(project.name);
     socket.emit('pause');
     fetchProjects();
     getWeeklyHours();
-
+    scheduleReport();
     
     const actLevelOnPause = calculator.getActivity()
     setActivityLevel(actLevelOnPause);
     saveActivityLevel(actLevelOnPause);
     calculator.stopTimer();
     setCalculator(null);
+  }
+
+  //Schedule a report when the user stops the tracker
+  const scheduleReport = async() => {
+    try{
+      await axios.get(`/api/scheduleReport/${user.id}`);
+    }catch(error){
+      console.error(error)
     }
+  }
   
   //Allows user to edit a project
   const handleEdit = async(project, user) => {
     try{
-      await axios.post(`${PORT}/api/editProject`, project);
+      await axios.post(`/api/editProject`, project);
       fetchProjects();
     }catch (error) {
       if(error.response.data.error){
@@ -191,12 +266,16 @@ function App() {
     if(isLogged && user.id){
       getWeeklyData();
       getWeeklyHours();
+      getScreenShots();
+      getActivity();
+      getTeamMembers();
     }
   }, [isLogged, user])
 
+  //Retrieve all available data on productivity and activity for the current week
   const getWeeklyData = async() => {
     try{
-      const response = await axios.get(`${PORT}/api/getWeeklyData/${user.id}`);
+      const response = await axios.get(`/api/getWeeklyData/${user.id}`);
       setWeeklyData(response.data);
     }catch(error){
       console.error(error);
@@ -206,21 +285,35 @@ function App() {
   //Retrieves weekly hours from the database
   const getWeeklyHours = async() => {
     try{
-      const response = await axios.get(`${PORT}/api/getWeeklyHours/${user.id}`);
+      const response = await axios.get(`/api/getWeeklyHours/${user.id}`);
       setWeeklyHours(response.data.worked_hours);
     }catch(error){
       console.error(error);
     }
   }
 
+  //Uploads screenshot everytime one is taken
+  const uploadScreenShot = async(project, data)=> {
+    try{
+      await axios.post(`/api/uploadScreenshot/${user.id}`, data); 
+    }catch(error){
+      console.error(error);
+    }
+  }
+  const getScreenShots = async() =>{
+    try{
+      const response = await axios.get(`/api/getScreenShots/${user.id}`);
+      setScreenShots(response.data)
+    }catch(error){
+      console.error(error);
+    }
+  }
   //Retrieves activity level from the database
   const getActivity = async() =>{
     try{
-      const response = await axios.get(`${PORT}/api/getActivity/${user.id}`);
+      const response = await axios.get(`/api/getActivity/${user.id}`);
       const activity = response.data.activity;
       setActivityLevel(activity);
-      const newCalculator = activityCalculator(activity);
-      setCalculator(newCalculator);
     }catch(error){
       console.error(error);
     }
@@ -249,11 +342,21 @@ function App() {
         id: user.id,
         activity: activity
       };
-      await axios.post(`${PORT}/api/setActivity`, data);
+      await axios.post(`/api/setActivity`, data);
     }catch(error){
       console.error(error);
     }
   }
+
+  //Retrieves team members
+  const getTeamMembers = async() => {
+    try{
+      const response = await axios.get(`/api/getMembers`);
+      setTeamMembers(response.data);
+    }catch(error){
+      console.error(error)
+    }
+  };
   
   //Context values to be consumed by other components
   const contextValue = {
@@ -272,48 +375,56 @@ function App() {
     startTracker,
     pauseTracker,
     trackerBtns,
+    setTrackerBtns,
     timer,
     weeklyHours,
     activityLevel, 
     weeklyData,
     dropDown,
     setDropDown,
-    showDropDown
+    showDropDown,
+    screenShots,
+    URL,
+    teamMembers,
+    handleEmailVerification,
+    handlePWReset,
+    isTokenValid
   };
-
-  if(isElectron()){
-    return (
-      <UserContext.Provider value={contextValue}>
-          <Routes>
-            <Route 
-              exact 
-              path='/' 
-              element={isLogged ? <Navigate to='/dashboard/' /> : <DesktopLanding/>}
-              />
-            <Route
-              path='/dashboard/*'
-              element={isLogged ? <DesktopDashboard /> : <Navigate to='/' />}
-            />
-          </Routes>
-      </UserContext.Provider>
-    )
-  }else{
-    return (
-      <UserContext.Provider value={contextValue}>
-          <Routes>
-            <Route 
-              exact 
-              path='/' 
-              element={isLogged ? <Navigate to='/dashboard/' /> : <Landing/>}
-              />
-            <Route
-              path='/dashboard/*'
-              element={isLogged ? <Dashboard /> : <Navigate to='/' />}
-            />
-          </Routes>
-      </UserContext.Provider>
-    )
-  }
+  return(
+    <UserContext.Provider value={contextValue}>
+      <Routes>
+        {isElectron() ? 
+        <>
+        <Route 
+        path='/' 
+        element={isLogged ? <Navigate to='/dashboard/' /> : <DesktopLanding/>}
+        />
+        <Route
+          path='/dashboard/'
+          element={isLogged ? <DesktopDashboard /> : <Navigate to='/' />}
+        />
+        </>
+        : 
+        <>
+        <Route 
+          path='/reset-password' 
+          element={<ResetPassword/>}
+        />
+        <Route
+          exact 
+          path='/' 
+          element={isLogged ? <Navigate to='/dashboard/' /> : <Landing/>}
+        />
+        <Route
+          path='/dashboard/*'
+          element={isLogged ? <Dashboard /> : <Navigate to='/' />}
+        />
+        <Route path="*" element={<NotFound/>} />
+        </>
+        }
+      </Routes>
+    </UserContext.Provider>
+  )
 }
 
 export default App
