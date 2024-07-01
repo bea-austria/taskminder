@@ -46,4 +46,32 @@ const logInFields = [
     },
 ];
 
-export {registrationfields, logInFields}
+const verificationField = [{
+    label: "Work Email",
+    id: 'email',
+    type: 'email',
+    placeholder: 'Your work email'
+}]
+
+const resetPWFields = [
+    {
+        label: "Work Email",
+        id: 'email',
+        type: 'email',
+        placeholder: 'Your work email'
+    },
+    {
+        label: "Password",
+        id: 'password',
+        type: 'password',
+        placeholder: 'Your password'
+    },
+    {
+        label: "Confirm Password",
+        id: 'confirmPW',
+        type: 'password',
+        placeholder: 'Confirm your password'
+    },
+]
+
+export {registrationfields, logInFields, verificationField, resetPWFields}
