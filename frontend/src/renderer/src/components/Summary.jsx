@@ -1,5 +1,4 @@
-import Profile from '../assets/logo/bunny-icon.jpg';
-import Placeholder from '../assets/placeholder.jpg';
+import Profile from '../assets/team/photo_placeholder.png';
 import UserContext from '../../../../utils/userContext.js';
 import { useContext, useEffect, useState } from 'react';
 import PageHeader from './PageHeader.jsx';
@@ -7,9 +6,9 @@ import ApexCharts from 'react-apexcharts';
 import options from '../../src/const/chartData.js';
 
 function Summary(){
-    const {user, weeklyHours, projects, activityLevel, weeklyData} = useContext(UserContext);
+    const {user, weeklyHours, projects, activityLevel, weeklyData, screenShots, URL} = useContext(UserContext);
     const [chartOptions, setChartOptions] = useState(options);
-    
+
     useEffect(()=> {
         if(weeklyData){
             // Process fetched data
@@ -57,7 +56,7 @@ function Summary(){
                     <img src={Profile} alt="Profile picture" className='rounded-full h-20 w-20'/>
                     <div>
                         <h2 className='text-2xl'>{user.first_name.charAt(0).toUpperCase()+ user.first_name.slice(1) + ' ' + user.last_name.charAt(0).toUpperCase()+ user.last_name.slice(1)}</h2>
-                        <p className='text-lg'>Job Position</p>
+                        <p className='text-lg'>{user.is_admin ? "Admin" : 'Team Member'}</p>
                     </div>
                 </div>
                 <div className="flex items-center flex-col justify-center rounded bg-gray-50 dark:bg-gray-800 py-6">
@@ -65,7 +64,7 @@ function Summary(){
                         <span className="material-symbols-outlined text-2xl">
                         schedule
                         </span>
-                        <h3 className='text-lg lg:text-xl'>Hours worked this week:</h3>
+                        <h3 className='text-lg lg:text-xl'>Weekly Hours:</h3>
                     </div>
                     <p className='text-xl lg:text-3xl'>{weeklyHours ? weeklyHours : '00:00:00'}</p>             
                 </div>
@@ -132,30 +131,16 @@ function Summary(){
                     Recent Activities:
                 </h2>
                 <div className="h-full grid grid-cols-2 xsm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mb-4 rounded bg-gray-50 dark:bg-gray-800 gap-4">
-                    <div className='flex flex-col justify-start items-center col-span-1'>
-                        <img className="h-full w-full rounded-lg shadow-xl dark:shadow-gray-800 object-cover" src={Placeholder} alt="image description"/>
-                        <span>05:06 pm</span>
+                {screenShots.length > 0 ?
+                screenShots.slice(0, 6).map((file, index) => (
+                    <div key={index} className='flex flex-col justify-start items-center col-span-1'>
+                        <img className="h-full w-full rounded-lg shadow-xl dark:shadow-gray-800 object-cover" src={`${URL}/screenshots/${file.filePath}`} alt="screenshot" />
+                        <span>{file.time}</span>
                     </div>
-                    <div className='flex flex-col justify-start items-center col-span-1'>
-                        <img className="h-full w-full rounded-lg shadow-xl dark:shadow-gray-800 object-cover" src={Placeholder} alt="image description"/>
-                        <span>05:06 pm</span>
-                    </div>
-                    <div className='flex flex-col justify-start items-center col-span-1'>
-                        <img className="h-full w-full rounded-lg shadow-xl dark:shadow-gray-800 object-cover" src={Placeholder} alt="image description"/>
-                        <span>05:06 pm</span>
-                    </div>
-                    <div className='flex flex-col justify-start items-center col-span-1'>
-                        <img className="h-full w-full rounded-lg shadow-xl dark:shadow-gray-800 object-cover" src={Placeholder} alt="image description"/>
-                        <span>05:06 pm</span>
-                    </div>
-                    <div className='flex flex-col justify-start items-center col-span-1'>
-                        <img className="h-full w-full rounded-lg shadow-xl dark:shadow-gray-800 object-cover" src={Placeholder} alt="image description"/>
-                        <span>05:06 pm</span>
-                    </div>
-                    <div className='flex flex-col justify-start items-center col-span-1'>
-                        <img className="h-full w-full rounded-lg shadow-xl dark:shadow-gray-800 object-cover" src={Placeholder} alt="image description"/>
-                        <span>05:06 pm</span>
-                    </div>
+                ))
+                :
+                <p>You have no recent activities</p>
+                }
                 </div>
             </section>
         </>

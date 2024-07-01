@@ -1,6 +1,9 @@
-import teamMembers from "../../src/const/teams";
+import Profile from '../assets/team/photo_placeholder.png';
+import UserContext from '../../../../utils/userContext.js';
+import { useContext } from 'react';
 
 function Teams(){
+    const {teamMembers} = useContext(UserContext);
     return(
         <section className="bg-white dark:bg-gray-900">
             <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-6">
@@ -13,11 +16,11 @@ function Teams(){
                 <div className="grid gap-8 lg:gap-16 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {teamMembers.map((member, index) =>(
                     <div className="text-center text-gray-500 dark:text-gray-400" key={index}>
-                        <img className="mx-auto mb-4 w-36 h-36 rounded-full" src={member.src} alt="Bonnie Avatar"/>
+                        <img className="mx-auto mb-4 w-36 h-36 rounded-full" src={Profile} alt="Bonnie Avatar"/>
                         <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            <a href="#">{member.name}</a>
+                            <a href="#">{member.first_name.charAt(0).toUpperCase() + member.first_name.slice(1) + " "  + member.last_name.charAt(0).toUpperCase() + member.last_name.slice(1)}</a>
                         </h3>
-                        <p>{member.position}</p>
+                        <p>{member.is_admin ? "Admin" : 'Team Member'}</p>
                         <ul className="flex justify-center mt-4 space-x-4">
                             <li>
                                 <a href="#" className="text-[#39569c] hover:text-gray-900 dark:hover:text-white">
