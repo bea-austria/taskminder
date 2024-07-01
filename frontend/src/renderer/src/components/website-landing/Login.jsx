@@ -2,33 +2,37 @@ import { useState, useContext } from "react";
 import React from 'react';
 import { Formik, Form} from 'formik';
 import FormFields from "./FormFields";
-import { registrationfields, logInFields } from "../../const/formFields";
+import { registrationfields, logInFields, verificationField } from "../../const/formFields";
 import * as Yup from 'yup';
 import UserContext from '../../../../../utils/userContext';
 
-
 function Login(){
+    const {handleLogIn, handleRegistration, handleEmailVerification} = useContext(UserContext);
     const[isRegistered, setIsRegistered] = useState(true);
-    const {handleLogIn, handleRegistration} = useContext(UserContext);
     const[isSubmitted, setIsSubmitted] = useState(false);
+    const [isPWForgotten, setIsPWForgotten] = useState(false);
 
     //Handles registration of new user
     function handleIsRegister(){
       setIsRegistered(!isRegistered);
-    }
-
-    //Handles password reset
-    function handlePWReset(){
-      console.log('hello')
+      setIsPWForgotten(false)
     }
 
     //Submits user information based on intended action
     function handleSubmit(values){
-      if(values.firstName){
-        handleRegistration(values);
+      if(!isPWForgotten){
+        if(values.firstName){
+          handleRegistration(values);
+        }else{
+          handleLogIn(values);
+        }
       }else{
-        handleLogIn(values);
+        handleEmailVerification(values);
       }
+    }
+
+    function handleEmailVerifForm(){
+      setIsPWForgotten(true);
     }
 
     //Validation rules for login
@@ -36,6 +40,11 @@ function Login(){
       email: Yup.string().email('Invalid email').required('Required'),
       password: Yup.string()
         .required('Required')
+    });
+
+    //Validation rules for password reset
+    const emailValidationSchema = Yup.object().shape({
+      email: Yup.string().email('Invalid email').required('Required'),
     });
 
     //Additional validation rules for registration
@@ -68,7 +77,7 @@ function Login(){
         <div className="flex flex-1 flex-col justify-center items-center pb-8 bg-white rounded-lg border-2">
         <div className="xsm:w-4/5">
           <h2 className="mt-3 text-center text-xl xsm:text-xl sm:text-xl sm:mt-5 xsm:text-left lg:text-2xl xlg:text-3xl font-bold leading-9 tracking-tight text-gray-900">
-            {isRegistered ? "Sign in to your account" : "Join TaskMinder"}
+            {!isPWForgotten ? (isRegistered ? "Sign in to your account" : "Join TaskMinder") : "Reset Your Password"}
           </h2>
         </div>
 
@@ -81,18 +90,21 @@ function Login(){
               password: '',
               confirmPW: '',
             }}
-            validationSchema={isRegistered ? validationSchema : registerValidationSchema}
-            onSubmit= {(values) => {
+            validationSchema={!isPWForgotten ? (isRegistered ? validationSchema : registerValidationSchema) : emailValidationSchema}
+            onSubmit= {(values, {resetForm}) => {
               setIsSubmitted(true);
               setTimeout(()=> {
                 handleSubmit(values)
                 setIsSubmitted(false)
-              }, 1000)
+              }, 1000);
+              setTimeout(()=> {
+                resetForm()
+              }, 3000)
             }}
           >
             {({ errors, touched }) => (
                 <Form className="sm:space-y-4">
-                { (isRegistered ? logInFields : registrationfields).map((fieldDetails, index) => (
+                { (!isPWForgotten ? (isRegistered ? logInFields : registrationfields) : verificationField).map((fieldDetails, index) => (
                     <FormFields
                       key={index}
                       label={fieldDetails.label} 
@@ -114,7 +126,7 @@ function Login(){
                     { isSubmitted && <span className="material-symbols-outlined animate-spin text-lg text-white">
                     autorenew
                     </span>}
-                    {isRegistered ? "Log In" : "Create Your Account"}
+                    {!isPWForgotten ? (isRegistered ? "Log In" : "Create Your Account") : "Send Verification Email"}
                   </button>
                 </div>
               </Form>
@@ -122,9 +134,15 @@ function Login(){
           </Formik>
       
           <p className="mt-5 text-left text-sm text-gray-500 pb-6 border-b-2">
-            {isRegistered ? "Forgot Password? " : "Already Have an Account? "}
-            <a href="#" className="font-semibold leading-6 text-blue-900 hover:text-blue-900" onClick={isRegistered ? handlePWReset : handleIsRegister}>
-              {isRegistered ? "Click here" : "Log in here"}
+            {!isPWForgotten ? (isRegistered ? "Forgot Password? " : "Already Have an Account? ") : ""}
+            <a href='#' className="font-semibold leading-6 text-blue-900 hover:text-blue-900" 
+            onClick={
+              (!isPWForgotten ? 
+              (isRegistered ? handleEmailVerifForm : handleIsRegister) :
+              () => {setIsRegistered(true); setIsPWForgotten(false)}
+              )}
+            >
+              {!isPWForgotten ? (isRegistered ? "Click here" : "Log in here") : "Log in to your account"}
             </a>
           </p>
 
@@ -132,9 +150,9 @@ function Login(){
             <p>
               New to TaskMinder?
             </p>
-            <button className="text-sm bg-indigo-50 hover:bg-indigo-100 text-blue-900 font-bold py-2 px-4 rounded border border-gray-300 sm:text-base" onClick={handleIsRegister}>
+            <a href='#' className="text-sm bg-indigo-50 hover:bg-indigo-100 text-blue-900 font-bold py-2 px-4 rounded border border-gray-300 sm:text-base" onClick={handleIsRegister}>
               Get Started
-            </button>
+            </a>
           </div>}
         </div>
       </div>

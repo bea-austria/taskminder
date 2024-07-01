@@ -1,5 +1,4 @@
 import logo from '../../assets/logo/taskminderlogo.svg';
-import { Link } from "react-router-dom";
 
 function Header(){
     return (
