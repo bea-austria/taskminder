@@ -97,7 +97,8 @@ function Summary(){
                                 </tr>
                             </thead>
                             <tbody>
-                                {projects.map((project, index)=>(
+                                {projects.length > 0 ?
+                                projects.map((project, index)=>(
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={index}>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {project.name}
@@ -106,7 +107,10 @@ function Summary(){
                                         {project.worked_hours ? project.worked_hours : '00:00:00'}
                                     </td>
                                 </tr>
-                                ))}
+                                ))
+                                :
+                                <p className='mx-auto mt-4 text-base text-blue-900'>You have no active projects.</p>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -130,18 +134,18 @@ function Summary(){
                 <h2 className="text-2xl mb-4">
                     Recent Activities:
                 </h2>
-                <div className="h-full grid grid-cols-2 xsm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mb-4 rounded bg-gray-50 dark:bg-gray-800 gap-4">
                 {screenShots.length > 0 ?
-                screenShots.slice(0, 6).map((file, index) => (
+                <div className="h-full grid grid-cols-2 xsm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mb-4 rounded bg-gray-50 dark:bg-gray-800 gap-4">
+                {screenShots.slice(0, 6).map((file, index) => (
                     <div key={index} className='flex flex-col justify-start items-center col-span-1'>
                         <img className="h-full w-full rounded-lg shadow-xl dark:shadow-gray-800 object-cover" src={`${URL}/screenshots/${file.filePath}`} alt="screenshot" />
                         <span>{file.time}</span>
                     </div>
-                ))
-                :
-                <p>You have no recent activities</p>
-                }
+                ))}
                 </div>
+                :
+                <p className='mx-auto text-base text-blue-900'>You have no recent activities</p>
+                }
             </section>
         </>
     )

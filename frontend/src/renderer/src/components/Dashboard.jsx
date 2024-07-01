@@ -28,7 +28,7 @@ function Dashboard(){
                             <Route path='/help' element={<Help />}/>
                             <Route path='/teams' element={<Teams />}/>
                             <Route path='/projects' element={<Projects />}/>
-                            <Route path="*" element={<NotFound/>} />
+                            <Route path="*" element={<NotFound page="Dashboard" link="http://localhost:5173/dashboard/"/>} />
                         </Routes>
                     </div>
                 </main>

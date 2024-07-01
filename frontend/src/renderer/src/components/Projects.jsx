@@ -86,24 +86,24 @@ function Projects(){
               </div>
             )}
 
+            {projects.length > 0 ? 
             <div className="lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:gap-y-6">
-                {projects.length > 0 ? 
-                projects.map((project, index)=> (
-                    <div key={index} className="relative max-w-sm p-6 mb-4 lg:mb-0 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" onClick={()=>{handleEditProject(project)}}>
-                        <span className="material-symbols-outlined absolute top-[5px] right-[15px] cursor-pointer text-2xl" onClick={(e)=> handleDeleteModal(index, e)}>
-                        remove
-                        </span>
-                        <h5 className="mb-2 text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{project.name}</h5>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{project.description}</p>
-                    <div className="flex justify-between items-center">
-                        <p>Worked hours: {project.worked_hours ? project.worked_hours : '00:00:00'}</p>
-                    </div>
+            {projects.map((project, index)=> (
+                <div key={index} className="relative max-w-sm p-6 mb-4 lg:mb-0 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" onClick={()=>{handleEditProject(project)}}>
+                    <span className="material-symbols-outlined absolute top-[5px] right-[15px] cursor-pointer text-2xl" onClick={(e)=> handleDeleteModal(index, e)}>
+                    remove
+                    </span>
+                    <h5 className="mb-2 text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{project.name}</h5>
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{project.description}</p>
+                <div className="flex justify-between items-center">
+                    <p>Worked hours: {project.worked_hours ? project.worked_hours : '00:00:00'}</p>
                 </div>
-                ))
-               :
-               <p>You have no active projects at the moment.</p> 
-                }
             </div>
+            ))}
+            </div>
+            :
+            <p className="text-blue-900 text-center">You have no active projects at the moment.</p> 
+            }
 
             {showModal && (
                 <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50 z-50"></div>

@@ -419,7 +419,7 @@ function App() {
           path='/dashboard/*'
           element={isLogged ? <Dashboard /> : <Navigate to='/' />}
         />
-        <Route path="*" element={<NotFound/>} />
+        <Route path="*" element={<NotFound page="Homepage" link="http://localhost:5173/"/>} />
         </>
         }
       </Routes>

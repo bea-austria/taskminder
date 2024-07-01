@@ -112,7 +112,7 @@ function DesktopDashboard(){
                     </div>
                 ))
                 : 
-                <p className='text-blue-900 text-base text-center'>You have no active projects. <a href="http://localhost:5173/" target='_blank' className='underline font-semibold'>Start a new project.</a></p>
+                <p className='text-blue-900 text-base text-center mt-5'>You have no active projects. <a href="http://localhost:5173/" target='_blank' className='underline font-semibold'>Start a new project.</a></p>
                 }
             </div>
         </div>
