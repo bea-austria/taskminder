@@ -1,5 +1,4 @@
-import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import DashOptions from "./DashboardLinks.jsx";
 
 function formatDate(date) {
@@ -9,9 +8,8 @@ function formatDate(date) {
 
 function PageHeader({h1, handleModal}){
     const [showToolTip, setShowToolTip] = useState(false);
-
-
     const date = new Date();
+    
     return(
         <section className="flex justify-between mb-10">
             <div className={h1 == 'Projects' ? 'relative' : ''}>

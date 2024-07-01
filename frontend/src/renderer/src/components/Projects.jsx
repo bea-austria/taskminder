@@ -16,32 +16,13 @@ function Projects(){
         successMsg, 
         setSuccessMsg, 
         setErrorMsg, 
-        startTracker, 
-        pauseTracker, 
-        trackerBtns,
-        timer} = useContext(UserContext);
-    const [toolTips, setToolTips] = useState(Array(projects.length).fill(false));
+        } = useContext(UserContext);
     const [showdeleteModal, setshowdeleteModal] = useState(false);
     const [formPurpose, setFormPurpose] = useState('add');
     const [project, setProject] = useState({})
- 
     //Handles appearance and dissappearance of modal
     function handleModal(){
         setShowModal(!showModal);
-    };
-
-    //Handles appearance of tooltip
-    function handleMouseEnter(index){
-        const currentToolTips = [...toolTips];
-        currentToolTips[index] = true;
-        setToolTips(currentToolTips);
-    };
-
-    //Handles disappearance of tooltip
-    function handleMouseLeave(index){
-        const currentToolTips = [...toolTips];
-        currentToolTips[index] = false;
-        setToolTips(currentToolTips);
     };
 
     //Handles appearance of alert for deleting a project
@@ -65,17 +46,6 @@ function Projects(){
         setShowModal(true);
     }
 
-    //Starts or pause tracker for a specific project
-    function handleTracking(e, project, index){
-        e.stopPropagation();
-        if(trackerBtns[index] === 'start'){
-            startTracker(project, index);
-            // setProject(project)
-        }else{
-            pauseTracker(index);
-        }
-    }
-
     //removes error or success alert after 3 seconds
     setTimeout(() => setErrorMsg(''), 4000)
     setTimeout(() => setSuccessMsg(''), 4000)
@@ -87,8 +57,8 @@ function Projects(){
         .min(10, 'Description is too short!'),
         limit_hours: Yup.string()
         .max(8, 'Max limit_hours is 8 hours'),
-      });
-
+    });
+    
     return(
         <>
             <PageHeader h1={'Projects'} handleModal={handleModal}/>
@@ -116,18 +86,9 @@ function Projects(){
               </div>
             )}
 
-            <div id="toast-success" className="flex items-center w-fit p-4 mb-4 text-gray-900 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
-                <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-900 bg-green-100 rounded-lg dark:bg-blue-900 dark:text-green-200">
-                    <span className="material-symbols-outlined">
-                    timer
-                    </span>
-                    <span className="sr-only">Timer icon</span>
-                </div>
-                <p className="ms-3 text-2xl font-normal">{timer ? `${timer.hours}:${timer.minutes}:${timer.seconds}` : project.worked_hours}</p>
-            </div>
-
             <div className="lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:gap-y-6">
-                {projects.map((project, index)=> (
+                {projects.length > 0 ? 
+                projects.map((project, index)=> (
                     <div key={index} className="relative max-w-sm p-6 mb-4 lg:mb-0 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" onClick={()=>{handleEditProject(project)}}>
                         <span className="material-symbols-outlined absolute top-[5px] right-[15px] cursor-pointer text-2xl" onClick={(e)=> handleDeleteModal(index, e)}>
                         remove
@@ -136,20 +97,12 @@ function Projects(){
                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{project.description}</p>
                     <div className="flex justify-between items-center">
                         <p>Worked hours: {project.worked_hours ? project.worked_hours : '00:00:00'}</p>
-                        <a href="#" className="inline-flex items-center px-4 py-3 text-sm font-medium text-center text-white bg-blue-900 rounded-full hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-900 dark:focus:ring-blue-900" onMouseEnter={()=>handleMouseEnter(index)} onMouseLeave={()=>handleMouseLeave(index)} onClick={(e) => {handleTracking(e, project, index)}}>
-                            <span className="rtl:rotate-180 flex justify-center items-center w-5 h-5 material-symbols-outlined text-4xl" aria-hidden="true">
-                            {trackerBtns[index] === 'start' ? 'play_arrow' : 'pause'}
-                            </span>
-                        </a>
-                        { toolTips[index] &&
-                        <div className="absolute z-10 -right-0.5 bottom-1/3 bg-white border border-gray-200 rounded-lg shadow-sm p-2">
-                        <div className="text-gray-900 text-sm font-medium">{trackerBtns[index] === 'start' ? 'Start Tracker' : 'Pause Tracker'}</div>
-                        <div className="tooltip-arrow"></div>
-                        </div>
-                        }
                     </div>
                 </div>
-                ))}
+                ))
+               :
+               <p>You have no active projects at the moment.</p> 
+                }
             </div>
 
             {showModal && (
