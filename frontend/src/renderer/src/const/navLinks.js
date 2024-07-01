@@ -15,11 +15,6 @@ export const sideBarOptions = [
         path: "/dashboard/activity"
     },
     {
-        icon: "task",
-        label: "Reports",
-        path: "/dashboard/timesheets"
-    },
-    {
         icon: "groups",
         label: "Team Members",
         path: "/dashboard/teams"
@@ -35,7 +30,7 @@ export const dashOptions = [
     {
         icon: "settings",
         label: "Settings",
-        path: "/dashboard/setting"
+        path: "/dashboard/settings"
     },
     {
         icon: "account_circle",
