@@ -24,13 +24,13 @@ class projectController {
 
         const project_id = await model.addProject(user_id, name, limit_hours, category, description);
         await productivityController.addEntry(project_id);
+        
         res.sendStatus(200);
     }
 
-    static async getUserProjects(req, res, index){
+    static async getUserProjects(index){
         try{
-            const projects = await model.getProjects(index);
-            res.status(200).json(projects);
+            return await model.getProjects(index);
         }catch(error){
             res.json({ error: "Unable to retrieve projects at the moment." });
         }
