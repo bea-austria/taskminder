@@ -2,22 +2,28 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-mysql-session": "^3.0.1",
     "express-session": "^1.18.0",
     "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
     "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.13",
     "socket.io": "^4.7.5"
   }
 }
