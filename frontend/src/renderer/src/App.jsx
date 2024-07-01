@@ -7,7 +7,7 @@ import Landing from './components/website-landing/Web-landing';
 import DesktopLanding from './components/desktop/Desktop-landing';
 import DesktopDashboard from './components/desktop/Desktop-dashboard';
 import Dashboard from './components/Dashboard';
-import ResetPassword from './components/resetPassword';
+import ResetPassword from './components/ResetPassword';
 import NotFound from './components/404';
 import UserContext from '../../../utils/userContext';
 import activityCalculator from '../../../utils/getActivity';
