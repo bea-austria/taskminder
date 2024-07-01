@@ -1,24 +1,53 @@
+# Node modules
+node_modules/
+
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Build output
+dist/
+out/
+build/
+*.tsbuildinfo
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Vite cache
+.vite/
+
+# Electron cache
+electron/dist/
+
+# Dependency directories
+client/node_modules/
+electron/node_modules/
+
+# Generated files
+client/dist/
+electron/dist/
+
+# OS-specific files
 .DS_Store
+Thumbs.db
+
+# IDE-specific files
+.idea/
+.vscode/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+*.swp
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Miscellaneous
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
