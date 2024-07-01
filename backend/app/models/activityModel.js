@@ -44,6 +44,33 @@ class ActivityModel {
         })
     };
 
+    static async saveScreenShot(id, filePath, time){
+        return new Promise((resolve, reject)=> {
+            const data = { filePath: filePath, time: time };
+            const query = 'UPDATE activity_levels SET images = JSON_ARRAY_APPEND(IFNULL(images, JSON_ARRAY()), "$", ?), updated_at=NOW() WHERE user_id =? AND DATE(created_at) = CURDATE()';
+            db.query(query, [JSON.stringify(data), id],(error, result)=>{
+                if(error){
+                    reject(error);
+                } else {
+                    resolve(true);
+                }
+            });
+        })
+    }
+
+    static async getScreenShots(id){
+        return new Promise((resolve, reject)=> {
+            const query = 'SELECT images FROM activity_levels WHERE user_id =? AND DATE(created_at) = CURDATE()';
+            db.query(query, [id],(error, result)=>{
+                if(error){
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
+        })
+    }
+
 };
 
 module.exports = ActivityModel;

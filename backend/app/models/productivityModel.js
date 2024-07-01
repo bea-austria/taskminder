@@ -62,16 +62,19 @@ class productivityModel {
         return new Promise((resolve, reject) =>{
             const query = `
             SELECT 
-                DATE_FORMAT(p.created_at, '%a') AS day,
-                a.activity,
-                SEC_TO_TIME(SUM(TIME_TO_SEC(p.worked_hours))) AS total_hours
+            DATE_FORMAT(p.created_at, '%a') AS day,
+            SEC_TO_TIME(SUM(TIME_TO_SEC(p.worked_hours))) AS total_hours,
+                (SELECT a.activity 
+                FROM activity_levels a 
+                WHERE a.user_id = p.user_id 
+                AND WEEK(a.created_at, 1) = WEEK(CURDATE(), 1)
+                AND DATE_FORMAT(a.created_at, '%a') = DATE_FORMAT(p.created_at, '%a')
+                LIMIT 1) AS activity
             FROM productivity p
-            INNER JOIN activity_levels a ON p.user_id = a.user_id
-            WHERE p.user_id = 4 
-            AND WEEK(a.created_at, 1) = WEEK(CURDATE(), 1) 
+            WHERE p.user_id = ?
             AND WEEK(p.created_at, 1) = WEEK(CURDATE(), 1)
-            GROUP BY DATE_FORMAT(p.created_at, '%a'), a.activity
-            ORDER BY DATE_FORMAT(p.created_at, '%a');`
+            GROUP BY day, activity
+            ORDER BY FIELD(day, 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');`
             db.query(query, [id], (error, result)=>{
                 if(error){
                     reject(error);
