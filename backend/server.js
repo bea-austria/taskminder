@@ -1,9 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
 const app = express();
 const router = require('./app/routes/routes');
 const session = require('express-session');
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 const http = require('http');
 const getHours = require('./app/utils/getHours');
 const format = require('./app/utils/timeFormat');
@@ -12,35 +13,40 @@ const incrementHours = require('./app/utils/incrementHours');
 const cron = require('node-cron');
 const createProductivityEntry = require('./app/utils/createProductivityEntry');
 const createActivityEntry = require('./app/utils/createActivityEntry');
+const cookieParser = require('cookie-parser');
 
 const { Server } = require("socket.io");
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {origin:"http://localhost:5173", methods: ["GET", "POST", "DELETE"]},
-});
 
+const corsOptions = {origin: true, methods: ["GET", "POST", "DELETE"], credentials: true};
+const io = new Server(server, {cors: corsOptions});
+
+app.use(cors(corsOptions));
+app.use(cookieParser());
+app.use(express.json());
 app.use(session({
-    secret: 'probability',
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
     cookie: {
-        httpOnly: false,
-        secure: false,
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
         maxAge: 1000 * 60 * 60 * 24 * 3,
         expires: 1000 * 60 * 60 * 24 * 3
     },
 }));
 
-app.use(cors());
-app.use(express.json());
+app.use('/screenshots', express.static('app/screenshots')); //Makes the screenshots accessible to the React components
 app.use(router);
 
+//Establishes the socket connection for time tracker
 io.on('connection', (socket)=>{
     let projectTimer;
     let interval;
     let project_id;
-    let user_id;
     let formattedprojectTimer;
+    let user_id;
 
     socket.on('start', async (data)=>{
         user_id = data.user.id;
@@ -60,11 +66,11 @@ io.on('connection', (socket)=>{
     });
 });
 
+//Schedules a cron job at 12 am daily to create new activity and productivity entries in the database
 cron.schedule('0 0 * * *', () => {
     createProductivityEntry();
     createActivityEntry();
 });
-
 
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`); 
