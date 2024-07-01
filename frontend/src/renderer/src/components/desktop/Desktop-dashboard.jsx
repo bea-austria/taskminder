@@ -3,7 +3,6 @@ import { useContext, useState } from 'react';
 
 function DesktopDashboard(){
     const {
-        user,
         projects, 
         startTracker, 
         pauseTracker, 
@@ -11,10 +10,14 @@ function DesktopDashboard(){
         timer,
         weeklyHours,
         activityLevel,
-        handleSignOut} = useContext(UserContext);
+        setTrackerBtns,
+        handleSignOut,
+        errorMsg,
+        setErrorMsg} = useContext(UserContext);
     const [toolTips, setToolTips] = useState(Array(projects.length).fill(false));
-    const [project, setProject] = useState({})
+    const [activeProjectIndex, setActiveProjectIndex] = useState(null)
     
+    //Shows and hides tracker tooltip
     function handleMouseEnter(index){
         const currentToolTips = [...toolTips];
         currentToolTips[index] = true;
@@ -29,28 +32,46 @@ function DesktopDashboard(){
     }
 
     //Starts or pause tracker for a specific project
-    function handleTracking(e, project, index){
-        e.stopPropagation();
-        if(trackerBtns[index] === 'start'){
-            startTracker(project, index);
-        }else{
-            pauseTracker(index);
+    function handleTracking(project, index){
+        let currentTracker = [...trackerBtns];
+
+        if(activeProjectIndex !== null && activeProjectIndex !== index){ 
+            setErrorMsg('Please pause active timer')
+            return
         }
+    
+        if(trackerBtns[index] === 'start'){
+            currentTracker[index] = 'pause';
+            startTracker(project);
+            setActiveProjectIndex(index);
+        }else{
+            currentTracker[index] = 'start';
+            pauseTracker(project);
+            setActiveProjectIndex(null);
+        }
+        setTrackerBtns(currentTracker);
     }
 
-    function handleProjectSelection(project){
-        if(project.worked_hours === null){
-            project.worked_hours = '00:00:00'
-        }
-        setProject(project)
-    }
-    
+    setTimeout(() => setErrorMsg(null), 5000)
+
     return(
         <div className='flex flex-col'>
             <div className='bg-blue-900 p-6 w-full flex flex-col'>
-                <span class="material-symbols-outlined text-white ml-auto cursor-pointer" onClick={handleSignOut}>
+                <span className="material-symbols-outlined text-white ml-auto cursor-pointer" onClick={handleSignOut}>
                 logout
                 </span>
+
+                {errorMsg && (
+                <div className="absolute z-50 top-50 left-0 right-0 mx-auto flex items-center p-4 mb-4 text-sm w-fit text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                <span className="material-symbols-outlined flex-shrink-0 inline me-3">
+                info
+                </span>
+                <span className="sr-only">Info</span>
+                <div>
+                    <span className="font-medium">Error!</span> {errorMsg}.
+                </div>
+                </div>
+                )}
 
                 <div className='flex justify-center items-center gap-2'>
                     <div className="text-white rounded-lg dark:bg-blue-900 dark:text-green-200">
@@ -60,7 +81,7 @@ function DesktopDashboard(){
                         <span className="sr-only">Timer icon</span>
                     </div>
                     <p className="text-2xl font-normal text-white">
-                    {timer ? `${timer.hours}:${timer.minutes}:${timer.seconds}` : (project.worked_hours ? project.worked_hours : "0:00:00")}
+                    {timer ? `${timer.hours}:${timer.minutes}:${timer.seconds}` :  "00:00:00"}
                     </p>
                 </div>
                 <div className='flex justify-between border-customLightBlue'>
@@ -70,12 +91,13 @@ function DesktopDashboard(){
             </div>
 
             <div className="lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:gap-y-6">
-                {projects.map((project, index)=> (
-                    <div key={index} className="relative flex w-full justify-between items-center p-5 lg:mb-0 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" onClick={()=> handleProjectSelection(project)}>
+                {projects.length > 0 ?
+                projects.map((project, index)=> (
+                    <div key={index} className={`relative flex w-full justify-between items-center p-5 lg:mb-0 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700` }>
                         <h5 className="mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{project.name}</h5>
                         <div className="flex justify-between items-center">
                             <p className='text-lg'>{project.worked_hours ? project.worked_hours : '00:00:00'}</p>
-                            <a href="#" className="mx-3 px-2 py-1 text-sm font-medium text-center text-white bg-blue-900 rounded-full hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-900 dark:focus:ring-blue-900" onMouseEnter={()=>handleMouseEnter(index)} onMouseLeave={()=>handleMouseLeave(index)} onClick={(e) => {handleTracking(e, project, index)}}>
+                            <a href="#" className={`mx-3 px-2 py-1 text-sm font-medium text-center text-white bg-blue-900 rounded-full hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-900 dark:focus:ring-blue-900 ${activeProjectIndex !== null && activeProjectIndex !== index ? 'focus:ring-red-400' : 'focus:ring-blue-300'}` } onMouseEnter={()=>handleMouseEnter(index)} onMouseLeave={()=>handleMouseLeave(index)} onClick={() => {handleTracking(project, index)}}>
                                 <span className="rtl:rotate-180 flex justify-center items-center material-symbols-outlined text-3xl" aria-hidden="true">
                                 {trackerBtns[index] === 'start' ? 'play_arrow' : 'pause'}
                                 </span>
@@ -88,7 +110,10 @@ function DesktopDashboard(){
                             }
                         </div>
                     </div>
-                ))}
+                ))
+                : 
+                <p className='text-blue-900 text-base text-center'>You have no active projects. <a href="http://localhost:5173/" target='_blank' className='underline font-semibold'>Start a new project.</a></p>
+                }
             </div>
         </div>
     )

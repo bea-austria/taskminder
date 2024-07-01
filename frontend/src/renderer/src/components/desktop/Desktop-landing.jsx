@@ -1,8 +1,7 @@
-import Login from '../website-landing/Login';
+import DesktopLogin from './Desktop-login';
 import backgroundImg from '../../assets/landing/taskminder-landing-bg.jpg/'
 import { useContext } from 'react';
 import UserContext from '../../../../../utils/userContext';
-import Footer from '../Footer'
 
 function DesktopLanding(){
     const {successMsg, errorMsg, setErrorMsg, setSuccessMsg} = useContext(UserContext);
@@ -38,7 +37,7 @@ function DesktopLanding(){
             </div>
             )}
 
-                <Login/>
+                <DesktopLogin/>
             </div>
         </div>
     )
