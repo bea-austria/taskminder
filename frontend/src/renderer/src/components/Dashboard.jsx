@@ -8,6 +8,8 @@ import Teams from "./Teams.jsx";
 import Projects from "./Projects.jsx";
 import Footer from "./Footer.jsx";
 import DashOptions from './DashboardLinks.jsx'
+import Activity from "./Activity.jsx";
+import NotFound from "./404.jsx";
 
 function Dashboard(){
     return(
@@ -20,12 +22,13 @@ function Dashboard(){
                 <main className="px-4 pt-4 pb-0 sm:ml-64 flex flex-grow">
                     <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 w-full h-full">
                         <Routes>
-                            <Route exact path='/' element={<Summary />}/>
-                            <Route exact path='/timesheets' element={<Timesheet />}/>
-                            <Route exact path='/setting' element={<Settings />}/>
-                            <Route exact path='/help' element={<Help />}/>
-                            <Route exact path='/teams' element={<Teams />}/>
-                            <Route exact path='/projects' element={<Projects />}/>
+                            <Route path='/' element={<Summary />}/>
+                            <Route path='/activity' element={<Activity />}/>
+                            <Route path='/settings' element={<Settings />}/>
+                            <Route path='/help' element={<Help />}/>
+                            <Route path='/teams' element={<Teams />}/>
+                            <Route path='/projects' element={<Projects />}/>
+                            <Route path="*" element={<NotFound/>} />
                         </Routes>
                     </div>
                 </main>
