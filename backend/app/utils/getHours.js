@@ -1,5 +1,6 @@
 const controller = require('../controllers/productivityController');
 
+//Retrieves worked hours per user project
 const getHours = async (project_id) => {
     const response = await controller.getDailyHours(project_id);
     let timeString;

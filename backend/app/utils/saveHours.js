@@ -1,5 +1,6 @@
 const controller = require('../controllers/productivityController')
 
+//Saves formatted tracked hours upon pause
 const saveHours = async (timer, project_id) => {
     let formattedTimer
     if(timer){

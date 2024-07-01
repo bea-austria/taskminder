@@ -1,3 +1,4 @@
+//Pads the time string for format consistency
 const formatTime = (timer) => {
     timer.hours = formatter(timer.hours);
     timer.minutes = formatter(timer.minutes);

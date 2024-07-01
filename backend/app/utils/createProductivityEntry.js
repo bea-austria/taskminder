@@ -1,6 +1,7 @@
 const controller = require('../controllers/productivityController');
 const projectController = require('../controllers/projectController');
 
+//create daily entries to track worked hours for each active project of each user
 const createProductivityEntry = async() => {
     try {
         const projects = await projectController.getAllProjects();

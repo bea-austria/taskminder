@@ -1,6 +1,7 @@
 const controller = require('../controllers/activityController');
 const userController = require('../controllers/userController');
 
+//create daily activity entry for all active projects per user
 const createActivityEntry = async() => {
     try {
         const users = await userController.getUsers();
