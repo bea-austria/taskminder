@@ -1,12 +1,37 @@
 {
   "name": "taskminder",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A remote employee monitoring applciation that tracks user productivity and activity level.",
+  "main": "frontend/out/main/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "env-cmd electron-forge publish"
   },
+  "productName": "TaskMinder",
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Bea Caponga",
+  "license": "ISC",
+  "dependencies": {
+    "@mhgbrown/iohook": "^0.12.2",
+    "electron-squirrel-startup": "^1.0.1",
+    "env-cmd": "^10.1.0",
+    "node-abi": "^3.63.0",
+    "update-electron-app": "^3.0.0"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-dmg": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron-forge/publisher-github": "^7.4.0",
+    "@electron/fuses": "^1.8.0",
+    "electron": "^29.4.3"
+  }
 }
