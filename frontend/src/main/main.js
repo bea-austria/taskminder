@@ -1,7 +1,6 @@
 import { app, BrowserWindow, ipcMain, powerMonitor, desktopCapturer, Notification, session, shell } from 'electron';
 import path from 'path';
-const iohook = require('iohook-raub');
-// require('update-electron-app')();
+import iohook from '../../utils/iohook-wrapper';
 
 let mainWindow;
 let captureInterval;
@@ -191,5 +190,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-// if (require('electron-squirrel-startup') === true) app.quit();
