@@ -57,7 +57,7 @@ class ActivityController {
     static async getScreenShots(id){
         try{
             const response = await model.getScreenShots(id)
-            if(response && response[0].images ){
+            if(response && response.length > 0 && response[0].images ){
                 const imageUrls = JSON.parse(response[0].images).map(file => {
                 const parsedFile = JSON.parse(file);
                 return {filePath: path.basename(parsedFile.filePath), time:parsedFile.time};
