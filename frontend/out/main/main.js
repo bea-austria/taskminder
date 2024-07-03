@@ -6,7 +6,6 @@ import __cjs_mod__ from "node:module";
 const __filename = __cjs_url__.fileURLToPath(import.meta.url);
 const __dirname = __cjs_path__.dirname(__filename);
 const require2 = __cjs_mod__.createRequire(import.meta.url);
-const iohook = require2("iohook-raub");
 let mainWindow;
 let captureInterval;
 let storedCookie;
@@ -27,30 +26,6 @@ function createWindow() {
     shell.openExternal(details.url);
     return { action: "deny" };
   });
-}
-function handleActivity() {
-  let isActive = false;
-  let inactivityTimer;
-  const handleMovement = () => {
-    if (!isActive) {
-      isActive = true;
-      mainWindow.webContents.send("user-activity");
-    }
-    clearTimeout(inactivityTimer);
-    inactivityTimer = setTimeout(() => {
-      isActive = false;
-      mainWindow.webContents.send("user-idle");
-    }, 1e3);
-  };
-  iohook.on("keydown", handleMovement);
-  iohook.on("keyup", handleMovement);
-  iohook.on("mousemove", handleMovement);
-  iohook.on("mousedown", handleMovement);
-  iohook.on("mouseup", handleMovement);
-  iohook.on("mouseclick", handleMovement);
-  iohook.on("mousedrag", handleMovement);
-  iohook.on("mousewheel", handleMovement);
-  iohook.start();
 }
 async function takeScreenshot() {
   try {
@@ -146,13 +121,18 @@ app.whenReady().then(() => {
     };
     showNotification(options);
   });
+  ipcMain.on("user-activity", (event) => {
+    mainWindow.webContents.send("user-activity");
+  });
+  ipcMain.on("user-idle", (event) => {
+    mainWindow.webContents.send("user-idle");
+  });
   powerMonitor.on("resume", () => {
     mainWindow.webContents.send("user-activity");
   });
   powerMonitor.on("suspend", () => {
     mainWindow.webContents.send("user-idle");
   });
-  handleActivity();
 });
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

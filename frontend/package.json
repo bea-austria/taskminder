@@ -2,8 +2,8 @@
   "name": "taskminder",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "main": "./out/main/main.js",
+  "type": "module",
   "scripts": {
     "dev": "electron-vite dev -w",
     "build": "electron-vite build && electron ./out/main/main.js",
@@ -16,6 +16,7 @@
     }
   },
   "dependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "apexcharts": "^3.49.1",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",
+    "@rollup/plugin-commonjs": "^26.0.1",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",

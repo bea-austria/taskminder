@@ -1,6 +1,5 @@
 import { app, BrowserWindow, ipcMain, powerMonitor, desktopCapturer, Notification, session, shell } from 'electron';
 import path from 'path';
-import iohook from '../../utils/iohook-wrapper';
 
 let mainWindow;
 let captureInterval;
@@ -26,33 +25,7 @@ function createWindow() {
   })
 }
 
-function handleActivity(){
-  let isActive = false;
-  let inactivityTimer;
-
-  const handleMovement = () => {
-    if (!isActive) {
-      isActive = true;
-      mainWindow.webContents.send('user-activity');
-    }
-    clearTimeout(inactivityTimer);
-    inactivityTimer = setTimeout(() => {
-      isActive = false;
-      mainWindow.webContents.send('user-idle');
-    }, 1000);
-  };
-
-  iohook.on('keydown', handleMovement);
-  iohook.on('keyup', handleMovement);
-  iohook.on('mousemove', handleMovement);
-  iohook.on('mousedown', handleMovement);
-  iohook.on('mouseup', handleMovement);
-  iohook.on('mouseclick', handleMovement);
-  iohook.on('mousedrag', handleMovement);
-  iohook.on('mousewheel', handleMovement);
-  iohook.start();
-}
-
+//Handles screen capture and send the image data to the renderer 
 async function takeScreenshot(){
   try {
     const date = new Date();
@@ -89,13 +62,14 @@ async function takeScreenshot(){
       title: 'TaskMinder',
       body: 'Screenshot taken',
     };
-
+    // Notify user that screenshot has been taken
     showNotification(options);
   } catch (error) {
     console.error('Error taking or uploading screenshot:', error);
   }
 }
 
+//Sets application name on pop up and display it
 function showNotification(options){
   if (process.platform === 'win32')
     {
@@ -105,9 +79,11 @@ function showNotification(options){
     customNotification.show();
 };
 
+
 app.whenReady().then(() => {
   createWindow();  
 
+  //Captures the cookie sent by the server
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     const setCookieHeaders = details.responseHeaders['set-cookie'] || details.responseHeaders['Set-Cookie'];
     if (setCookieHeaders) {
@@ -138,6 +114,7 @@ app.whenReady().then(() => {
     callback({ cancel: false });
   });
 
+  //Adds cookie sent by the server to every request header for authentication
   session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
     if (storedCookie && details.url.startsWith('http://localhost:5000')) {
       // Add cookie to request headers
@@ -146,6 +123,7 @@ app.whenReady().then(() => {
     callback({ cancel: false, requestHeaders: details.requestHeaders });
   });
   
+  //Triggers screen captures once the user starts the tracker
   ipcMain.on('start-capture', (event, projectName) => {
     takeScreenshot()
     captureInterval = setInterval(() => takeScreenshot(), 300000);
@@ -157,6 +135,7 @@ app.whenReady().then(() => {
     showNotification(options);
   });
 
+  //Stops screen captures once the user pauses the tracker
   ipcMain.on('stop-capture', (event, projectName) => {
     takeScreenshot()
     clearInterval(captureInterval);
@@ -168,15 +147,25 @@ app.whenReady().then(() => {
     showNotification(options);
   });
 
+  //Handles user's active second
+  ipcMain.on('user-activity', (event)=> {
+    mainWindow.webContents.send('user-activity');
+  });
+
+  //Handles user's idle second
+  ipcMain.on('user-idle', (event)=> {
+    mainWindow.webContents.send('user-idle');
+  });
+
+  //Handles user's active second
   powerMonitor.on('resume', () => {
     mainWindow.webContents.send('user-activity');
   });
 
+   //Handles user's idle second
   powerMonitor.on('suspend', () => {
     mainWindow.webContents.send('user-idle');
   });
-
-  handleActivity();
 });
 
 app.on('window-all-closed', () => {
