@@ -21,7 +21,7 @@ const server = http.createServer(app);
 const corsOptions = {origin: true, methods: ["GET", "POST", "DELETE"], credentials: true};
 const io = new Server(server, {cors: corsOptions});
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use(session({
