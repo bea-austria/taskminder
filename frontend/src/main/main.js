@@ -1,17 +1,18 @@
-import { app, BrowserWindow, ipcMain, powerMonitor, desktopCapturer, Notification, session, shell } from 'electron';
-import path from 'path';
-import iohook from '../../utils/iohook-wrapper'
+const { app, BrowserWindow, ipcMain, powerMonitor, desktopCapturer, Notification, session, shell } = require('electron');
+const path = require('path');
+const iohook = require('iohook-raub');
 
 let mainWindow;
 let captureInterval;
 let storedCookie;
+const iconPath = path.join(__dirname, '../../../assets/icons/taskminderlogo.ico');
 
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 600,
     height: 700,
     resizable: false,
-    icon: path.join(__dirname, '../../assets/icons/taskminderlogo.ico'),
+    icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, '../preload/preload.mjs'),
       nodeIntegration: true
@@ -195,9 +196,7 @@ app.whenReady().then(() => {
     mainWindow.webContents.send('user-idle');
   });
 
-  // handleActivity()
-
-
+  handleActivity()
 });
 
 app.on('window-all-closed', () => {
@@ -211,3 +210,5 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+if (require('electron-squirrel-startup') === true) app.quit();
