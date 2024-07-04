@@ -14,6 +14,8 @@ const cron = require('node-cron');
 const createProductivityEntry = require('./app/utils/createProductivityEntry');
 const createActivityEntry = require('./app/utils/createActivityEntry');
 const cookieParser = require('cookie-parser');
+const MySQLStore = require('express-mysql-session')(session);
+
 
 const { Server } = require("socket.io");
 const server = http.createServer(app);
@@ -21,6 +23,7 @@ const server = http.createServer(app);
 const corsOptions = {origin: true, methods: ["GET", "POST", "DELETE"], credentials: true};
 const io = new Server(server, {cors: corsOptions});
 
+const sessionStore = new MySQLStore(options);
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
@@ -33,6 +36,7 @@ app.use(session({
         secure: true,
         sameSite: 'none',
         maxAge: 1000 * 60 * 60 * 24 * 3,
+        store: sessionStore,
         expires: 1000 * 60 * 60 * 24 * 3
     },
 }));
