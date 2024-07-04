@@ -15,6 +15,7 @@ const createProductivityEntry = require('./app/utils/createProductivityEntry');
 const createActivityEntry = require('./app/utils/createActivityEntry');
 const cookieParser = require('cookie-parser');
 const MySQLStore = require('express-mysql-session')(session);
+import { dbOptions } from './app/config/db.config';
 
 
 const { Server } = require("socket.io");
@@ -23,7 +24,7 @@ const server = http.createServer(app);
 const corsOptions = {origin: true, methods: ["GET", "POST", "DELETE"], credentials: true};
 const io = new Server(server, {cors: corsOptions});
 
-const sessionStore = new MySQLStore(options);
+const sessionStore = new MySQLStore(dbOptions);
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
