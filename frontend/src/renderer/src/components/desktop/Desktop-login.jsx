@@ -77,7 +77,7 @@ function DesktopLogin(){
       
           <p className="mt-5 text-left text-sm text-gray-500 pb-6 border-b-2">
             Forgot Password?
-            <a href='http://localhost:5173' target='_blank' className="font-semibold leading-6 text-blue-900 hover:text-blue-900"> 
+            <a href='https://taskminder-app.vercel.app/' target='_blank' className="font-semibold leading-6 text-blue-900 hover:text-blue-900"> 
               Click here
             </a>
           </p>
@@ -86,7 +86,7 @@ function DesktopLogin(){
             <p>
               New to TaskMinder?
             </p>
-            <a href='http://localhost:5173' target='_blank' className="text-sm bg-indigo-50 hover:bg-indigo-100 text-blue-900 font-bold py-2 px-4 rounded border border-gray-300 sm:text-base">
+            <a href='https://taskminder-app.vercel.app/' target='_blank' className="text-sm bg-indigo-50 hover:bg-indigo-100 text-blue-900 font-bold py-2 px-4 rounded border border-gray-300 sm:text-base">
               Get Started
             </a>
           </div>
