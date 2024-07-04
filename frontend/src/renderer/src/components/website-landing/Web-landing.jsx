@@ -71,7 +71,7 @@ function Landing(){
                             <dt className="mb-2 text-3xl md:text-4xl font-bold">{proof.figure}</dt>
                             <dd className="font-semibold md:text-lg text-gray-500 dark:text-gray-400">{proof.text}</dd>
                         </div>
-                        ))};
+                        ))}
                     </dl>
                 </section>
 
