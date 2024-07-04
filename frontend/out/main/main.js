@@ -1,16 +1,12 @@
-import { app, session, ipcMain, powerMonitor, BrowserWindow, shell, desktopCapturer, Notification } from "electron";
-import path from "path";
-import __cjs_url__ from "node:url";
-import __cjs_path__ from "node:path";
-import __cjs_mod__ from "node:module";
-const __filename = __cjs_url__.fileURLToPath(import.meta.url);
-const __dirname = __cjs_path__.dirname(__filename);
-const require2 = __cjs_mod__.createRequire(import.meta.url);
+"use strict";
+const electron = require("electron");
+const path = require("path");
+require("iohook-raub");
 let mainWindow;
 let captureInterval;
 let storedCookie;
 function createWindow() {
-  mainWindow = new BrowserWindow({
+  mainWindow = new electron.BrowserWindow({
     width: 600,
     height: 700,
     resizable: false,
@@ -23,7 +19,7 @@ function createWindow() {
   mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
   mainWindow.on("closed", () => mainWindow = null);
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url);
+    electron.shell.openExternal(details.url);
     return { action: "deny" };
   });
 }
@@ -38,7 +34,7 @@ async function takeScreenshot() {
     const formattedMins = minutes < 10 ? `0${minutes}` : minutes;
     const formattedTime = `${formattedHours}:${formattedMins} ${ampm}`;
     const fileName = `screenshot-${timestamp}.png`;
-    const sources = await desktopCapturer.getSources({
+    const sources = await electron.desktopCapturer.getSources({
       types: ["screen"],
       thumbnailSize: {
         width: 800,
@@ -64,14 +60,14 @@ async function takeScreenshot() {
 }
 function showNotification(options) {
   if (process.platform === "win32") {
-    app.setAppUserModelId(app.name);
+    electron.app.setAppUserModelId(electron.app.name);
   }
-  const customNotification = new Notification(options);
+  const customNotification = new electron.Notification(options);
   customNotification.show();
 }
-app.whenReady().then(() => {
+electron.app.whenReady().then(() => {
   createWindow();
-  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+  electron.session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     const setCookieHeaders = details.responseHeaders["set-cookie"] || details.responseHeaders["Set-Cookie"];
     if (setCookieHeaders) {
       try {
@@ -90,20 +86,20 @@ app.whenReady().then(() => {
           domain: "localhost"
         };
         storedCookie = cookieDetails;
-        session.defaultSession.cookies.set(cookieDetails);
+        electron.session.defaultSession.cookies.set(cookieDetails);
       } catch (error) {
         console.error("Error setting cookie:", error);
       }
     }
     callback({ cancel: false });
   });
-  session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+  electron.session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
     if (storedCookie && details.url.startsWith("http://localhost:5000")) {
       details.requestHeaders["Cookie"] = `${storedCookie.name}=${storedCookie.value}`;
     }
     callback({ cancel: false, requestHeaders: details.requestHeaders });
   });
-  ipcMain.on("start-capture", (event, projectName) => {
+  electron.ipcMain.on("start-capture", (event, projectName) => {
     takeScreenshot();
     captureInterval = setInterval(() => takeScreenshot(), 3e5);
     const options = {
@@ -112,7 +108,7 @@ app.whenReady().then(() => {
     };
     showNotification(options);
   });
-  ipcMain.on("stop-capture", (event, projectName) => {
+  electron.ipcMain.on("stop-capture", (event, projectName) => {
     takeScreenshot();
     clearInterval(captureInterval);
     const options = {
@@ -121,25 +117,25 @@ app.whenReady().then(() => {
     };
     showNotification(options);
   });
-  ipcMain.on("user-activity", (event) => {
+  electron.ipcMain.on("user-activity", (event) => {
     mainWindow.webContents.send("user-activity");
   });
-  ipcMain.on("user-idle", (event) => {
+  electron.ipcMain.on("user-idle", (event) => {
     mainWindow.webContents.send("user-idle");
   });
-  powerMonitor.on("resume", () => {
+  electron.powerMonitor.on("resume", () => {
     mainWindow.webContents.send("user-activity");
   });
-  powerMonitor.on("suspend", () => {
+  electron.powerMonitor.on("suspend", () => {
     mainWindow.webContents.send("user-idle");
   });
 });
-app.on("window-all-closed", () => {
+electron.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
-    app.quit();
+    electron.app.quit();
   }
 });
-app.on("activate", () => {
+electron.app.on("activate", () => {
   if (mainWindow == null) {
     createWindow();
   }

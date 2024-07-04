@@ -86,7 +86,7 @@ function DesktopDashboard(){
                 </div>
                 <div className='flex justify-between border-customLightBlue'>
                     <p className='text-white px-8'>Activity Level: {activityLevel}%</p>
-                    <p className='text-white px-8'>Weekly Total: {weeklyHours}</p>
+                    <p className='text-white px-8'>Weekly Total: {weeklyHours ? weeklyHours : "00:00:00"}</p>
                 </div>
             </div>
 

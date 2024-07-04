@@ -23,7 +23,7 @@ function Landing(){
 
                     <div className="relative p-6 pb-0 xsm:p-8 xsm:pb-0 sm:p-12 sm:pb-0 md:p-10 lg:p-12 ">
                         <h1 className='text-3xl mb-3 text-white sm:text-4xl lg:text-5xl' style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 1)' }}>Effortlessly manage your team</h1>
-                        <p className='text-base text-white sm:text-lg md:text-lg lg:text-xl lg:my-6' style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 1.5)' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt similique ducimus labore repellendus eum. Dignissimos harum corrupti nam veritatis numquam, fugiat maxime expedita quo voluptatem placeat repudiandae quam saepe assumenda.</p>
+                        <p className='text-base text-white sm:text-lg md:text-lg lg:text-xl lg:my-6' style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 1.5)' }}>The Remote Employee Productivity Tracker is a comprehensive tool designed to monitor and enhance the productivity of remote employees. This tool ensures accountability and helps maintain productivity in a remote working environment.</p>
                         <a href="#about">
                             <button className="bg-indigo-50 text-base hover:bg-indigo-100 text-blue-900 font-bold mt-4 py-2 px-3 lg:text-xl lg:py-4 lg:px-6 rounded border border-gray-300 sm:text-lg">
                                 Learn about TaskMinder

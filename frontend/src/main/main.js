@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, powerMonitor, desktopCapturer, Notification, session, shell } from 'electron';
 import path from 'path';
+import iohook from '../../utils/iohook-wrapper'
 
 let mainWindow;
 let captureInterval;
@@ -67,6 +68,33 @@ async function takeScreenshot(){
   } catch (error) {
     console.error('Error taking or uploading screenshot:', error);
   }
+}
+
+async function handleActivity(){
+  let isActive = false;
+  let inactivityTimer;
+
+  const handleMovement = () => {
+    if (!isActive) {
+      isActive = true;
+      mainWindow.webContents.send('user-activity');
+    }
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      isActive = false;
+      mainWindow.webContents.send('user-idle');
+    }, 1000);
+  };
+
+  iohook.on('keydown', handleMovement);
+  iohook.on('keyup', handleMovement);
+  iohook.on('mousemove', handleMovement);
+  iohook.on('mousedown', handleMovement);
+  iohook.on('mouseup', handleMovement);
+  iohook.on('mouseclick', handleMovement);
+  iohook.on('mousedrag', handleMovement);
+  iohook.on('mousewheel', handleMovement);
+  iohook.start();
 }
 
 //Sets application name on pop up and display it
@@ -166,6 +194,10 @@ app.whenReady().then(() => {
   powerMonitor.on('suspend', () => {
     mainWindow.webContents.send('user-idle');
   });
+
+  // handleActivity()
+
+
 });
 
 app.on('window-all-closed', () => {

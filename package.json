@@ -15,7 +15,6 @@
   "author": "Bea Caponga",
   "license": "ISC",
   "dependencies": {
-    "@mhgbrown/iohook": "^0.12.2",
     "electron-squirrel-startup": "^1.0.1",
     "env-cmd": "^10.1.0",
     "node-abi": "^3.63.0",
