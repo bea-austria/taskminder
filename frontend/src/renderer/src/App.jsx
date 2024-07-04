@@ -419,7 +419,7 @@ function App() {
           path='/dashboard/*'
           element={isLogged ? <Dashboard /> : <Navigate to='/' />}
         />
-        <Route path="*" element={<NotFound page="Homepage" link="http://localhost:5173/"/>} />
+        <Route path="*" element={<NotFound page="Homepage" link="https://taskminder-app.vercel.app/"/>} />
         </>
         }
       </Routes>

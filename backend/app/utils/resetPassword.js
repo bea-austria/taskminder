@@ -8,7 +8,7 @@ async function sendPWResetEmail(email, token){
         subject: `Password Reset`,
         html: `<h1>Reset Your Password</h1>
     <p>Click on the following link to reset your password:</p>
-    <a href="http://localhost:5173/reset-password?token=${token}">http://localhost:5173/reset-password?token=${token}</a>
+    <a href="https://taskminder-app.vercel.app/reset-password?token=${token}">https://taskminder-app.vercel.app/reset-password?token=${token}</a>
     <p>The link will expire in 10 minutes.</p>
     <p>If you didn't request a password reset, please ignore this email.</p>`,
     };
