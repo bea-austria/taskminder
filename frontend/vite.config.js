@@ -10,7 +10,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': 'https://taskminder-app-api.vercel.app'
+      '/api': 'https://taskminder-app-api-git-main-bea-austrias-projects.vercel.app'
     }
   },
 })

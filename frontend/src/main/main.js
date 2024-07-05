@@ -123,7 +123,7 @@ app.whenReady().then(() => {
         const expirationDate = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
 
         const cookieDetails = {
-          url: 'https://taskminder-app-api.vercel.app',
+          url: 'https://taskminder-app-api-git-main-bea-austrias-projects.vercel.app',
           name: cookieName,
           value: cookieValue,
           path: '/',
@@ -144,7 +144,7 @@ app.whenReady().then(() => {
 
   //Adds cookie sent by the server to every request header for authentication
   session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-    if (storedCookie && details.url.startsWith('https://taskminder-app-api.vercel.app')) {
+    if (storedCookie && details.url.startsWith('https://taskminder-app-api-git-main-bea-austrias-projects.vercel.app')) {
       // Add cookie to request headers
       details.requestHeaders['Cookie'] = `${storedCookie.name}=${storedCookie.value}`;
     }
