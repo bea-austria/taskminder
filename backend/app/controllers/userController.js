@@ -50,7 +50,7 @@ class UserController{
             const password = req.body.password;
             const isRegistered = await UserController.isUserRegistered(email);
             const errors = validationResult(req);
-
+            console.log(isRegistered[0])
             if (!errors.isEmpty()) {
                 return res.status(400).json({ errors: errors.array() });
             }

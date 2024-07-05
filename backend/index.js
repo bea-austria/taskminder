@@ -15,7 +15,7 @@ const createProductivityEntry = require('./app/utils/createProductivityEntry');
 const createActivityEntry = require('./app/utils/createActivityEntry');
 const cookieParser = require('cookie-parser');
 const MySQLStore = require('express-mysql-session')(session);
-const dbOptions = require('./app/config/db.config')
+const { dbOptions } = require('./app/config/db.config')
 
 
 const { Server } = require("socket.io");

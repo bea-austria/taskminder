@@ -1,14 +1,17 @@
-const db = require('../config/db.config');
+const { db } = require('../config/db.config');
 
 class UserModel{
 
     static async fetchUser(email){
+        console.log(email)
         return new Promise((resolve, reject)=>{
             const query = 'SELECT * FROM users WHERE email = ?';
             db.query(query, [email], (error, result)=>{
                 if(error){
+                    console.error('Error executing query:', error);
                     reject(error);
                 }else{
+                    console.log('the results is:', result)
                     resolve(result);
                 }
             })

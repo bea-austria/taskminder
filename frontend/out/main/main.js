@@ -13,7 +13,7 @@ function createWindow() {
     resizable: false,
     icon: iconPath,
     webPreferences: {
-      preload: path.join(__dirname, "../preload/preload.mjs"),
+      preload: path.join(__dirname, "../preload/preload.js"),
       nodeIntegration: true
     }
   });
@@ -111,6 +111,7 @@ app.whenReady().then(() => {
           domain: "localhost"
         };
         storedCookie = cookieDetails;
+        console.log(cookieDetails);
         session.defaultSession.cookies.set(cookieDetails);
       } catch (error) {
         console.error("Error setting cookie:", error);

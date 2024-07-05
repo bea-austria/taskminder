@@ -1,4 +1,4 @@
-const db = require('../config/db.config');
+const { db } = require('../config/db.config');
 
 class projectModel {
     static async addProject(user_id, name, limit_hours, category, description){
