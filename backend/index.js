@@ -21,7 +21,7 @@ const { dbOptions } = require('./app/config/db.config')
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 
-const corsOptions = {origin: 'https://taskminder-app.vercel.app', methods: ["GET", "POST", "DELETE"], credentials: true};
+const corsOptions = {origin: '*', methods: ["GET", "POST", "DELETE"], credentials: true};
 const io = new Server(server, {cors: corsOptions});
 
 const sessionStore = new MySQLStore(dbOptions);
