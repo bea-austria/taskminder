@@ -4,7 +4,6 @@ require('dotenv').config();
 const app = express();
 const router = require('./app/routes/routes');
 const session = require('express-session');
-const PORT = 5000;
 const http = require('http');
 const getHours = require('./app/utils/getHours');
 const format = require('./app/utils/timeFormat');
@@ -78,5 +77,5 @@ cron.schedule('0 0 * * *', () => {
 });
 
 server.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`); 
+    console.log(`Server is running on https://taskminder-app-api.vercel.app/`); 
 });
