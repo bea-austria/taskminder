@@ -46,6 +46,7 @@ class UserController{
 
     static async logUser(req, res){
         try{
+            console.log('hello')
             const email = req.body.email;
             const password = req.body.password;
             const isRegistered = await UserController.isUserRegistered(email);

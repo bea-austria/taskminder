@@ -37,7 +37,7 @@ app.use(session({
         secure: true,
         sameSite: 'none',
         maxAge: 1000 * 60 * 60 * 24 * 3,
-        store: sessionStore,
+        // store: sessionStore,
         expires: 1000 * 60 * 60 * 24 * 3
     },
 }));
