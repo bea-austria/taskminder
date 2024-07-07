@@ -130,7 +130,7 @@ app.whenReady().then(() => {
           secure: true,
           httpOnly: true,
           expirationDate: expirationDate,
-          domain: 'localhost'
+          domain: 'taskminder-mysql-api.onrender.com'
         };
 
         storedCookie = cookieDetails;
