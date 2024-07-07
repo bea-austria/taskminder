@@ -73,6 +73,7 @@ class UserController{
                 .cookie('loginToken', token, {
                 httpOnly: true,
                 secure: true,
+                sameSite: 'none',
                 maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
                 })
                 .status(200)
@@ -183,6 +184,7 @@ class UserController{
             res.clearCookie('loginToken', req.cookies.loginToken, {
                 httpOnly: true,
                 secure: true, // Set to true in production
+                sameSite: 'none',
                 maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
                 })
                 req.session.destroy();
