@@ -128,12 +128,14 @@ app.whenReady().then(() => {
           value: cookieValue,
           path: '/',
           secure: true,
+          sameSite: 'None',
           httpOnly: true,
           expirationDate: expirationDate,
           domain: 'taskminder-mysql-api.onrender.com'
         };
 
         storedCookie = cookieDetails;
+        console.log(storedCookie)
         session.defaultSession.cookies.set(cookieDetails)
       } catch (error) {
         console.error('Error setting cookie:', error);
