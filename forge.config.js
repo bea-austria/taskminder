@@ -50,7 +50,7 @@ module.exports = {
           name: 'taskminder'
         },
         prerelease: false,
-        draft: true
+        draft: false
       }
     }
   ],
