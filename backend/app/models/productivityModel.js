@@ -28,10 +28,10 @@ class productivityModel {
         });
     };
 
-    static async saveHours(timer, project_id){
+    static async saveHours(id, timer, project_id){
         return new Promise((resolve, reject)=>{
-            const query = 'UPDATE productivity SET worked_hours = ?, updated_at = NOW() WHERE project_id= ? AND DATE(created_at) = CURDATE()';
-            db.query(query, [timer, project_id], (error, result)=>{
+            const query = 'UPDATE productivity SET user_id = ?, worked_hours = ?, updated_at = NOW() WHERE project_id= ? AND DATE(created_at) = CURDATE()';
+            db.query(query, [id, timer, project_id], (error, result)=>{
                 if(error){
                     reject(error);
                 }else{

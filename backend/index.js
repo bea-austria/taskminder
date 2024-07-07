@@ -21,7 +21,7 @@ const { dbOptions } = require('./app/config/db.config')
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 
-const corsOptions = {origin: "https://taskminder-app.vercel.app", methods: ["GET", "POST", "DELETE"], credentials: true};
+const corsOptions = {origin: ["https://taskminder-app.vercel.app", "http://localhost:5173"], methods: ["GET", "POST", "DELETE"], credentials: true};
 const io = new Server(server, {cors: corsOptions});
 
 const sessionStore = new MySQLStore(dbOptions);
@@ -66,7 +66,7 @@ io.on('connection', (socket)=>{
     });
 
     socket.on('pause', () => {
-        saveHours(formattedprojectTimer, project_id);
+        saveHours(user_id, formattedprojectTimer, project_id);
         clearInterval(interval);
     });
 });

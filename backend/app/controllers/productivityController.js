@@ -17,9 +17,9 @@ class productivityController {
         }
     }
     
-    static async saveHours(timer, project_id){
+    static async saveHours(id, timer, project_id){
         try{
-            await model.saveHours(timer, project_id);
+            await model.saveHours(id, timer, project_id);
         }catch(error){
             console.error(error,'Unable to save tracked hours for this project.');
         }
