@@ -101,7 +101,7 @@ app.whenReady().then(() => {
         const cookieValue = cookieString.split(";")[0].split("=")[1];
         const expirationDate = Math.floor(Date.now() / 1e3) + 30 * 24 * 60 * 60;
         const cookieDetails = {
-          url: "https://taskminder-mysql-api.onrender.com",
+          url: "https://taskminder-app-api.vercel.app",
           name: cookieName,
           value: cookieValue,
           path: "/",
@@ -119,7 +119,7 @@ app.whenReady().then(() => {
     callback({ cancel: false });
   });
   session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-    if (storedCookie && details.url.startsWith("https://taskminder-mysql-api.onrender.com")) {
+    if (storedCookie && details.url.startsWith("https://taskminder-app-api.vercel.app")) {
       details.requestHeaders["Cookie"] = `${storedCookie.name}=${storedCookie.value}`;
     }
     callback({ cancel: false, requestHeaders: details.requestHeaders });

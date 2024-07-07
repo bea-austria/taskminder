@@ -14,7 +14,7 @@ const authenticate = async(req, res, next) => {
         const userId = decoded.userId;
 
         const storedCookie = await userController.getUserCookie(userId);
-        console.log('storedCookie', storedCookie)
+        
         if(storedCookie.length === 0){
             return res.status(401).json({error: 'Please log in to your account'})
         };

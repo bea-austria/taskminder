@@ -10,7 +10,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': 'https://taskminder-mysql-api.onrender.com'
+      '/api': 'https://taskminder-app-api.vercel.app'
     }
   },
 })

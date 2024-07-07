@@ -13,7 +13,7 @@ import UserContext from '../../../utils/userContext';
 import activityCalculator from '../../../utils/getActivity';
 import isElectron from 'is-electron';
 
-const URL = 'https://taskminder-mysql-api.onrender.com'
+const URL = 'https://taskminder-app-api.vercel.app'
 const socket = io.connect(URL);
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = 'https://taskminder-mysql-api.onrender.com';
+  axios.defaults.baseURL = 'https://taskminder-app-api.vercel.app';
 
   //Shows and hide profile dropdown
   function showDropDown(){
