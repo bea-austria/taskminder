@@ -16,13 +16,13 @@ const authenticate = async(req, res, next) => {
         const storedCookie = await userController.getUserCookie(userId);
         
         if(storedCookie.length === 0){
-            return res.status(401).json({error: 'Please log in to your account'})
+            return res.status(401).json({error: 'Token not found. Please log in to your account'})
         };
 
         const isTokenValid = await bcrypt.compare(token, storedCookie[0].cookie);
 
         if(!isTokenValid){
-            return res.status(401).json({error: 'Please log in to your account'})
+            return res.status(401).json({error: 'Token does not match. Please log in to your account'})
         }
         const user = await userController.getUserById(userId);
         req.user = user;
