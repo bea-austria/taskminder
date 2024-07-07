@@ -6,6 +6,11 @@ export default defineConfig({
     main: {},
     preload: {},
     renderer: {
-        plugins: [react()]
+        plugins: [react()],
+        server: {
+            proxy: {
+                '/api': 'https://taskminder-mysql-api.onrender.com'
+            }
+        }
     },
 });
