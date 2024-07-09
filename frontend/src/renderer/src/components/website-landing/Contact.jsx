@@ -45,8 +45,11 @@ function Contact(){
                     <a href="#" className="title-font font-semibold text-gray-900 tracking-widest text-xs mt-4 block">TERMS</a>
                 </div>
                 <div>
-                    <h2 href="#" className="title-font font-semibold text-gray-900 tracking-widest text-xs">ADDRESS</h2>
+                    <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">ADDRESS</h2>
                     <p className="mt-1">11650 Olio Road, Suite #1000 - 193 Fishers, IN 46037</p>
+                </div>
+                <div>
+                    <p className="mt-1"><a href="https://github.com/bea-austria/taskminder/releases/download/v1.0.0/TaskMinder-1.0.0.Setup.exe">Download TaskMinder for Windows</a></p>
                 </div>
             </div>
         </section>
