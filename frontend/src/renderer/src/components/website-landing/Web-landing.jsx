@@ -81,6 +81,7 @@ function Landing(){
                             <h2 className="mb-4 text-2xl lg:text-4xl tracking-tight leading-tight text-white dark:text-white">Start your free trial today</h2>
                             <p className="mb-6 font-light text-white md:text-lg">Try TaskMinder for 30 days. No credit card required.</p>
                             <a href="#" className="bg-indigo-50 hover:bg-indigo-100 text-blue-900 dark:focus:ring-primary-800focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">Free trial for 30 days</a>
+                            <a className="mt-1 block mt-4 text-white" href="https://github.com/bea-austria/taskminder/releases/download/v1.0.0/TaskMinder-1.0.0.Setup.exe">Download TaskMinder for Windows</a>
                         </div>
                     </div>
                 </section>
