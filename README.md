@@ -2,8 +2,6 @@
 
 TaskMinder is a remote employee monitoring application that tracks worked hours, activity levels, takes periodic screenshots, and emails daily reports to admins.
 
-Link to project: https://taskminder-app.vercel.app/
-
 ## How It's Made:
 
 * ReactJS: Frontend development
